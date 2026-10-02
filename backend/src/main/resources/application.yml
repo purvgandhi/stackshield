@@ -2,7 +2,7 @@ spring:
   application:
     name: stacktrial
   datasource:
-    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/stacktrial}
+    url: ${DATABASE_URL:jdbc:postgresql://127.0.0.1:5432/stacktrial?sslmode=disable}
     username: ${DATABASE_USERNAME:stacktrial}
     password: ${DATABASE_PASSWORD:stacktrial}
   jpa:
@@ -19,7 +19,7 @@ spring:
       max-request-size: 2MB
 
 server:
-  port: ${PORT:8080}
+  port: ${PORT:8081}
   # Local developer tool: not exposed on other interfaces by default.
   address: ${SERVER_ADDRESS:127.0.0.1}
   error:

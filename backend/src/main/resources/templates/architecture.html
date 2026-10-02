@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head(${repo.name} + ' · Architecture')}"></head>
+<body>
+<div class="app-layout">
+    <aside th:replace="~{fragments :: sidebar(${activeNav})}"></aside>
+    <div class="main-wrapper">
+        <header th:replace="~{fragments :: topbar}"></header>
+
+        <main class="content-container">
+            <div th:replace="~{fragments :: repoHeader(${repo}, 'architecture')}"></div>
+
+            <div th:if="${arch != null}">
+                <!-- Architecture Summary & KPIs -->
+                <div class="card" style="margin-bottom: 20px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+                        <div>
+                            <div class="text-muted" style="font-size: 11.5px; text-transform: uppercase; font-family: var(--mono); letter-spacing: 0.08em;">Extracted Architecture Pattern</div>
+                            <h2 style="margin: 4px 0 0; font-size: 18px; color: var(--text-main);" th:text="${arch.style}">Spring Boot Layered Monolith</h2>
+                        </div>
+                        <div class="badge badge-info" th:text="${arch.summary}">Summary</div>
+                    </div>
+                </div>
+
+                <div class="grid-4">
+                    <div class="card">
+                        <div class="card-title">Controllers / APIs</div>
+                        <div class="stat-value text-cyan" th:text="${arch.detectedControllers}">3</div>
+                        <div class="stat-sub" th:text="${arch.detectedEndpoints} + ' HTTP Routes Exposed'">Endpoints</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">Service Layer</div>
+                        <div class="stat-value text-emerald" th:text="${arch.detectedServices}">4</div>
+                        <div class="stat-sub">Business Logic Components</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">Persistence & Repos</div>
+                        <div class="stat-value text-indigo" th:text="${arch.detectedRepositories}">2</div>
+                        <div class="stat-sub" th:text="${arch.detectedEntities} + ' Domain Entities'">Entities</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">Total Components</div>
+                        <div class="stat-value text-amber" th:text="${arch.totalComponents}">12</div>
+                        <div class="stat-sub">Extracted from AST</div>
+                    </div>
+                </div>
+
+                <!-- API Endpoint Explorer -->
+                <div class="card" style="margin-bottom: 24px; padding: 0;">
+                    <div style="padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between;">
+                        <h3 style="margin: 0; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted);">
+                            🌐 API Endpoint Explorer (<span th:text="${#lists.size(arch.endpoints)}">0</span> routes)
+                        </h3>
+                    </div>
+                    <div class="table-wrap" style="border: 0; border-radius: 0 0 var(--radius) var(--radius);">
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>Method</th>
+                                <th>Endpoint Route</th>
+                                <th>Controller</th>
+                                <th>Handler Method</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:if="${#lists.isEmpty(arch.endpoints)}">
+                                <td colspan="4" class="text-muted" style="text-align: center; padding: 20px;">No public REST endpoints detected.</td>
+                            </tr>
+                            <tr th:each="ep : ${arch.endpoints}">
+                                <td>
+                                    <span class="badge" th:classappend="${ep.httpMethod == 'GET' ? 'badge-pass' : ep.httpMethod == 'POST' ? 'badge-info' : ep.httpMethod == 'DELETE' ? 'badge-fail' : 'badge-warn'}" th:text="${ep.httpMethod}">GET</span>
+                                </td>
+                                <td class="mono" style="font-weight: 600; color: var(--text-main);" th:text="${ep.path}">/api/v1/resource</td>
+                                <td class="mono text-muted" th:text="${ep.controllerClass}">ResourceController</td>
+                                <td class="mono text-cyan" th:text="${ep.methodName} + '()'">get()</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Detected Architecture Components Table -->
+                <div class="card" style="padding: 0;">
+                    <div style="padding: 16px 20px; border-bottom: 1px solid var(--border);">
+                        <h3 style="margin: 0; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted);">
+                            🧩 Discovered Components & Dependencies
+                        </h3>
+                    </div>
+                    <div class="table-wrap" style="border: 0; border-radius: 0 0 var(--radius) var(--radius);">
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>Component Name</th>
+                                <th>Layer</th>
+                                <th>Role</th>
+                                <th>File Path</th>
+                                <th>Detection</th>
+                                <th>Outgoing Dependencies</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="node : ${arch.nodes}">
+                                <td class="mono" style="font-weight: 700; color: var(--text-main);" th:text="${node.name}">MyService</td>
+                                <td>
+                                    <span class="code-tag" th:text="${node.layer}">SERVICE</span>
+                                </td>
+                                <td>
+                                    <span class="badge" th:classappend="${node.role == 'CONTROLLER' ? 'badge-info' : node.role == 'SERVICE' ? 'badge-pass' : node.role == 'REPOSITORY' ? 'badge-warn' : 'badge-secondary'}" th:text="${node.role}">SERVICE</span>
+                                </td>
+                                <td class="mono text-muted" style="font-size: 12px;" th:text="${node.filePath}">src/main/java/...</td>
+                                <td>
+                                    <span class="code-tag" style="font-size: 10px;" th:text="${node.detectionType}">DETECTED</span>
+                                </td>
+                                <td>
+                                    <span th:each="t : ${node.targets}" class="code-tag" style="margin-right: 4px; font-size: 11px;" th:text="${t}">Target</span>
+                                    <span th:if="${#lists.isEmpty(node.targets)}" class="text-muted" style="font-size: 11px;">-</span>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+</body>
+</html>

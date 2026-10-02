@@ -3,17 +3,160 @@
 <head th:fragment="head(title)">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title th:text="${title} + ' · StackTrial'">StackTrial</title>
+    <title th:text="${title} + ' · StackTrial Platform'">StackTrial · Understand. Run. Change. Verify. Ship.</title>
     <link rel="stylesheet" th:href="@{/css/app.css}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-<header th:fragment="header" class="top">
-    <a class="brand" th:href="@{/}">STACK<span>TRIAL</span></a>
-    <span class="tagline">Try the change before you merge it.</span>
-    <nav>
-        <a th:href="@{/}">Dashboard</a>
-        <a th:href="@{/trials/new}">New trial</a>
-    </nav>
+
+<!-- Global Sidebar Fragment -->
+<aside th:fragment="sidebar(activeNav)" class="sidebar">
+    <div class="sidebar-header">
+        <a class="brand-logo" th:href="@{/}">
+            <span>⚡</span> STACK<span>TRIAL</span>
+            <span class="brand-badge">PRO v0.2</span>
+        </a>
+    </div>
+
+    <!-- Core Hub Navigation -->
+    <div class="sidebar-section">
+        <div class="sidebar-section-title">Platform</div>
+        <ul class="sidebar-nav">
+            <li>
+                <a th:href="@{/}" th:classappend="${activeNav == 'dashboard' ? 'active' : ''}">
+                    <span class="nav-icon">📊</span> Dashboard
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/repositories}" th:classappend="${activeNav == 'repositories' ? 'active' : ''}">
+                    <span class="nav-icon">📦</span> Repositories
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/trials/new}" th:classappend="${activeNav == 'new-trial' ? 'active' : ''}">
+                    <span class="nav-icon">🚀</span> Run Verification Trial
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Active Repository Context Navigation -->
+    <div class="sidebar-section" th:if="${repo != null}">
+        <div class="sidebar-section-title" th:text="'Repository: ' + ${repo.name}">Active Repository</div>
+        <ul class="sidebar-nav">
+            <li>
+                <a th:href="@{'/repositories/' + ${repo.id} + '/overview'}" th:classappend="${activeNav == 'overview' ? 'active' : ''}">
+                    <span class="nav-icon">🔍</span> Overview & Tech Stack
+                </a>
+            </li>
+            <li>
+                <a th:href="@{'/repositories/' + ${repo.id} + '/architecture'}" th:classappend="${activeNav == 'architecture' ? 'active' : ''}">
+                    <span class="nav-icon">🏛️</span> Architecture & APIs
+                </a>
+            </li>
+            <li>
+                <a th:href="@{'/repositories/' + ${repo.id} + '/doctor'}" th:classappend="${activeNav == 'doctor' ? 'active' : ''}">
+                    <span class="nav-icon">🩺</span> Environment Doctor
+                </a>
+            </li>
+            <li>
+                <a th:href="@{'/repositories/' + ${repo.id} + '/run'}" th:classappend="${activeNav == 'run' ? 'active' : ''}">
+                    <span class="nav-icon">🐳</span> Docker Sandbox Run
+                </a>
+            </li>
+            <li>
+                <a th:href="@{'/repositories/' + ${repo.id} + '/security'}" th:classappend="${activeNav == 'security' ? 'active' : ''}">
+                    <span class="nav-icon">🛡️</span> Security & Vulnerabilities
+                </a>
+            </li>
+            <li>
+                <a th:href="@{'/repositories/' + ${repo.id} + '/pr-impact'}" th:classappend="${activeNav == 'pr-impact' ? 'active' : ''}">
+                    <span class="nav-icon">⚡</span> PR & Diff Impact
+                </a>
+            </li>
+            <li>
+                <a th:href="@{'/repositories/' + ${repo.id} + '/readiness'}" th:classappend="${activeNav == 'readiness' ? 'active' : ''}">
+                    <span class="nav-icon">🎯</span> Deployment Readiness
+                </a>
+            </li>
+            <li>
+                <a th:href="@{'/repositories/' + ${repo.id} + '/qa'}" th:classappend="${activeNav == 'qa' ? 'active' : ''}">
+                    <span class="nav-icon">💬</span> Repository AI Q&A
+                </a>
+            </li>
+            <li>
+                <a th:href="@{'/repositories/' + ${repo.id} + '/interview'}" th:classappend="${activeNav == 'interview' ? 'active' : ''}">
+                    <span class="nav-icon">🎓</span> Technical Deep Dive
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="sidebar-footer">
+        <div class="mono text-muted" style="font-size: 11px;">Deterministic Verification & Grounded AI</div>
+        <div style="margin-top: 4px; font-size: 11px; color: var(--text-subtle);">PostgreSQL 16 + pgvector · Docker Sandbox</div>
+    </div>
+</aside>
+
+<!-- Topbar Fragment -->
+<header th:fragment="topbar" class="topbar">
+    <div class="topbar-left">
+        <div class="breadcrumbs">
+            <a th:href="@{/}">StackTrial</a>
+            <span>/</span>
+            <span th:if="${repo != null}">
+                <a th:href="@{'/repositories/' + ${repo.id} + '/overview'}" th:text="${repo.name}">repo</a>
+                <span>/</span>
+            </span>
+            <span class="text-cyan" th:text="${activeNav}">Dashboard</span>
+        </div>
+    </div>
+    <div class="topbar-right">
+        <span class="badge badge-pass" style="font-size: 11px;">● Engine Ready</span>
+        <a th:href="@{/repositories}" class="btn btn-secondary btn-sm">+ Import Repo</a>
+        <a th:href="@{/trials/new}" class="btn btn-primary btn-sm">⚡ New Trial</a>
+    </div>
 </header>
+
+<!-- Repository Header Fragment -->
+<div th:fragment="repoHeader(repo, activeTab)" class="repo-header">
+    <div class="repo-title-row">
+        <div class="repo-name">
+            <span class="text-cyan">📦</span>
+            <span th:text="${repo.name}">my-service</span>
+            <span class="badge" th:classappend="'stat-' + ${repo.status}" th:text="${repo.status}">READY</span>
+        </div>
+        <div class="repo-actions">
+            <form th:action="@{'/repositories/' + ${repo.id} + '/rescan'}" method="post" style="display:inline;">
+                <button type="submit" class="btn btn-secondary btn-sm">🔄 Rescan</button>
+            </form>
+            <a th:href="@{'/trials/new?repoUrl=' + ${repo.repoUrl}}" class="btn btn-primary btn-sm">⚡ Run Trial on this Repo</a>
+            <form th:action="@{'/repositories/' + ${repo.id} + '/delete'}" method="post" style="display:inline;" onsubmit="return confirm('Delete this repository and local workspace?');">
+                <button type="submit" class="btn btn-danger btn-sm">🗑️ Delete</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="repo-meta">
+        <div><strong>URL:</strong> <span class="mono" th:text="${repo.repoUrl}">https://...</span></div>
+        <div><strong>Ref:</strong> <span class="code-tag" th:text="${repo.defaultRef}">main</span></div>
+        <div><strong>Status:</strong> <span th:text="${repo.statusMessage}">Ready</span></div>
+    </div>
+
+    <div class="repo-tabs" style="margin-top: 18px; margin-bottom: 0;">
+        <a th:href="@{'/repositories/' + ${repo.id} + '/overview'}" class="repo-tab" th:classappend="${activeTab == 'overview' ? 'active' : ''}">🔍 Overview</a>
+        <a th:href="@{'/repositories/' + ${repo.id} + '/architecture'}" class="repo-tab" th:classappend="${activeTab == 'architecture' ? 'active' : ''}">🏛️ Architecture & APIs</a>
+        <a th:href="@{'/repositories/' + ${repo.id} + '/doctor'}" class="repo-tab" th:classappend="${activeTab == 'doctor' ? 'active' : ''}">🩺 Doctor</a>
+        <a th:href="@{'/repositories/' + ${repo.id} + '/run'}" class="repo-tab" th:classappend="${activeTab == 'run' ? 'active' : ''}">🐳 Docker Sandbox</a>
+        <a th:href="@{'/repositories/' + ${repo.id} + '/security'}" class="repo-tab" th:classappend="${activeTab == 'security' ? 'active' : ''}">🛡️ Security</a>
+        <a th:href="@{'/repositories/' + ${repo.id} + '/pr-impact'}" class="repo-tab" th:classappend="${activeTab == 'pr-impact' ? 'active' : ''}">⚡ PR Impact</a>
+        <a th:href="@{'/repositories/' + ${repo.id} + '/readiness'}" class="repo-tab" th:classappend="${activeTab == 'readiness' ? 'active' : ''}">🎯 Readiness</a>
+        <a th:href="@{'/repositories/' + ${repo.id} + '/qa'}" class="repo-tab" th:classappend="${activeTab == 'qa' ? 'active' : ''}">💬 AI Q&A</a>
+        <a th:href="@{'/repositories/' + ${repo.id} + '/interview'}" class="repo-tab" th:classappend="${activeTab == 'interview' ? 'active' : ''}">🎓 Tech Interview</a>
+    </div>
+</div>
+
 </body>
 </html>

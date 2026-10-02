@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head(${repo.name} + ' · Overview')}"></head>
+<body>
+<div class="app-layout">
+    <aside th:replace="~{fragments :: sidebar(${activeNav})}"></aside>
+    <div class="main-wrapper">
+        <header th:replace="~{fragments :: topbar}"></header>
+
+        <main class="content-container">
+            <div th:replace="~{fragments :: repoHeader(${repo}, 'overview')}"></div>
+
+            <!-- Tech Stack KPIs -->
+            <div class="grid-4" th:if="${scan != null}">
+                <div class="card">
+                    <div class="card-title">Build System</div>
+                    <div class="stat-value text-cyan" th:text="${scan.buildSystem}">Maven</div>
+                    <div class="stat-sub" th:text="'Version: ' + (${scan.buildSystemVersion != null ? scan.buildSystemVersion : 'Standard'})">Version</div>
+                </div>
+                <div class="card">
+                    <div class="card-title">Java & Framework</div>
+                    <div class="stat-value text-emerald" th:text="'Java ' + (${scan.javaVersion != null ? scan.javaVersion : '21'})">Java 21</div>
+                    <div class="stat-sub" th:text="${scan.springBootVersion != null ? 'Spring Boot ' + scan.springBootVersion : 'Standard Java'}">Spring Boot</div>
+                </div>
+                <div class="card">
+                    <div class="card-title">Codebase Scale</div>
+                    <div class="stat-value" th:text="${#numbers.formatInteger(scan.totalLinesOfCode, 0, 'COMMA')} + ' LOC'">1,200 LOC</div>
+                    <div class="stat-sub" th:text="${scan.totalFiles} + ' source files tracked'">Files</div>
+                </div>
+                <div class="card">
+                    <div class="card-title">Test Suite</div>
+                    <div class="stat-value text-cyan" th:text="${scan.testFileCount} + ' Tests'">12 Tests</div>
+                    <div class="stat-sub" th:text="${#strings.listJoin(scan.testFrameworks, ', ')}">JUnit 5</div>
+                </div>
+            </div>
+
+            <!-- Detailed Stack Breakdown -->
+            <div class="grid-2" th:if="${scan != null}">
+                <!-- Frameworks & Databases -->
+                <div class="card">
+                    <h3 class="card-title">Detected Frameworks & Infrastructure</h3>
+                    <div style="margin-bottom: 14px;">
+                        <div class="text-muted" style="font-size: 12px; margin-bottom: 6px;">Frameworks:</div>
+                        <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                            <span th:each="f : ${scan.detectedFrameworks}" class="code-tag" style="color: var(--cyan);" th:text="${f}">Spring Web</span>
+                            <span th:if="${#lists.isEmpty(scan.detectedFrameworks)}" class="text-muted">None detected</span>
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 14px;">
+                        <div class="text-muted" style="font-size: 12px; margin-bottom: 6px;">Databases & Stores:</div>
+                        <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                            <span th:each="db : ${scan.detectedDatabases}" class="code-tag" style="color: var(--emerald);" th:text="${db}">PostgreSQL</span>
+                            <span th:if="${#lists.isEmpty(scan.detectedDatabases)}" class="text-muted">In-memory / No dedicated DB</span>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="text-muted" style="font-size: 12px; margin-bottom: 6px;">Containerization:</div>
+                        <div style="display: flex; gap: 8px;">
+                            <span class="badge" th:classappend="${scan.hasDocker ? 'badge-pass' : 'badge-fail'}" th:text="${scan.hasDocker ? 'Dockerfile Present' : 'No Dockerfile'}">Docker</span>
+                            <span class="badge" th:classappend="${scan.hasDockerCompose ? 'badge-pass' : 'badge-warn'}" th:text="${scan.hasDockerCompose ? 'Docker Compose Present' : 'No Compose'}">Compose</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Languages Distribution -->
+                <div class="card">
+                    <h3 class="card-title">Language Distribution</h3>
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>Language</th>
+                                <th>Files</th>
+                                <th>Lines</th>
+                                <th>Share</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="lang : ${scan.languages}">
+                                <td style="font-weight: 600;" th:text="${lang.name}">Java</td>
+                                <td class="mono" th:text="${lang.files}">14</td>
+                                <td class="mono" th:text="${#numbers.formatInteger(lang.lines, 0, 'COMMA')}">1,400</td>
+                                <td class="mono text-cyan" th:text="${lang.percentage} + '%'">85%</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Health Observations & Important Files -->
+            <div class="grid-2" th:if="${scan != null}">
+                <div class="card">
+                    <h3 class="card-title">Health Observations</h3>
+                    <div th:if="${#lists.isEmpty(scan.healthObservations)}" class="text-muted">No health warnings found.</div>
+                    <div th:each="obs : ${scan.healthObservations}" style="margin-bottom: 10px; padding: 8px 12px; background: rgba(0,0,0,0.2); border-radius: var(--radius-sm); border-left: 3px solid var(--amber);">
+                        <div style="font-weight: 600; font-size: 13px;" th:text="${obs.title}">Observation</div>
+                        <div class="text-muted" style="font-size: 12px; margin-top: 2px;" th:text="${obs.details}">Details</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3 class="card-title">Key Configuration & Source Files</h3>
+                    <ul style="margin: 0; padding-left: 18px; font-family: var(--mono); font-size: 12.5px; line-height: 1.8;">
+                        <li th:each="file : ${scan.importantFiles}">
+                            <span class="text-cyan" th:text="${file}">pom.xml</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+</body>
+</html>

@@ -1,37 +1,60 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments :: head('Trial progress')}"></head>
+<head th:replace="~{fragments :: head('Trial in Progress')}"></head>
 <body>
-<header th:replace="~{fragments :: header}"></header>
-<main th:with="order=${ {'QUEUED','PREPARING','RUNNING','ANALYZING','EXPLAINING','COMPLETED'} }">
-    <h1>Trial in progress</h1>
-    <p class="sub mono" th:text="${r.repoUrl} + '@' + ${r.baselineRef}">repo</p>
+<div class="app-layout">
+    <aside th:replace="~{fragments :: sidebar('new-trial')}"></aside>
+    <div class="main-wrapper">
+        <header th:replace="~{fragments :: topbar}"></header>
 
-    <div class="card">
-        <div class="verdict">
-            <span class="badge" th:classappend="'s-' + ${r.status}" th:text="${r.status}">RUNNING</span>
-            <span th:text="${r.currentStep}">Running baseline</span>
-        </div>
-        <div class="pipeline">
-            <span class="step" th:each="s, it : ${order}"
-                  th:classappend="${s == r.status} ? 'active' : (${it.index} < ${order.indexOf(r.status)} ? 'done' : '')"
-                  th:text="${s}">STEP</span>
-        </div>
-        <dl class="kv">
-            <dt>Change</dt><dd th:text="${r.changeSummary}">change</dd>
-            <dt>Commit</dt><dd class="mono" th:text="${r.baselineCommit} ?: 'resolving…'">sha</dd>
-            <dt>Started</dt><dd class="mono" th:text="${r.startedAt} ?: 'waiting for a worker'">t</dd>
-        </dl>
-        <p class="hint">Baseline and trial each run <span class="mono">mvn verify</span> in a fresh container. The first run
-            downloads dependencies and can take several minutes. This page refreshes every 3 seconds.</p>
-    </div>
+        <main class="content-container" th:with="order=${ {'QUEUED','PREPARING','RUNNING','ANALYZING','EXPLAINING','COMPLETED'} }">
+            <div style="margin-bottom: 24px;">
+                <h1 style="margin: 0; font-size: 22px; color: var(--text-main);">Verification Trial in Progress</h1>
+                <div class="mono text-cyan" style="font-size: 13px; margin-top: 4px;" th:text="${r.repoUrl} + '@' + ${r.baselineRef}">repo@main</div>
+            </div>
 
-    <div class="card" th:if="${r.baseline}">
-        <strong>Baseline finished:</strong>
-        <span class="badge" th:classappend="'o-' + (${r.baseline.outcome} == 'SUCCESS' ? 'PASS' : 'FAIL')" th:text="${r.baseline.outcome}">SUCCESS</span>
-        <span class="muted" th:text="${r.baseline.tests.describe()}">tests</span>
+            <div class="card" style="margin-bottom: 20px;">
+                <div class="verdict" style="margin-bottom: 16px;">
+                    <span class="badge" th:classappend="'s-' + ${r.status}" style="font-size: 14px; padding: 6px 14px;" th:text="${r.status}">RUNNING</span>
+                    <span style="font-size: 16px; font-weight: 600; color: var(--text-main);" th:text="${r.currentStep}">Running baseline build in Docker</span>
+                </div>
+
+                <div class="pipeline" style="margin-bottom: 20px;">
+                    <span class="step" th:each="s, it : ${order}"
+                          th:classappend="${s == r.status} ? 'active' : (${it.index} < ${order.indexOf(r.status)} ? 'done' : '')"
+                          th:text="${s}">STEP</span>
+                </div>
+
+                <div class="grid-3" style="margin-bottom: 16px;">
+                    <div>
+                        <div class="text-muted" style="font-size: 12px;">Proposed Change:</div>
+                        <div class="mono" style="font-weight: 600; margin-top: 2px;" th:text="${r.changeSummary}">change</div>
+                    </div>
+                    <div>
+                        <div class="text-muted" style="font-size: 12px;">Baseline Commit:</div>
+                        <div class="mono" style="font-weight: 600; margin-top: 2px;" th:text="${r.baselineCommit} ?: 'Resolving…'">sha</div>
+                    </div>
+                    <div>
+                        <div class="text-muted" style="font-size: 12px;">Started:</div>
+                        <div class="mono" style="font-weight: 600; margin-top: 2px;" th:text="${r.startedAt} ?: 'Queued'">t</div>
+                    </div>
+                </div>
+
+                <p class="text-muted" style="margin: 0; font-size: 12.5px;">
+                    Baseline and trial each run <span class="mono text-cyan">mvn verify</span> in a disposable Docker container. This page automatically refreshes every 3 seconds.
+                </p>
+            </div>
+
+            <div class="card" th:if="${r.baseline}">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <strong style="color: var(--text-main);">Baseline Run Finished:</strong>
+                    <span class="badge" th:classappend="'o-' + (${r.baseline.outcome} == 'SUCCESS' ? 'PASS' : 'FAIL')" th:text="${r.baseline.outcome}">SUCCESS</span>
+                    <span class="text-muted" th:text="${r.baseline.tests.describe()}">tests</span>
+                </div>
+            </div>
+        </main>
     </div>
-</main>
+</div>
 <script>setTimeout(() => location.reload(), 3000);</script>
 </body>
 </html>

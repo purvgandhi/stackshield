@@ -2,37 +2,164 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments :: head('Dashboard')}"></head>
 <body>
-<header th:replace="~{fragments :: header}"></header>
-<main>
-    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
-        <div>
-            <h1>Trials</h1>
-            <p class="sub">Each trial runs your repository twice in Docker, baseline and trial, and compares real evidence.</p>
-        </div>
-        <a class="btn" th:href="@{/trials/new}">+ New trial</a>
-    </div>
+<div class="app-layout">
+    <aside th:replace="~{fragments :: sidebar(${activeNav})}"></aside>
+    <div class="main-wrapper">
+        <header th:replace="~{fragments :: topbar}"></header>
 
-    <div class="card" th:if="${#lists.isEmpty(trials)}">
-        <p class="muted">No trials yet. Start one with a Maven Spring Boot repository and a proposed change.</p>
-    </div>
+        <main class="content-container">
+            <!-- Platform KPIs -->
+            <div class="grid-4">
+                <div class="card">
+                    <div class="card-title">Imported Repositories</div>
+                    <div class="stat-value text-cyan" th:text="${totalRepos}">0</div>
+                    <div class="stat-sub">Tracked and indexed workspaces</div>
+                </div>
+                <div class="card">
+                    <div class="card-title">Verification Trials</div>
+                    <div class="stat-value text-emerald" th:text="${totalTrials}">0</div>
+                    <div class="stat-sub">Deterministic baseline vs trial runs</div>
+                </div>
+                <div class="card">
+                    <div class="card-title">Trial Pass Rate</div>
+                    <div class="stat-value" th:classappend="${passRate >= 70 ? 'text-emerald' : 'text-amber'}" th:text="${passRate} + '%'">100%</div>
+                    <div class="stat-sub">Upgrades & changes verified</div>
+                </div>
+                <div class="card">
+                    <div class="card-title">Docker Sandbox</div>
+                    <div class="stat-value text-cyan">ACTIVE</div>
+                    <div class="stat-sub">Isolated container execution</div>
+                </div>
+            </div>
 
-    <div class="card table-wrap" th:unless="${#lists.isEmpty(trials)}">
-        <table>
-            <thead>
-            <tr><th>Created</th><th>Repository</th><th>Change</th><th>Status</th><th>Verdict</th></tr>
-            </thead>
-            <tbody>
-            <tr th:each="t : ${trials}">
-                <td class="mono muted" th:text="${#temporals.format(t.createdAt, 'yyyy-MM-dd HH:mm')}">2026-10-02</td>
-                <td class="mono"><a th:href="@{/trials/{id}(id=${t.id})}" th:text="${t.repoUrl} + '@' + ${t.baselineRef}">repo</a></td>
-                <td th:text="${t.changeSummary}">change</td>
-                <td><span class="badge" th:classappend="'s-' + ${t.status}" th:text="${t.status}">QUEUED</span></td>
-                <td><span th:if="${t.verdict}" class="badge" th:classappend="'v-' + ${t.verdict}" th:text="${t.verdict}">PASS</span>
-                    <span th:unless="${t.verdict}" class="muted">–</span></td>
-            </tr>
-            </tbody>
-        </table>
+            <!-- Quick Action Cards -->
+            <div class="grid-2">
+                <div class="card">
+                    <h2 style="margin-top: 0; margin-bottom: 10px; font-size: 16px; color: var(--text-main);">⚡ Import New Repository</h2>
+                    <p class="text-muted" style="margin-top: 0; font-size: 13px;">
+                        Clone, inspect AST architecture, run doctor diagnostics, and index codebase for grounded Q&A.
+                    </p>
+                    <form th:action="@{/repositories/import}" method="post">
+                        <div class="form-group">
+                            <input type="text" name="repoUrl" placeholder="https://github.com/org/repo.git or file:///path" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="ref" placeholder="Branch / Ref (default: main)">
+                        </div>
+                        <button type="submit" class="btn btn-primary">🚀 Import & Analyze</button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <h2 style="margin-top: 0; margin-bottom: 10px; font-size: 16px; color: var(--text-main);">🧪 Run Verification Trial</h2>
+                    <p class="text-muted" style="margin-top: 0; font-size: 13px;">
+                        Compare a proposed change against an untouched baseline in disposable Docker containers.
+                    </p>
+                    <div style="margin-top: 24px;">
+                        <a th:href="@{/trials/new}" class="btn btn-primary">⚡ Configure Verification Trial</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tracked Repositories Section -->
+            <div style="margin-top: 32px; margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between;">
+                <h2 style="margin: 0; font-size: 14px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em;">Tracked Codebases</h2>
+                <a th:href="@{/repositories}" class="text-cyan mono" style="font-size: 12px;">View all →</a>
+            </div>
+
+            <div class="card" style="padding: 0;">
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Repository</th>
+                            <th>Default Ref</th>
+                            <th>Status</th>
+                            <th>Created</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:if="${#lists.isEmpty(repos)}">
+                            <td colspan="5" class="text-muted" style="text-align: center; padding: 24px;">
+                                No repositories imported yet. Import one above or <a th:href="@{/repositories}">view demo fixtures</a>.
+                            </td>
+                        </tr>
+                        <tr th:each="repo : ${repos}">
+                            <td>
+                                <a th:href="@{'/repositories/' + ${repo.id} + '/overview'}" style="font-weight: 600; font-size: 14px;">
+                                    📦 <span th:text="${repo.name}">repo</span>
+                                </a>
+                                <div class="mono text-muted" style="font-size: 11.5px; margin-top: 2px;" th:text="${repo.repoUrl}">url</div>
+                            </td>
+                            <td><span class="code-tag" th:text="${repo.defaultRef}">main</span></td>
+                            <td>
+                                <span class="badge" th:classappend="'stat-' + ${repo.status}" th:text="${repo.status}">READY</span>
+                            </td>
+                            <td class="mono text-muted" style="font-size: 12px;" th:text="${#temporals.format(repo.createdAt, 'yyyy-MM-dd HH:mm')}">2026-10-02</td>
+                            <td>
+                                <a th:href="@{'/repositories/' + ${repo.id} + '/overview'}" class="btn btn-secondary btn-sm">Explore</a>
+                                <a th:href="@{'/trials/new?repoUrl=' + ${repo.repoUrl}}" class="btn btn-primary btn-sm">Trial</a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Recent Verification Trials Feed -->
+            <div style="margin-top: 36px; margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between;">
+                <h2 style="margin: 0; font-size: 14px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em;">Recent Verification Trials</h2>
+                <a th:href="@{/trials/new}" class="text-cyan mono" style="font-size: 12px;">+ New Trial</a>
+            </div>
+
+            <div class="card" style="padding: 0;">
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Trial ID</th>
+                            <th>Repository & Ref</th>
+                            <th>Proposed Change</th>
+                            <th>Status</th>
+                            <th>Verdict</th>
+                            <th>Ran At</th>
+                            <th>Report</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:if="${#lists.isEmpty(trials)}">
+                            <td colspan="7" class="text-muted" style="text-align: center; padding: 24px;">
+                                No trials run yet. Submit a trial above.
+                            </td>
+                        </tr>
+                        <tr th:each="t : ${trials}">
+                            <td class="mono">
+                                <a th:href="@{'/trials/' + ${t.id}}" th:text="${#strings.substring(t.id.toString(), 0, 8)}">id</a>
+                            </td>
+                            <td>
+                                <div style="font-weight: 500;" th:text="${t.repoUrl}">repo</div>
+                                <span class="code-tag" style="font-size: 11px;" th:text="${t.baselineRef}">main</span>
+                            </td>
+                            <td class="mono" style="font-size: 12.5px;" th:text="${t.changeSummary}">change</td>
+                            <td>
+                                <span class="badge" th:classappend="'s-' + ${t.status}" th:text="${t.status}">COMPLETED</span>
+                            </td>
+                            <td>
+                                <span th:if="${t.verdict != null}" class="badge" th:classappend="'v-' + ${t.verdict}" th:text="${t.verdict}">PASS</span>
+                                <span th:if="${t.verdict == null}" class="text-muted">-</span>
+                            </td>
+                            <td class="mono text-muted" style="font-size: 12px;" th:text="${#temporals.format(t.createdAt, 'yyyy-MM-dd HH:mm')}">time</td>
+                            <td>
+                                <a th:href="@{'/trials/' + ${t.id}}" class="btn btn-secondary btn-sm">Report →</a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
     </div>
-</main>
+</div>
 </body>
 </html>

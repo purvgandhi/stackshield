@@ -27,18 +27,8 @@ public class TrialPageController {
         this.reports = reports;
     }
 
-    @GetMapping("/")
-    public String dashboard(Model model) {
-        model.addAttribute("trials", trials.recent().stream().map(TrialSummary::of).toList());
-        return "dashboard";
-    }
+    // Trial creation, progress, and report are handled below
 
-    @GetMapping("/trials/new")
-    public String newTrial(Model model) {
-        model.addAttribute("form", new TrialForm());
-        model.addAttribute("changeTypes", ChangeType.values());
-        return "new-trial";
-    }
 
     @PostMapping("/trials")
     public String create(@ModelAttribute("form") TrialForm form, Model model) {
