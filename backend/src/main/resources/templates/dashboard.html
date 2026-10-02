@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Dashboard')}"></head>
+<body>
+<header th:replace="~{fragments :: header}"></header>
+<main>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+        <div>
+            <h1>Trials</h1>
+            <p class="sub">Each trial runs your repository twice in Docker, baseline and trial, and compares real evidence.</p>
+        </div>
+        <a class="btn" th:href="@{/trials/new}">+ New trial</a>
+    </div>
+
+    <div class="card" th:if="${#lists.isEmpty(trials)}">
+        <p class="muted">No trials yet. Start one with a Maven Spring Boot repository and a proposed change.</p>
+    </div>
+
+    <div class="card table-wrap" th:unless="${#lists.isEmpty(trials)}">
+        <table>
+            <thead>
+            <tr><th>Created</th><th>Repository</th><th>Change</th><th>Status</th><th>Verdict</th></tr>
+            </thead>
+            <tbody>
+            <tr th:each="t : ${trials}">
+                <td class="mono muted" th:text="${#temporals.format(t.createdAt, 'yyyy-MM-dd HH:mm')}">2026-10-02</td>
+                <td class="mono"><a th:href="@{/trials/{id}(id=${t.id})}" th:text="${t.repoUrl} + '@' + ${t.baselineRef}">repo</a></td>
+                <td th:text="${t.changeSummary}">change</td>
+                <td><span class="badge" th:classappend="'s-' + ${t.status}" th:text="${t.status}">QUEUED</span></td>
+                <td><span th:if="${t.verdict}" class="badge" th:classappend="'v-' + ${t.verdict}" th:text="${t.verdict}">PASS</span>
+                    <span th:unless="${t.verdict}" class="muted">–</span></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+</body>
+</html>

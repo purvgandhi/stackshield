@@ -1,0 +1,151 @@
+{
+  "id": "813d10aa-63cc-47d3-bc39-6f17eb7872ef",
+  "repoUrl": "file:///tmp/stacktrial-fixture-repos/passing-upgrade",
+  "baselineRef": "main",
+  "baselineCommit": "20e2102a5a5cf897cb46b34a51a07a4a45b88c00",
+  "changeType": "JAVA_VERSION",
+  "changeSummary": "Upgrade Java to 21 — Java java.version 17 -> 21",
+  "appliedDiff": "diff --git a/pom.xml b/pom.xml\nindex d12f149..cd45f9f 100644\n--- a/pom.xml\n+++ b/pom.xml\n@@ -18,7 +18,7 @@\n     <description>StackTrial fixture A: changes to this project (commons-lang3 bump, Java 17 to 21) pass.</description>\n \n     <properties>\n-        <java.version>17</java.version>\n+        <java.version>21</java.version>\n         <commons-lang3.version>3.13.0</commons-lang3.version>\n     </properties>\n \n",
+  "status": "COMPLETED",
+  "currentStep": "Completed",
+  "finished": true,
+  "failureReason": null,
+  "verdict": "PASS",
+  "verdictReason": "Both builds succeeded and no test that passed in baseline fails in trial.",
+  "createdAt": "2026-10-02T11:07:08.377634Z",
+  "startedAt": "2026-10-02T11:07:08.388083Z",
+  "finishedAt": "2026-10-02T11:07:29.445512Z",
+  "environment": {
+    "baselineJava": 17,
+    "trialJava": 21,
+    "baselineSpringBoot": "3.2.12",
+    "trialSpringBoot": "3.2.12"
+  },
+  "baseline": {
+    "side": "BASELINE",
+    "image": "maven:3.9-eclipse-temurin-17",
+    "outcome": "SUCCESS",
+    "exitCode": 0,
+    "timedOut": false,
+    "phaseReached": "VERIFY",
+    "durationMs": 10443,
+    "tests": {
+      "total": 5,
+      "passed": 5,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "compileErrors": 0,
+    "dependencies": 64,
+    "failureSummary": null,
+    "buildLogUrl": "/api/trials/813d10aa-63cc-47d3-bc39-6f17eb7872ef/runs/BASELINE/log",
+    "dependencyTreeUrl": "/api/trials/813d10aa-63cc-47d3-bc39-6f17eb7872ef/runs/BASELINE/dependency-tree"
+  },
+  "trial": {
+    "side": "TRIAL",
+    "image": "maven:3.9-eclipse-temurin-21",
+    "outcome": "SUCCESS",
+    "exitCode": 0,
+    "timedOut": false,
+    "phaseReached": "VERIFY",
+    "durationMs": 10208,
+    "tests": {
+      "total": 5,
+      "passed": 5,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "compileErrors": 0,
+    "dependencies": 64,
+    "failureSummary": null,
+    "buildLogUrl": "/api/trials/813d10aa-63cc-47d3-bc39-6f17eb7872ef/runs/TRIAL/log",
+    "dependencyTreeUrl": "/api/trials/813d10aa-63cc-47d3-bc39-6f17eb7872ef/runs/TRIAL/dependency-tree"
+  },
+  "comparison": [
+    {
+      "label": "JAVA",
+      "baseline": "17",
+      "trial": "21",
+      "changed": true
+    },
+    {
+      "label": "SPRING BOOT",
+      "baseline": "3.2.12",
+      "trial": "3.2.12",
+      "changed": false
+    },
+    {
+      "label": "BUILD",
+      "baseline": "PASS",
+      "trial": "PASS",
+      "changed": false
+    },
+    {
+      "label": "PHASE REACHED",
+      "baseline": "VERIFY",
+      "trial": "VERIFY",
+      "changed": false
+    },
+    {
+      "label": "TESTS",
+      "baseline": "5 passed",
+      "trial": "5 passed",
+      "changed": false
+    },
+    {
+      "label": "COMPILE ERRORS",
+      "baseline": "0",
+      "trial": "0",
+      "changed": false
+    },
+    {
+      "label": "DEPENDENCIES",
+      "baseline": "64",
+      "trial": "64",
+      "changed": false
+    },
+    {
+      "label": "EXIT CODE",
+      "baseline": "0",
+      "trial": "0",
+      "changed": false
+    },
+    {
+      "label": "DURATION (info)",
+      "baseline": "10.4 s",
+      "trial": "10.2 s",
+      "changed": false
+    }
+  ],
+  "findings": [],
+  "evidence": [
+    {
+      "code": "EVIDENCE-001",
+      "kind": "RUN_RESULT",
+      "side": "BASELINE",
+      "title": "Baseline run: SUCCESS",
+      "detail": "outcome=SUCCESS, exitCode=0, phaseReached=VERIFY, tests: 5 passed, compileErrors=0"
+    },
+    {
+      "code": "EVIDENCE-002",
+      "kind": "RUN_RESULT",
+      "side": "TRIAL",
+      "title": "Trial run: SUCCESS",
+      "detail": "outcome=SUCCESS, exitCode=0, phaseReached=VERIFY, tests: 5 passed, compileErrors=0"
+    }
+  ],
+  "failedTests": [],
+  "explanation": {
+    "status": "NOT_NEEDED",
+    "model": null,
+    "retrievalMethod": null,
+    "content": null,
+    "note": "Verdict is PASS: no regression to explain.",
+    "citedEvidence": [],
+    "citedKnowledge": [],
+    "unknownCitations": [],
+    "documentation": []
+  }
+}

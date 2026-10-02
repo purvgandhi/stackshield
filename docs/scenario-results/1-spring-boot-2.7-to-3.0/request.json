@@ -1,0 +1,6 @@
+{
+  "repoUrl": "file:///tmp/stacktrial-fixture-repos/breaking-upgrade",
+  "baselineRef": "main",
+  "changeType": "SPRING_BOOT_VERSION",
+  "targetVersion": "3.0.13"
+}

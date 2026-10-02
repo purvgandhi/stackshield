@@ -1,0 +1,579 @@
+{
+  "id": "a5c9f459-8288-4088-a97a-79e3d84ec532",
+  "repoUrl": "file:///tmp/stacktrial-fixture-repos/breaking-upgrade",
+  "baselineRef": "main",
+  "baselineCommit": "249b1d3393541ed95f46f1ce695ba52fec9c490d",
+  "changeType": "SPRING_BOOT_VERSION",
+  "changeSummary": "Upgrade Spring Boot to 3.0.13 — Spring Boot 2.7.18 -> 3.0.13 (spring-boot-starter-parent)",
+  "appliedDiff": "diff --git a/pom.xml b/pom.xml\nindex 285fd0f..bbf7237 100644\n--- a/pom.xml\n+++ b/pom.xml\n@@ -7,7 +7,7 @@\n     <parent>\n         <groupId>org.springframework.boot</groupId>\n         <artifactId>spring-boot-starter-parent</artifactId>\n-        <version>2.7.18</version>\n+        <version>3.0.13</version>\n         <relativePath/>\n     </parent>\n \n",
+  "status": "COMPLETED",
+  "currentStep": "Completed",
+  "finished": true,
+  "failureReason": null,
+  "verdict": "REGRESSION",
+  "verdictReason": "Baseline build succeeded but the trial build failed in phase TEST; 2 test(s) that passed in baseline fail in trial.",
+  "createdAt": "2026-10-02T11:06:17.129205Z",
+  "startedAt": "2026-10-02T11:06:17.140289Z",
+  "finishedAt": "2026-10-02T11:06:38.500068Z",
+  "environment": {
+    "baselineJava": 17,
+    "trialJava": 17,
+    "baselineSpringBoot": "2.7.18",
+    "trialSpringBoot": "3.0.13"
+  },
+  "baseline": {
+    "side": "BASELINE",
+    "image": "maven:3.9-eclipse-temurin-17",
+    "outcome": "SUCCESS",
+    "exitCode": 0,
+    "timedOut": false,
+    "phaseReached": "VERIFY",
+    "durationMs": 10881,
+    "tests": {
+      "total": 8,
+      "passed": 8,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "compileErrors": 0,
+    "dependencies": 60,
+    "failureSummary": null,
+    "buildLogUrl": "/api/trials/a5c9f459-8288-4088-a97a-79e3d84ec532/runs/BASELINE/log",
+    "dependencyTreeUrl": "/api/trials/a5c9f459-8288-4088-a97a-79e3d84ec532/runs/BASELINE/dependency-tree"
+  },
+  "trial": {
+    "side": "TRIAL",
+    "image": "maven:3.9-eclipse-temurin-17",
+    "outcome": "FAILURE",
+    "exitCode": 1,
+    "timedOut": false,
+    "phaseReached": "TEST",
+    "durationMs": 9968,
+    "tests": {
+      "total": 8,
+      "passed": 6,
+      "failed": 2,
+      "errors": 0,
+      "skipped": 0
+    },
+    "compileErrors": 0,
+    "dependencies": 62,
+    "failureSummary": "Failed to execute goal org.apache.maven.plugins:maven-surefire-plugin:2.22.2:test (default-test) on project orders-service: There are test failures.",
+    "buildLogUrl": "/api/trials/a5c9f459-8288-4088-a97a-79e3d84ec532/runs/TRIAL/log",
+    "dependencyTreeUrl": "/api/trials/a5c9f459-8288-4088-a97a-79e3d84ec532/runs/TRIAL/dependency-tree"
+  },
+  "comparison": [
+    {
+      "label": "JAVA",
+      "baseline": "17",
+      "trial": "17",
+      "changed": false
+    },
+    {
+      "label": "SPRING BOOT",
+      "baseline": "2.7.18",
+      "trial": "3.0.13",
+      "changed": true
+    },
+    {
+      "label": "BUILD",
+      "baseline": "PASS",
+      "trial": "FAIL",
+      "changed": true
+    },
+    {
+      "label": "PHASE REACHED",
+      "baseline": "VERIFY",
+      "trial": "TEST",
+      "changed": true
+    },
+    {
+      "label": "TESTS",
+      "baseline": "8 passed",
+      "trial": "6 passed / 2 failed",
+      "changed": true
+    },
+    {
+      "label": "COMPILE ERRORS",
+      "baseline": "0",
+      "trial": "0",
+      "changed": false
+    },
+    {
+      "label": "DEPENDENCIES",
+      "baseline": "60",
+      "trial": "62",
+      "changed": true
+    },
+    {
+      "label": "EXIT CODE",
+      "baseline": "0",
+      "trial": "1",
+      "changed": true
+    },
+    {
+      "label": "DURATION (info)",
+      "baseline": "10.9 s",
+      "trial": "10.0 s",
+      "changed": false
+    }
+  ],
+  "findings": [
+    {
+      "type": "BUILD_REGRESSION",
+      "severity": "CRITICAL",
+      "title": "Trial build fails (TEST)",
+      "description": "The build succeeded on baseline and failed on trial in phase TEST. Maven: Failed to execute goal org.apache.maven.plugins:maven-surefire-plugin:2.22.2:test (default-test) on project orders-service: There are test failures.",
+      "baselineEvidence": [
+        "EVIDENCE-001"
+      ],
+      "trialEvidence": [
+        "EVIDENCE-002"
+      ]
+    },
+    {
+      "type": "TEST_REGRESSION",
+      "severity": "HIGH",
+      "title": "Test regressed: com.example.orders.OrderControllerTest#listsOrdersWithTrailingSlash",
+      "description": "Passed in baseline, FAILED in trial: Status expected:<200> but was:<404>",
+      "baselineEvidence": [
+        "EVIDENCE-003"
+      ],
+      "trialEvidence": [
+        "EVIDENCE-004"
+      ]
+    },
+    {
+      "type": "TEST_REGRESSION",
+      "severity": "HIGH",
+      "title": "Test regressed: com.example.orders.OrderControllerTest#returnsOneOrderWithTrailingSlash",
+      "description": "Passed in baseline, FAILED in trial: Status expected:<200> but was:<404>",
+      "baselineEvidence": [
+        "EVIDENCE-005"
+      ],
+      "trialEvidence": [
+        "EVIDENCE-006"
+      ]
+    },
+    {
+      "type": "DEPENDENCY_CHANGED",
+      "severity": "INFO",
+      "title": "49 resolved dependency change(s)",
+      "description": "Resolved dependency tree differs between baseline and trial (first 40 shown as evidence).",
+      "baselineEvidence": [],
+      "trialEvidence": [
+        "EVIDENCE-007",
+        "EVIDENCE-008",
+        "EVIDENCE-009",
+        "EVIDENCE-010",
+        "EVIDENCE-011",
+        "EVIDENCE-012",
+        "EVIDENCE-013",
+        "EVIDENCE-014",
+        "EVIDENCE-015",
+        "EVIDENCE-016",
+        "EVIDENCE-017",
+        "EVIDENCE-018",
+        "EVIDENCE-019",
+        "EVIDENCE-020",
+        "EVIDENCE-021",
+        "EVIDENCE-022",
+        "EVIDENCE-023",
+        "EVIDENCE-024",
+        "EVIDENCE-025",
+        "EVIDENCE-026",
+        "EVIDENCE-027",
+        "EVIDENCE-028",
+        "EVIDENCE-029",
+        "EVIDENCE-030",
+        "EVIDENCE-031",
+        "EVIDENCE-032",
+        "EVIDENCE-033",
+        "EVIDENCE-034",
+        "EVIDENCE-035",
+        "EVIDENCE-036",
+        "EVIDENCE-037",
+        "EVIDENCE-038",
+        "EVIDENCE-039",
+        "EVIDENCE-040",
+        "EVIDENCE-041",
+        "EVIDENCE-042",
+        "EVIDENCE-043",
+        "EVIDENCE-044",
+        "EVIDENCE-045",
+        "EVIDENCE-046"
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "code": "EVIDENCE-001",
+      "kind": "RUN_RESULT",
+      "side": "BASELINE",
+      "title": "Baseline run: SUCCESS",
+      "detail": "outcome=SUCCESS, exitCode=0, phaseReached=VERIFY, tests: 8 passed, compileErrors=0"
+    },
+    {
+      "code": "EVIDENCE-002",
+      "kind": "RUN_RESULT",
+      "side": "TRIAL",
+      "title": "Trial run: FAILURE",
+      "detail": "outcome=FAILURE, exitCode=1, phaseReached=TEST, tests: 6 passed / 2 failed, compileErrors=0. Failure: Failed to execute goal org.apache.maven.plugins:maven-surefire-plugin:2.22.2:test (default-test) on project orders-service: There are test failures."
+    },
+    {
+      "code": "EVIDENCE-003",
+      "kind": "TEST_PASS",
+      "side": "BASELINE",
+      "title": "Baseline test passed: com.example.orders.OrderControllerTest#listsOrdersWithTrailingSlash",
+      "detail": "Outcome PASSED."
+    },
+    {
+      "code": "EVIDENCE-004",
+      "kind": "TEST_FAILURE",
+      "side": "TRIAL",
+      "title": "Trial test FAILED: com.example.orders.OrderControllerTest#listsOrdersWithTrailingSlash",
+      "detail": "java.lang.AssertionError: Status expected:<200> but was:<404>\njava.lang.AssertionError: Status expected:<200> but was:<404>\n\tat com.example.orders.OrderControllerTest.listsOrdersWithTrailingSlash(OrderControllerTest.java:44)"
+    },
+    {
+      "code": "EVIDENCE-005",
+      "kind": "TEST_PASS",
+      "side": "BASELINE",
+      "title": "Baseline test passed: com.example.orders.OrderControllerTest#returnsOneOrderWithTrailingSlash",
+      "detail": "Outcome PASSED."
+    },
+    {
+      "code": "EVIDENCE-006",
+      "kind": "TEST_FAILURE",
+      "side": "TRIAL",
+      "title": "Trial test FAILED: com.example.orders.OrderControllerTest#returnsOneOrderWithTrailingSlash",
+      "detail": "java.lang.AssertionError: Status expected:<200> but was:<404>\njava.lang.AssertionError: Status expected:<200> but was:<404>\n\tat com.example.orders.OrderControllerTest.returnsOneOrderWithTrailingSlash(OrderControllerTest.java:50)"
+    },
+    {
+      "code": "EVIDENCE-007",
+      "kind": "DEPENDENCY_CHANGE",
+      "side": null,
+      "title": "Dependency change: ch.qos.logback:logback-classic 1.2.12 -> 1.4.11",
+      "detail": "ch.qos.logback:logback-classic 1.2.12 -> 1.4.11"
+    },
+    {
+      "code": "EVIDENCE-008",
+      "kind": "DEPENDENCY_CHANGE",
+      "side": null,
+      "title": "Dependency change: ch.qos.logback:logback-core 1.2.12 -> 1.4.11",
+      "detail": "ch.qos.logback:logback-core 1.2.12 -> 1.4.11"
+    },
+    {
+      "code": "EVIDENCE-009",
+      "kind": "DEPENDENCY_CHANGE",
+      "side": null,
+      "title": "Dependency change: com.fasterxml.jackson.core:jackson-annotations 2.13.5 -> 2.14.3",
+      "detail": "com.fasterxml.jackson.core:jackson-annotations 2.13.5 -> 2.14.3"
+    },
+    {
+      "code": "EVIDENCE-010",
+      "kind": "DEPENDENCY_CHANGE",
+      "side": null,
+      "title": "Dependency change: com.fasterxml.jackson.core:jackson-core 2.13.5 -> 2.14.3",
+      "detail": "com.fasterxml.jackson.core:jackson-core 2.13.5 -> 2.14.3"
+    },
+    {
+      "code": "EVIDENCE-011",
+      "kind": "DEPENDENCY_CHANGE",
+      "side": null,
+      "title": "Dependency change: com.fasterxml.jackson.core:jackson-databind 2.13.5 -> 2.14.3",
+      "detail": "com.fasterxml.jackson.core:jackson-databind 2.13.5 -> 2.14.3"
+    },
+    {
+      "code": "EVIDENCE-012",
+      "kind": "DEPENDENCY_CHANGE",
+      "side": null,
+      "title": "Dependency change: com.fasterxml.jackson.datatype:jackson-datatype-jdk8 2.13.5 -> 2.14.3",
+      "detail": "com.fasterxml.jackson.datatype:jackson-datatype-jdk8 2.13.5 -> 2.14.3"
+    },
+    {
+      "code": "EVIDENCE-013",
+      "kind": "DEPENDENCY_CHANGE",
+      "side": null,
+      "title": "Dependency change: com.fasterxml.jackson.datatype:jackson-datatype-jsr310 2.13.5 -> 2.14.3",
+      "detail": "com.fasterxml.jackson.datatype:jackson-datatype-jsr310 2.13.5 -> 2.14.3"
+    },
+    {
+      "code": "EVIDENCE-014",
+      "kind": "DEPENDENCY_CHANGE",
+      "side": null,
+      "title": "Dependency change: com.fasterxml.jackson.module:jackson-module-parameter-names 2.13.5 -> 2.14.3",
+      "detail": "com.fasterxml.jackson.module:jackson-module-parameter-names 2.13.5 -> 2.14.3"
+    },
+    {
+      "code": "EVIDENCE-015",
+      "kind": "DEPENDENCY_CHANGE",
+      "side": null,
+      "title": "Dependency change: io.micrometer:micrometer-commons added (1.10.13)",
+      "detail": "io.micrometer:micrometer-commons added (1.10.13)"
+    },
+    {
+      "code": "EVIDENCE-016",
+      "kind": "DEPENDENCY_CHANGE",
+      "side": null,
+      "title": "Dependency change: io.micrometer:micrometer-observation added (1.10.13)",
+      "detail": "io.micrometer:micrometer-observation added (1.10.13)"
+    },
+    {
+      "code": "EVIDENCE-017",
+      "kind": "DEPENDENCY_CHANGE",
+      "side": null,
+      "title": "Dependency change: jakarta.activation:jakarta.activation-api 1.2.2 -> 2.1.2",
+      "detail": "jakarta.activation:jakarta.activation-api 1.2.2 -> 2.1.2"
+    },
+    {
+      "code": "EVIDENCE-018",
+      "kind": "DEPENDENCY_CHANGE",
+      "side": null,
+      "title": "Dependency change: jakarta.annotation:jakarta.annotation-api 1.3.5 -> 2.1.1",
+      "detail": "jakarta.annotation:jakarta.annotation-api 1.3.5 -> 2.1.1"
+    },
+    {
+      "code": "EVIDENCE-019",
+      "kind": "DEPENDENCY_CHANGE",
+      "side": null,
+      "title": "Dependency change: jakarta.xml.bind:jakarta.xml.bind-api 2.3.3 -> 4.0.1",
+      "detail": "jakarta.xml.bind:jakarta.xml.bind-api 2.3.3 -> 4.0.1"
+    },
+    {
+      "code": "EVIDENCE-020",
+      "kind": "DEPENDENCY_CHANGE",
+      "side": null,
+      "title": "Dependency change: org.apache.logging.log4j:log4j-api 2.17.2 -> 2.19.0",
+      "detail": "org.apache.logging.log4j:log4j-api 2.17.2 -> 2.19.0"
+    },
+    {
+      "code": "EVIDENCE-021",
+      "kind": "DEPENDENCY_CHANGE",
+      "side": null,
+      "title": "Dependency change: org.apache.logging.log4j:log4j-to-slf4j 2.17.2 -> 2.19.0",
+      "detail": "org.apache.logging.log4j:log4j-to-slf4j 2.17.2 -> 2.19.0"
+    },
+    {
+      "code": "EVIDENCE-022",
+      "kind": "DEPENDENCY_CHANGE",
+      "side": null,
+      "title": "Dependency change: org.apache.tomcat.embed:tomcat-embed-core 9.0.83 -> 10.1.16",
+      "detail": "org.apache.tomcat.embed:tomcat-embed-core 9.0.83 -> 10.1.16"
+    },
+    {
+      "code": "EVIDENCE-023",
+      "kind": "DEPENDENCY_CHANGE",
+      "side": null,
+      "title": "Dependency change: org.apache.tomcat.embed:tomcat-embed-el 9.0.83 -> 10.1.16",
+      "detail": "org.apache.tomcat.embed:tomcat-embed-el 9.0.83 -> 10.1.16"
+    },
+    {
+      "code": "EVIDENCE-024",
+      "kind": "DEPENDENCY_CHANGE",
+      "side": null,
+      "title": "Dependency change: org.apache.tomcat.embed:tomcat-embed-websocket 9.0.83 -> 10.1.16",
+      "detail": "org.apache.tomcat.embed:tomcat-embed-websocket 9.0.83 -> 10.1.16"
+    },
+    {
+      "code": "EVIDENCE-025",
+      "kind": "DEPENDENCY_CHANGE",
+      "side": null,
+      "title": "Dependency change: org.assertj:assertj-core 3.22.0 -> 3.23.1",
+      "detail": "org.assertj:assertj-core 3.22.0 -> 3.23.1"
+    },
+    {
+      "code": "EVIDENCE-026",
+      "kind": "DEPENDENCY_CHANGE",
+      "side": null,
+      "title": "Dependency change: org.junit.jupiter:junit-jupiter 5.8.2 -> 5.9.3",
+      "detail": "org.junit.jupiter:junit-jupiter 5.8.2 -> 5.9.3"
+    },
+    {
+      "code": "EVIDENCE-027",
+      "kind": "DEPENDENCY_CHANGE",
+      "side": null,
+      "title": "Dependency change: org.junit.jupiter:junit-jupiter-api 5.8.2 -> 5.9.3",
+      "detail": "org.junit.jupiter:junit-jupiter-api 5.8.2 -> 5.9.3"
+    },
+    {
+      "code": "EVIDENCE-028",
+      "kind": "DEPENDENCY_CHANGE",
+      "side": null,
+      "title": "Dependency change: org.junit.jupiter:junit-jupiter-engine 5.8.2 -> 5.9.3",
+      "detail": "org.junit.jupiter:junit-jupiter-engine 5.8.2 -> 5.9.3"
+    },
+    {
+      "code": "EVIDENCE-029",
+      "kind": "DEPENDENCY_CHANGE",
+      "side": null,
+      "title": "Dependency change: org.junit.jupiter:junit-jupiter-params 5.8.2 -> 5.9.3",
+      "detail": "org.junit.jupiter:junit-jupiter-params 5.8.2 -> 5.9.3"
+    },
+    {
+      "code": "EVIDENCE-030",
+      "kind": "DEPENDENCY_CHANGE",
+      "side": null,
+      "title": "Dependency change: org.junit.platform:junit-platform-commons 1.8.2 -> 1.9.3",
+      "detail": "org.junit.platform:junit-platform-commons 1.8.2 -> 1.9.3"
+    },
+    {
+      "code": "EVIDENCE-031",
+      "kind": "DEPENDENCY_CHANGE",
+      "side": null,
+      "title": "Dependency change: org.junit.platform:junit-platform-engine 1.8.2 -> 1.9.3",
+      "detail": "org.junit.platform:junit-platform-engine 1.8.2 -> 1.9.3"
+    },
+    {
+      "code": "EVIDENCE-032",
+      "kind": "DEPENDENCY_CHANGE",
+      "side": null,
+      "title": "Dependency change: org.mockito:mockito-core 4.5.1 -> 4.8.1",
+      "detail": "org.mockito:mockito-core 4.5.1 -> 4.8.1"
+    },
+    {
+      "code": "EVIDENCE-033",
+      "kind": "DEPENDENCY_CHANGE",
+      "side": null,
+      "title": "Dependency change: org.mockito:mockito-junit-jupiter 4.5.1 -> 4.8.1",
+      "detail": "org.mockito:mockito-junit-jupiter 4.5.1 -> 4.8.1"
+    },
+    {
+      "code": "EVIDENCE-034",
+      "kind": "DEPENDENCY_CHANGE",
+      "side": null,
+      "title": "Dependency change: org.slf4j:jul-to-slf4j 1.7.36 -> 2.0.9",
+      "detail": "org.slf4j:jul-to-slf4j 1.7.36 -> 2.0.9"
+    },
+    {
+      "code": "EVIDENCE-035",
+      "kind": "DEPENDENCY_CHANGE",
+      "side": null,
+      "title": "Dependency change: org.slf4j:slf4j-api 1.7.36 -> 2.0.9",
+      "detail": "org.slf4j:slf4j-api 1.7.36 -> 2.0.9"
+    },
+    {
+      "code": "EVIDENCE-036",
+      "kind": "DEPENDENCY_CHANGE",
+      "side": null,
+      "title": "Dependency change: org.springframework.boot:spring-boot 2.7.18 -> 3.0.13",
+      "detail": "org.springframework.boot:spring-boot 2.7.18 -> 3.0.13"
+    },
+    {
+      "code": "EVIDENCE-037",
+      "kind": "DEPENDENCY_CHANGE",
+      "side": null,
+      "title": "Dependency change: org.springframework.boot:spring-boot-autoconfigure 2.7.18 -> 3.0.13",
+      "detail": "org.springframework.boot:spring-boot-autoconfigure 2.7.18 -> 3.0.13"
+    },
+    {
+      "code": "EVIDENCE-038",
+      "kind": "DEPENDENCY_CHANGE",
+      "side": null,
+      "title": "Dependency change: org.springframework.boot:spring-boot-starter 2.7.18 -> 3.0.13",
+      "detail": "org.springframework.boot:spring-boot-starter 2.7.18 -> 3.0.13"
+    },
+    {
+      "code": "EVIDENCE-039",
+      "kind": "DEPENDENCY_CHANGE",
+      "side": null,
+      "title": "Dependency change: org.springframework.boot:spring-boot-starter-json 2.7.18 -> 3.0.13",
+      "detail": "org.springframework.boot:spring-boot-starter-json 2.7.18 -> 3.0.13"
+    },
+    {
+      "code": "EVIDENCE-040",
+      "kind": "DEPENDENCY_CHANGE",
+      "side": null,
+      "title": "Dependency change: org.springframework.boot:spring-boot-starter-logging 2.7.18 -> 3.0.13",
+      "detail": "org.springframework.boot:spring-boot-starter-logging 2.7.18 -> 3.0.13"
+    },
+    {
+      "code": "EVIDENCE-041",
+      "kind": "DEPENDENCY_CHANGE",
+      "side": null,
+      "title": "Dependency change: org.springframework.boot:spring-boot-starter-test 2.7.18 -> 3.0.13",
+      "detail": "org.springframework.boot:spring-boot-starter-test 2.7.18 -> 3.0.13"
+    },
+    {
+      "code": "EVIDENCE-042",
+      "kind": "DEPENDENCY_CHANGE",
+      "side": null,
+      "title": "Dependency change: org.springframework.boot:spring-boot-starter-tomcat 2.7.18 -> 3.0.13",
+      "detail": "org.springframework.boot:spring-boot-starter-tomcat 2.7.18 -> 3.0.13"
+    },
+    {
+      "code": "EVIDENCE-043",
+      "kind": "DEPENDENCY_CHANGE",
+      "side": null,
+      "title": "Dependency change: org.springframework.boot:spring-boot-starter-web 2.7.18 -> 3.0.13",
+      "detail": "org.springframework.boot:spring-boot-starter-web 2.7.18 -> 3.0.13"
+    },
+    {
+      "code": "EVIDENCE-044",
+      "kind": "DEPENDENCY_CHANGE",
+      "side": null,
+      "title": "Dependency change: org.springframework.boot:spring-boot-test 2.7.18 -> 3.0.13",
+      "detail": "org.springframework.boot:spring-boot-test 2.7.18 -> 3.0.13"
+    },
+    {
+      "code": "EVIDENCE-045",
+      "kind": "DEPENDENCY_CHANGE",
+      "side": null,
+      "title": "Dependency change: org.springframework.boot:spring-boot-test-autoconfigure 2.7.18 -> 3.0.13",
+      "detail": "org.springframework.boot:spring-boot-test-autoconfigure 2.7.18 -> 3.0.13"
+    },
+    {
+      "code": "EVIDENCE-046",
+      "kind": "DEPENDENCY_CHANGE",
+      "side": null,
+      "title": "Dependency change: org.springframework:spring-aop 5.3.31 -> 6.0.14",
+      "detail": "org.springframework:spring-aop 5.3.31 -> 6.0.14"
+    }
+  ],
+  "failedTests": [
+    {
+      "side": "TRIAL",
+      "test": "com.example.orders.OrderControllerTest#listsOrdersWithTrailingSlash",
+      "outcome": "FAILED",
+      "type": "java.lang.AssertionError",
+      "message": "Status expected:<200> but was:<404>",
+      "stackTrace": "java.lang.AssertionError: Status expected:<200> but was:<404>\n\tat com.example.orders.OrderControllerTest.listsOrdersWithTrailingSlash(OrderControllerTest.java:44)"
+    },
+    {
+      "side": "TRIAL",
+      "test": "com.example.orders.OrderControllerTest#returnsOneOrderWithTrailingSlash",
+      "outcome": "FAILED",
+      "type": "java.lang.AssertionError",
+      "message": "Status expected:<200> but was:<404>",
+      "stackTrace": "java.lang.AssertionError: Status expected:<200> but was:<404>\n\tat com.example.orders.OrderControllerTest.returnsOneOrderWithTrailingSlash(OrderControllerTest.java:50)"
+    }
+  ],
+  "explanation": {
+    "status": "UNAVAILABLE",
+    "model": null,
+    "retrievalMethod": "FULL_TEXT",
+    "content": null,
+    "note": "GEMINI_API_KEY is not configured. The deterministic report is complete; the retrieved documentation below was selected without AI.",
+    "citedEvidence": [],
+    "citedKnowledge": [],
+    "unknownCitations": [],
+    "documentation": [
+      {
+        "id": "KB-SB30-03",
+        "source": "Spring Boot 3.0 Migration Guide (curated summary)",
+        "sourceUrl": "https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-3.0-Migration-Guide",
+        "title": "Spring MVC and WebFlux: trailing slash matching disabled",
+        "content": "Spring Framework 6.0 (used by Spring Boot 3.0) no longer matches URLs with a trailing slash by default. In Spring Boot 2.x, a controller mapped to \"/api/orders\" also answered \"/api/orders/\". After the upgrade, a request to \"/api/orders/\" returns 404 Not Found unless the trailing-slash path is mapped explicitly. Tests that call endpoints with a trailing slash start failing with \"Status expected:<200> but was:<404>\". The old behaviour can be re-enabled with PathMatchConfigurer#setUseTrailingSlashMatch(true), which is deprecated; the recommended fix is to map or redirect the trailing-slash URLs explicitly.",
+        "cited": false
+      },
+      {
+        "id": "KB-JDK21-04",
+        "source": "Upgrading a Java project to Java 21 (curated summary)",
+        "sourceUrl": "https://docs.oracle.com/en/java/javase/21/migrate/",
+        "title": "Removed and changed APIs",
+        "content": "Thread.stop() throws UnsupportedOperationException since Java 20. Finalization and the Security Manager are deprecated for removal. Java 21 adds sequenced collections (getFirst, getLast, reversed on List, Deque and others); a custom collection class that already declares a method with one of these names but a different return type fails to compile.",
+        "cited": false
+      }
+    ]
+  }
+}

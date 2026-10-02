@@ -1,0 +1,6 @@
+{
+  "repoUrl": "file:///tmp/stacktrial-fixture-repos/passing-upgrade",
+  "baselineRef": "main",
+  "changeType": "JAVA_VERSION",
+  "targetVersion": "21"
+}

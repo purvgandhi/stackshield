@@ -1,0 +1,68 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] --------------------< com.example:greeting-service >--------------------
+[INFO] Building greeting-service 1.0.0
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ greeting-service ---
+[INFO] skip non existing resourceDirectory /workspace/src/main/resources
+[INFO] skip non existing resourceDirectory /workspace/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.11.0:compile (default-compile) @ greeting-service ---
+[INFO] Changes detected - recompiling the module! :source
+[INFO] Compiling 3 source files with javac [debug release 17] to target/classes
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ greeting-service ---
+[INFO] skip non existing resourceDirectory /workspace/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.11.0:testCompile (default-testCompile) @ greeting-service ---
+[INFO] Changes detected - recompiling the module! :dependency
+[INFO] Compiling 2 source files with javac [debug release 17] to target/test-classes
+[INFO] 
+[INFO] --- surefire:3.1.2:test (default-test) @ greeting-service ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running com.example.greeting.GreetingServiceTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.105 s -- in com.example.greeting.GreetingServiceTest
+[INFO] Running com.example.greeting.GreetingControllerTest
+11:06:58.013 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.example.greeting.GreetingControllerTest]: GreetingControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+11:06:58.134 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.example.greeting.GreetingApplication for test class com.example.greeting.GreetingControllerTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::               (v3.2.12)
+
+2026-10-02T11:06:58.481Z  INFO 76 --- [           main] c.e.greeting.GreetingControllerTest      : Starting GreetingControllerTest using Java 17.0.20.1 with PID 76 (started by ubuntu in /workspace)
+2026-10-02T11:06:58.482Z  INFO 76 --- [           main] c.e.greeting.GreetingControllerTest      : No active profile set, falling back to 1 default profile: "default"
+2026-10-02T11:06:59.353Z  INFO 76 --- [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-10-02T11:06:59.354Z  INFO 76 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-10-02T11:06:59.356Z  INFO 76 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 1 ms
+2026-10-02T11:06:59.388Z  INFO 76 --- [           main] c.e.greeting.GreetingControllerTest      : Started GreetingControllerTest in 1.198 seconds (process running for 2.266)
+OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.285 s -- in com.example.greeting.GreetingControllerTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- jar:3.3.0:jar (default-jar) @ greeting-service ---
+[INFO] Building jar: /workspace/target/greeting-service-1.0.0.jar
+[INFO] 
+[INFO] --- spring-boot:3.2.12:repackage (repackage) @ greeting-service ---
+[INFO] Replacing main artifact /workspace/target/greeting-service-1.0.0.jar with repackaged archive, adding nested dependencies in BOOT-INF/.
+[INFO] The original artifact has been renamed to /workspace/target/greeting-service-1.0.0.jar.original
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  5.947 s
+[INFO] Finished at: 2026-10-02T11:07:00Z
+[INFO] ------------------------------------------------------------------------

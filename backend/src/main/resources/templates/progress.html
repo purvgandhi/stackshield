@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Trial progress')}"></head>
+<body>
+<header th:replace="~{fragments :: header}"></header>
+<main th:with="order=${ {'QUEUED','PREPARING','RUNNING','ANALYZING','EXPLAINING','COMPLETED'} }">
+    <h1>Trial in progress</h1>
+    <p class="sub mono" th:text="${r.repoUrl} + '@' + ${r.baselineRef}">repo</p>
+
+    <div class="card">
+        <div class="verdict">
+            <span class="badge" th:classappend="'s-' + ${r.status}" th:text="${r.status}">RUNNING</span>
+            <span th:text="${r.currentStep}">Running baseline</span>
+        </div>
+        <div class="pipeline">
+            <span class="step" th:each="s, it : ${order}"
+                  th:classappend="${s == r.status} ? 'active' : (${it.index} < ${order.indexOf(r.status)} ? 'done' : '')"
+                  th:text="${s}">STEP</span>
+        </div>
+        <dl class="kv">
+            <dt>Change</dt><dd th:text="${r.changeSummary}">change</dd>
+            <dt>Commit</dt><dd class="mono" th:text="${r.baselineCommit} ?: 'resolving…'">sha</dd>
+            <dt>Started</dt><dd class="mono" th:text="${r.startedAt} ?: 'waiting for a worker'">t</dd>
+        </dl>
+        <p class="hint">Baseline and trial each run <span class="mono">mvn verify</span> in a fresh container. The first run
+            downloads dependencies and can take several minutes. This page refreshes every 3 seconds.</p>
+    </div>
+
+    <div class="card" th:if="${r.baseline}">
+        <strong>Baseline finished:</strong>
+        <span class="badge" th:classappend="'o-' + (${r.baseline.outcome} == 'SUCCESS' ? 'PASS' : 'FAIL')" th:text="${r.baseline.outcome}">SUCCESS</span>
+        <span class="muted" th:text="${r.baseline.tests.describe()}">tests</span>
+    </div>
+</main>
+<script>setTimeout(() => location.reload(), 3000);</script>
+</body>
+</html>

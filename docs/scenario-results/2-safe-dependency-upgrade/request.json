@@ -1,0 +1,8 @@
+{
+  "repoUrl": "file:///tmp/stacktrial-fixture-repos/passing-upgrade",
+  "baselineRef": "main",
+  "changeType": "DEPENDENCY_VERSION",
+  "groupId": "org.apache.commons",
+  "artifactId": "commons-lang3",
+  "targetVersion": "3.17.0"
+}

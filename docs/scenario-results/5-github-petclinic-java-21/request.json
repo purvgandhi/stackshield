@@ -1,0 +1,6 @@
+{
+  "repoUrl": "https://github.com/spring-projects/spring-petclinic",
+  "baselineRef": "main",
+  "changeType": "JAVA_VERSION",
+  "targetVersion": "21"
+}

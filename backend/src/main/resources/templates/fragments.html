@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(title)">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${title} + ' · StackTrial'">StackTrial</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<header th:fragment="header" class="top">
+    <a class="brand" th:href="@{/}">STACK<span>TRIAL</span></a>
+    <span class="tagline">Try the change before you merge it.</span>
+    <nav>
+        <a th:href="@{/}">Dashboard</a>
+        <a th:href="@{/trials/new}">New trial</a>
+    </nav>
+</header>
+</body>
+</html>

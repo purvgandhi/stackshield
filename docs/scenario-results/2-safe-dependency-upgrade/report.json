@@ -1,0 +1,169 @@
+{
+  "id": "aad49ec2-0168-46ba-8332-8f1f06d4c3b7",
+  "repoUrl": "file:///tmp/stacktrial-fixture-repos/passing-upgrade",
+  "baselineRef": "main",
+  "baselineCommit": "20e2102a5a5cf897cb46b34a51a07a4a45b88c00",
+  "changeType": "DEPENDENCY_VERSION",
+  "changeSummary": "Upgrade org.apache.commons:commons-lang3 to 3.17.0 — org.apache.commons:commons-lang3 (property commons-lang3.version: 3.13.0 -> 3.17.0)",
+  "appliedDiff": "diff --git a/pom.xml b/pom.xml\nindex d12f149..8affefa 100644\n--- a/pom.xml\n+++ b/pom.xml\n@@ -19,7 +19,7 @@\n \n     <properties>\n         <java.version>17</java.version>\n-        <commons-lang3.version>3.13.0</commons-lang3.version>\n+        <commons-lang3.version>3.17.0</commons-lang3.version>\n     </properties>\n \n     <dependencies>\n",
+  "status": "COMPLETED",
+  "currentStep": "Completed",
+  "finished": true,
+  "failureReason": null,
+  "verdict": "PASS",
+  "verdictReason": "Both builds succeeded and no test that passed in baseline fails in trial.",
+  "createdAt": "2026-10-02T11:06:42.765068Z",
+  "startedAt": "2026-10-02T11:06:42.772460Z",
+  "finishedAt": "2026-10-02T11:07:03.659277Z",
+  "environment": {
+    "baselineJava": 17,
+    "trialJava": 17,
+    "baselineSpringBoot": "3.2.12",
+    "trialSpringBoot": "3.2.12"
+  },
+  "baseline": {
+    "side": "BASELINE",
+    "image": "maven:3.9-eclipse-temurin-17",
+    "outcome": "SUCCESS",
+    "exitCode": 0,
+    "timedOut": false,
+    "phaseReached": "VERIFY",
+    "durationMs": 10124,
+    "tests": {
+      "total": 5,
+      "passed": 5,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "compileErrors": 0,
+    "dependencies": 64,
+    "failureSummary": null,
+    "buildLogUrl": "/api/trials/aad49ec2-0168-46ba-8332-8f1f06d4c3b7/runs/BASELINE/log",
+    "dependencyTreeUrl": "/api/trials/aad49ec2-0168-46ba-8332-8f1f06d4c3b7/runs/BASELINE/dependency-tree"
+  },
+  "trial": {
+    "side": "TRIAL",
+    "image": "maven:3.9-eclipse-temurin-17",
+    "outcome": "SUCCESS",
+    "exitCode": 0,
+    "timedOut": false,
+    "phaseReached": "VERIFY",
+    "durationMs": 10325,
+    "tests": {
+      "total": 5,
+      "passed": 5,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "compileErrors": 0,
+    "dependencies": 64,
+    "failureSummary": null,
+    "buildLogUrl": "/api/trials/aad49ec2-0168-46ba-8332-8f1f06d4c3b7/runs/TRIAL/log",
+    "dependencyTreeUrl": "/api/trials/aad49ec2-0168-46ba-8332-8f1f06d4c3b7/runs/TRIAL/dependency-tree"
+  },
+  "comparison": [
+    {
+      "label": "JAVA",
+      "baseline": "17",
+      "trial": "17",
+      "changed": false
+    },
+    {
+      "label": "SPRING BOOT",
+      "baseline": "3.2.12",
+      "trial": "3.2.12",
+      "changed": false
+    },
+    {
+      "label": "BUILD",
+      "baseline": "PASS",
+      "trial": "PASS",
+      "changed": false
+    },
+    {
+      "label": "PHASE REACHED",
+      "baseline": "VERIFY",
+      "trial": "VERIFY",
+      "changed": false
+    },
+    {
+      "label": "TESTS",
+      "baseline": "5 passed",
+      "trial": "5 passed",
+      "changed": false
+    },
+    {
+      "label": "COMPILE ERRORS",
+      "baseline": "0",
+      "trial": "0",
+      "changed": false
+    },
+    {
+      "label": "DEPENDENCIES",
+      "baseline": "64",
+      "trial": "64",
+      "changed": false
+    },
+    {
+      "label": "EXIT CODE",
+      "baseline": "0",
+      "trial": "0",
+      "changed": false
+    },
+    {
+      "label": "DURATION (info)",
+      "baseline": "10.1 s",
+      "trial": "10.3 s",
+      "changed": false
+    }
+  ],
+  "findings": [
+    {
+      "type": "DEPENDENCY_CHANGED",
+      "severity": "INFO",
+      "title": "1 resolved dependency change(s)",
+      "description": "Resolved dependency tree differs between baseline and trial.",
+      "baselineEvidence": [],
+      "trialEvidence": [
+        "EVIDENCE-003"
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "code": "EVIDENCE-001",
+      "kind": "RUN_RESULT",
+      "side": "BASELINE",
+      "title": "Baseline run: SUCCESS",
+      "detail": "outcome=SUCCESS, exitCode=0, phaseReached=VERIFY, tests: 5 passed, compileErrors=0"
+    },
+    {
+      "code": "EVIDENCE-002",
+      "kind": "RUN_RESULT",
+      "side": "TRIAL",
+      "title": "Trial run: SUCCESS",
+      "detail": "outcome=SUCCESS, exitCode=0, phaseReached=VERIFY, tests: 5 passed, compileErrors=0"
+    },
+    {
+      "code": "EVIDENCE-003",
+      "kind": "DEPENDENCY_CHANGE",
+      "side": null,
+      "title": "Dependency change: org.apache.commons:commons-lang3 3.13.0 -> 3.17.0",
+      "detail": "org.apache.commons:commons-lang3 3.13.0 -> 3.17.0"
+    }
+  ],
+  "failedTests": [],
+  "explanation": {
+    "status": "NOT_NEEDED",
+    "model": null,
+    "retrievalMethod": null,
+    "content": null,
+    "note": "Verdict is PASS: no regression to explain.",
+    "citedEvidence": [],
+    "citedKnowledge": [],
+    "unknownCitations": [],
+    "documentation": []
+  }
+}

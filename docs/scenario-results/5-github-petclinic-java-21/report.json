@@ -1,0 +1,151 @@
+{
+  "id": "0929425b-8160-48fc-83fb-b045410caba4",
+  "repoUrl": "https://github.com/spring-projects/spring-petclinic",
+  "baselineRef": "main",
+  "baselineCommit": "500158f732419217507c7656904b8e6aa1bcc0d6",
+  "changeType": "JAVA_VERSION",
+  "changeSummary": "Upgrade Java to 21 — Java java.version 17 -> 21",
+  "appliedDiff": "diff --git a/pom.xml b/pom.xml\nindex db5b9f7..11d4d26 100644\n--- a/pom.xml\n+++ b/pom.xml\n@@ -16,7 +16,7 @@\n \n   <properties>\n     <!-- Generic properties -->\n-    <java.version>17</java.version>\n+    <java.version>21</java.version>\n     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>\n     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>\n     <!-- Important for reproducible builds. Update using e.g. ./mvnw versions:set -DnewVersion=... -->\n",
+  "status": "COMPLETED",
+  "currentStep": "Completed",
+  "finished": true,
+  "failureReason": null,
+  "verdict": "PASS",
+  "verdictReason": "Both builds succeeded and no test that passed in baseline fails in trial.",
+  "createdAt": "2026-10-02T11:16:11.836567Z",
+  "startedAt": "2026-10-02T11:16:16.835978Z",
+  "finishedAt": "2026-10-02T11:18:08.458926Z",
+  "environment": {
+    "baselineJava": 17,
+    "trialJava": 21,
+    "baselineSpringBoot": "4.1.0",
+    "trialSpringBoot": "4.1.0"
+  },
+  "baseline": {
+    "side": "BASELINE",
+    "image": "maven:3.9-eclipse-temurin-17",
+    "outcome": "SUCCESS",
+    "exitCode": 0,
+    "timedOut": false,
+    "phaseReached": "VERIFY",
+    "durationMs": 69276,
+    "tests": {
+      "total": 79,
+      "passed": 77,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 2
+    },
+    "compileErrors": 0,
+    "dependencies": 171,
+    "failureSummary": null,
+    "buildLogUrl": "/api/trials/0929425b-8160-48fc-83fb-b045410caba4/runs/BASELINE/log",
+    "dependencyTreeUrl": "/api/trials/0929425b-8160-48fc-83fb-b045410caba4/runs/BASELINE/dependency-tree"
+  },
+  "trial": {
+    "side": "TRIAL",
+    "image": "maven:3.9-eclipse-temurin-21",
+    "outcome": "SUCCESS",
+    "exitCode": 0,
+    "timedOut": false,
+    "phaseReached": "VERIFY",
+    "durationMs": 40261,
+    "tests": {
+      "total": 79,
+      "passed": 77,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 2
+    },
+    "compileErrors": 0,
+    "dependencies": 171,
+    "failureSummary": null,
+    "buildLogUrl": "/api/trials/0929425b-8160-48fc-83fb-b045410caba4/runs/TRIAL/log",
+    "dependencyTreeUrl": "/api/trials/0929425b-8160-48fc-83fb-b045410caba4/runs/TRIAL/dependency-tree"
+  },
+  "comparison": [
+    {
+      "label": "JAVA",
+      "baseline": "17",
+      "trial": "21",
+      "changed": true
+    },
+    {
+      "label": "SPRING BOOT",
+      "baseline": "4.1.0",
+      "trial": "4.1.0",
+      "changed": false
+    },
+    {
+      "label": "BUILD",
+      "baseline": "PASS",
+      "trial": "PASS",
+      "changed": false
+    },
+    {
+      "label": "PHASE REACHED",
+      "baseline": "VERIFY",
+      "trial": "VERIFY",
+      "changed": false
+    },
+    {
+      "label": "TESTS",
+      "baseline": "77 passed / 2 skipped",
+      "trial": "77 passed / 2 skipped",
+      "changed": false
+    },
+    {
+      "label": "COMPILE ERRORS",
+      "baseline": "0",
+      "trial": "0",
+      "changed": false
+    },
+    {
+      "label": "DEPENDENCIES",
+      "baseline": "171",
+      "trial": "171",
+      "changed": false
+    },
+    {
+      "label": "EXIT CODE",
+      "baseline": "0",
+      "trial": "0",
+      "changed": false
+    },
+    {
+      "label": "DURATION (info)",
+      "baseline": "69.3 s",
+      "trial": "40.3 s",
+      "changed": false
+    }
+  ],
+  "findings": [],
+  "evidence": [
+    {
+      "code": "EVIDENCE-001",
+      "kind": "RUN_RESULT",
+      "side": "BASELINE",
+      "title": "Baseline run: SUCCESS",
+      "detail": "outcome=SUCCESS, exitCode=0, phaseReached=VERIFY, tests: 77 passed / 2 skipped, compileErrors=0"
+    },
+    {
+      "code": "EVIDENCE-002",
+      "kind": "RUN_RESULT",
+      "side": "TRIAL",
+      "title": "Trial run: SUCCESS",
+      "detail": "outcome=SUCCESS, exitCode=0, phaseReached=VERIFY, tests: 77 passed / 2 skipped, compileErrors=0"
+    }
+  ],
+  "failedTests": [],
+  "explanation": {
+    "status": "NOT_NEEDED",
+    "model": null,
+    "retrievalMethod": null,
+    "content": null,
+    "note": "Verdict is PASS: no regression to explain.",
+    "citedEvidence": [],
+    "citedKnowledge": [],
+    "unknownCitations": [],
+    "documentation": []
+  }
+}

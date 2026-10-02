@@ -1,0 +1,78 @@
+# Live REST API checks against the running app (2026-10-02T11:15:56Z)
+
+$ POST /api/trials  (JAVA_VERSION 21 on passing-upgrade) -> expect 202
+HTTP/1.1 202 
+Location: /api/trials/d48aad1c-cdca-46e1-8f94-26fb5f6a87fc
+{"trialId":"d48aad1c-cdca-46e1-8f94-26fb5f6a87fc","status":"QUEUED","reportUrl":"/api/trials/d48aad1c-cdca-46e1-8f94-26fb5f6a87fc","pageUrl":"/trials/d48aad1c-cdca-46e1-8f94-26fb5f6a87fc"}
+
+$ GET /api/trials  (first 2 items)
+[{"id":"d48aad1c-cdca-46e1-8f94-26fb5f6a87fc","repoUrl":"file:///tmp/stacktrial-fixture-repos/passing-upgrade","baselineRef":"main","changeType":"JAVA_VERSION","changeSummary":"Upgrade Java to 21","status":"PREPARING","currentStep":"Cloning repository","verdict":null,"createdAt":"2026-10-02T11:15:56.186525Z"},{"id":"0e5df89a-495b-4f08-8dac-eddb400a261e","repoUrl":"file:///tmp/stacktrial-fixture-repos/breaking-upgrade","baselineRef":"main","changeType":"SPRING_BOOT_VERSION","changeSummary":"Upgrade Spring Boot to 3.0.13 — Spring Boot 2.7.18 -> 3.0.13 (spring-boot-starter-parent)","status":"COMPLETED","currentStep":"Completed","verdict":"REGRESSION","createdAt":"2026-10-02T11:14:24.600797Z"}
+
+$ GET /api/trials/a5c9f459-8288-4088-a97a-79e3d84ec532  (selected fields)
+{
+  "status": "COMPLETED",
+  "verdict": "REGRESSION",
+  "verdictReason": "Baseline build succeeded but the trial build failed in phase TEST; 2 test(s) that passed in baseline fail in trial.",
+  "comparison": [
+    "JAVA: 17 -> 17",
+    "SPRING BOOT: 2.7.18 -> 3.0.13",
+    "BUILD: PASS -> FAIL",
+    "PHASE REACHED: VERIFY -> TEST",
+    "TESTS: 8 passed -> 6 passed / 2 failed",
+    "COMPILE ERRORS: 0 -> 0",
+    "DEPENDENCIES: 60 -> 62",
+    "EXIT CODE: 0 -> 1",
+    "DURATION (info): 10.9 s -> 10.0 s"
+  ],
+  "findings": [
+    "BUILD_REGRESSION",
+    "TEST_REGRESSION",
+    "TEST_REGRESSION",
+    "DEPENDENCY_CHANGED"
+  ],
+  "firstEvidence": {
+    "code": "EVIDENCE-001",
+    "kind": "RUN_RESULT",
+    "side": "BASELINE",
+    "title": "Baseline run: SUCCESS",
+    "detail": "outcome=SUCCESS, exitCode=0, phaseReached=VERIFY, tests: 8 passed, compileErrors=0"
+  }
+}
+
+$ GET /api/trials/a5c9f459-8288-4088-a97a-79e3d84ec532/runs/TRIAL/log  (tail)
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException
+
+HTTP 200
+
+$ GET /api/trials/a5c9f459-8288-4088-a97a-79e3d84ec532/runs/BASELINE/dependency-tree  (head)
+com.example:orders-service:jar:1.0.0
++- org.springframework.boot:spring-boot-starter-web:jar:2.7.18:compile
+|  +- org.springframework.boot:spring-boot-starter:jar:2.7.18:compile
+|  |  +- org.springframework.boot:spring-boot:jar:2.7.18:compile
+|  |  +- org.springframework.boot:spring-boot-autoconfigure:jar:2.7.18:compile
+
+$ POST /api/trials with ssh:// URL  -> expect 400
+{"type":"about:blank","title":"Invalid request","status":400,"detail":"Repository URL must be https://host/path or file:///path","instance":"/api/trials"}
+HTTP 400
+
+$ POST /api/trials DEPENDENCY_VERSION without groupId -> expect 400
+{"type":"about:blank","title":"Invalid request","status":400,"detail":"groupId is required for this change type","instance":"/api/trials"}
+HTTP 400
+
+$ GET /api/trials/<random uuid> -> expect 404
+{"type":"about:blank","title":"Not found","status":404,"detail":"Trial 00000000-0000-0000-0000-000000000000 not found","instance":"/api/trials/00000000-0000-0000-0000-000000000000"}
+HTTP 404
+
+$ GET /actuator/health
+{"status":"UP"}
+HTTP 200
+
+$ UI pages
+GET / -> 200
+GET /trials/new -> 200
+GET /trials/a5c9f459-8288-4088-a97a-79e3d84ec532 -> 200

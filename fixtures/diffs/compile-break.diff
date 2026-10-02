@@ -1,0 +1,12 @@
+diff --git a/src/main/java/com/example/greeting/GreetingService.java b/src/main/java/com/example/greeting/GreetingService.java
+index 58dd36a..147af13 100644
+--- a/src/main/java/com/example/greeting/GreetingService.java
++++ b/src/main/java/com/example/greeting/GreetingService.java
+@@ -8,6 +8,6 @@ public class GreetingService {
+ 
+     public String greet(String name) {
+         String clean = StringUtils.isBlank(name) ? "world" : StringUtils.capitalize(name.strip());
+-        return "Hello, " + StringUtils.abbreviate(clean, 20) + "!";
++        return "Hello, " + StringUtils.truncateMiddle(clean, 20) + "!";
+     }
+ }

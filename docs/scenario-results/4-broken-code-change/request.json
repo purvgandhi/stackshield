@@ -1,0 +1,6 @@
+{
+  "repoUrl": "file:///tmp/stacktrial-fixture-repos/passing-upgrade",
+  "baselineRef": "main",
+  "changeType": "GIT_DIFF",
+  "diff": "diff --git a/src/main/java/com/example/greeting/GreetingService.java b/src/main/java/com/example/greeting/GreetingService.java\nindex 58dd36a..147af13 100644\n--- a/src/main/java/com/example/greeting/GreetingService.java\n+++ b/src/main/java/com/example/greeting/GreetingService.java\n@@ -8,6 +8,6 @@ public class GreetingService {\n \n     public String greet(String name) {\n         String clean = StringUtils.isBlank(name) ? \"world\" : StringUtils.capitalize(name.strip());\n-        return \"Hello, \" + StringUtils.abbreviate(clean, 20) + \"!\";\n+        return \"Hello, \" + StringUtils.truncateMiddle(clean, 20) + \"!\";\n     }\n }\n"
+}

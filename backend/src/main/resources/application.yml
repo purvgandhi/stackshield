@@ -1,0 +1,66 @@
+spring:
+  application:
+    name: stacktrial
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/stacktrial}
+    username: ${DATABASE_USERNAME:stacktrial}
+    password: ${DATABASE_PASSWORD:stacktrial}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    enabled: true
+  thymeleaf:
+    cache: false
+  servlet:
+    multipart:
+      max-file-size: 1MB
+      max-request-size: 2MB
+
+server:
+  port: ${PORT:8080}
+  # Local developer tool: not exposed on other interfaces by default.
+  address: ${SERVER_ADDRESS:127.0.0.1}
+  error:
+    include-message: always
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+logging:
+  pattern:
+    level: "%5p [trial=%X{trialId:-}] [step=%X{step:-}]"
+
+stacktrial:
+  data-dir: ${STACKTRIAL_DATA_DIR:./data}
+  workspace:
+    allow-local-repositories: ${STACKTRIAL_ALLOW_LOCAL_REPOS:true}
+    clone-timeout: 3m
+    keep-workspaces: false
+  execution:
+    max-concurrent-trials: 1
+    queue-capacity: 20
+  runner:
+    images:
+      17: maven:3.9-eclipse-temurin-17-alpine
+      21: maven:3.9-eclipse-temurin-21-alpine
+    default-java-version: 21
+    memory-mb: 2048
+    cpus: 2.0
+    pids-limit: 512
+    timeout: ${STACKTRIAL_RUN_TIMEOUT:15m}
+    user: "1000:1000"
+    network-mode: ${STACKTRIAL_RUNNER_NETWORK:bridge}
+    dependency-cache-volume: stacktrial-m2-cache
+  gemini:
+    api-key: ${GEMINI_API_KEY:}
+    chat-model: ${GEMINI_CHAT_MODEL:gemini-2.5-flash}
+    embedding-model: ${GEMINI_EMBEDDING_MODEL:gemini-embedding-001}
+  rag:
+    top-k: 5
+    embedding-dimensions: 768
+    max-cosine-distance: 0.45

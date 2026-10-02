@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('New trial')}"></head>
+<body>
+<header th:replace="~{fragments :: header}"></header>
+<main>
+    <h1>New trial</h1>
+    <p class="sub">StackTrial clones the repository at the baseline ref, applies your change to a copy, and runs
+        <span class="mono">mvn verify</span> on both inside identical Docker containers.</p>
+
+    <div class="notice err" th:if="${error}" th:text="${error}">error</div>
+
+    <form class="card" method="post" th:action="@{/trials}" th:object="${form}">
+        <div class="row">
+            <label for="repoUrl">Repository URL</label>
+            <div>
+                <input id="repoUrl" th:field="*{repoUrl}" placeholder="https://github.com/acme/shop or file:///path/to/repo" required>
+                <div class="hint">Public HTTPS Git repository with a pom.xml at the root (Java / Spring Boot / Maven).</div>
+            </div>
+        </div>
+        <div class="row">
+            <label for="baselineRef">Baseline ref</label>
+            <input id="baselineRef" th:field="*{baselineRef}" placeholder="main" required>
+        </div>
+        <div class="row">
+            <label for="changeType">Change type</label>
+            <select id="changeType" th:field="*{changeType}">
+                <option th:each="t : ${changeTypes}" th:value="${t}" th:text="${t}">TYPE</option>
+            </select>
+        </div>
+        <div class="row" data-for="DEPENDENCY_VERSION">
+            <label for="groupId">Dependency</label>
+            <div class="grid2">
+                <input id="groupId" th:field="*{groupId}" placeholder="groupId, e.g. org.apache.commons">
+                <input id="artifactId" th:field="*{artifactId}" placeholder="artifactId, e.g. commons-lang3">
+            </div>
+        </div>
+        <div class="row" data-for="DEPENDENCY_VERSION SPRING_BOOT_VERSION JAVA_VERSION">
+            <label for="targetVersion">Target version</label>
+            <div>
+                <input id="targetVersion" th:field="*{targetVersion}" placeholder="e.g. 3.0.13 (Spring Boot) or 21 (Java)">
+                <div class="hint">Java versions need a configured runner image (17 and 21 by default).</div>
+            </div>
+        </div>
+        <div class="row" data-for="GIT_DIFF">
+            <label for="diff">Unified diff</label>
+            <div>
+                <textarea id="diff" th:field="*{diff}" placeholder="Paste the output of git diff"></textarea>
+                <div class="hint">Applied with <span class="mono">git apply</span>; it must apply cleanly to the baseline ref.</div>
+            </div>
+        </div>
+        <div class="row">
+            <span></span>
+            <div><button class="btn" type="submit">Start trial</button></div>
+        </div>
+    </form>
+</main>
+<script>
+    // Show only the inputs the selected change type needs.
+    const select = document.getElementById('changeType');
+    function sync() {
+        document.querySelectorAll('[data-for]').forEach(row => {
+            row.style.display = row.dataset.for.split(' ').includes(select.value) ? '' : 'none';
+        });
+    }
+    select.addEventListener('change', sync);
+    sync();
+</script>
+</body>
+</html>

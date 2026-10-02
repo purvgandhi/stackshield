@@ -1,0 +1,189 @@
+{
+  "id": "99c148c6-7620-4874-8103-7e4038bd9d4d",
+  "repoUrl": "file:///tmp/stacktrial-fixture-repos/passing-upgrade",
+  "baselineRef": "main",
+  "baselineCommit": "20e2102a5a5cf897cb46b34a51a07a4a45b88c00",
+  "changeType": "GIT_DIFF",
+  "changeSummary": "Apply uploaded git diff — Applied git diff touching 1 file(s)",
+  "appliedDiff": "diff --git a/src/main/java/com/example/greeting/GreetingService.java b/src/main/java/com/example/greeting/GreetingService.java\nindex 58dd36a..147af13 100644\n--- a/src/main/java/com/example/greeting/GreetingService.java\n+++ b/src/main/java/com/example/greeting/GreetingService.java\n@@ -8,6 +8,6 @@ public class GreetingService {\n \n     public String greet(String name) {\n         String clean = StringUtils.isBlank(name) ? \"world\" : StringUtils.capitalize(name.strip());\n-        return \"Hello, \" + StringUtils.abbreviate(clean, 20) + \"!\";\n+        return \"Hello, \" + StringUtils.truncateMiddle(clean, 20) + \"!\";\n     }\n }\n",
+  "status": "COMPLETED",
+  "currentStep": "Completed",
+  "finished": true,
+  "failureReason": null,
+  "verdict": "REGRESSION",
+  "verdictReason": "Baseline build succeeded but the trial build failed in phase COMPILE.",
+  "createdAt": "2026-10-02T11:07:33.928723Z",
+  "startedAt": "2026-10-02T11:07:33.936230Z",
+  "finishedAt": "2026-10-02T11:07:51.612992Z",
+  "environment": {
+    "baselineJava": 17,
+    "trialJava": 17,
+    "baselineSpringBoot": "3.2.12",
+    "trialSpringBoot": "3.2.12"
+  },
+  "baseline": {
+    "side": "BASELINE",
+    "image": "maven:3.9-eclipse-temurin-17",
+    "outcome": "SUCCESS",
+    "exitCode": 0,
+    "timedOut": false,
+    "phaseReached": "VERIFY",
+    "durationMs": 10314,
+    "tests": {
+      "total": 5,
+      "passed": 5,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "compileErrors": 0,
+    "dependencies": 64,
+    "failureSummary": null,
+    "buildLogUrl": "/api/trials/99c148c6-7620-4874-8103-7e4038bd9d4d/runs/BASELINE/log",
+    "dependencyTreeUrl": "/api/trials/99c148c6-7620-4874-8103-7e4038bd9d4d/runs/BASELINE/dependency-tree"
+  },
+  "trial": {
+    "side": "TRIAL",
+    "image": "maven:3.9-eclipse-temurin-17",
+    "outcome": "FAILURE",
+    "exitCode": 1,
+    "timedOut": false,
+    "phaseReached": "COMPILE",
+    "durationMs": 6966,
+    "tests": {
+      "total": 0,
+      "passed": 0,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "compileErrors": 1,
+    "dependencies": 64,
+    "failureSummary": "Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.11.0:compile (default-compile) on project greeting-service: Compilation failure",
+    "buildLogUrl": "/api/trials/99c148c6-7620-4874-8103-7e4038bd9d4d/runs/TRIAL/log",
+    "dependencyTreeUrl": "/api/trials/99c148c6-7620-4874-8103-7e4038bd9d4d/runs/TRIAL/dependency-tree"
+  },
+  "comparison": [
+    {
+      "label": "JAVA",
+      "baseline": "17",
+      "trial": "17",
+      "changed": false
+    },
+    {
+      "label": "SPRING BOOT",
+      "baseline": "3.2.12",
+      "trial": "3.2.12",
+      "changed": false
+    },
+    {
+      "label": "BUILD",
+      "baseline": "PASS",
+      "trial": "FAIL",
+      "changed": true
+    },
+    {
+      "label": "PHASE REACHED",
+      "baseline": "VERIFY",
+      "trial": "COMPILE",
+      "changed": true
+    },
+    {
+      "label": "TESTS",
+      "baseline": "5 passed",
+      "trial": "no tests ran",
+      "changed": true
+    },
+    {
+      "label": "COMPILE ERRORS",
+      "baseline": "0",
+      "trial": "1",
+      "changed": true
+    },
+    {
+      "label": "DEPENDENCIES",
+      "baseline": "64",
+      "trial": "64",
+      "changed": false
+    },
+    {
+      "label": "EXIT CODE",
+      "baseline": "0",
+      "trial": "1",
+      "changed": true
+    },
+    {
+      "label": "DURATION (info)",
+      "baseline": "10.3 s",
+      "trial": "7.0 s",
+      "changed": false
+    }
+  ],
+  "findings": [
+    {
+      "type": "BUILD_REGRESSION",
+      "severity": "CRITICAL",
+      "title": "Trial build fails (COMPILE)",
+      "description": "The build succeeded on baseline and failed on trial in phase COMPILE. 1 compile error(s). Maven: Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.11.0:compile (default-compile) on project greeting-service: Compilation failure",
+      "baselineEvidence": [
+        "EVIDENCE-001"
+      ],
+      "trialEvidence": [
+        "EVIDENCE-002",
+        "EVIDENCE-003"
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "code": "EVIDENCE-001",
+      "kind": "RUN_RESULT",
+      "side": "BASELINE",
+      "title": "Baseline run: SUCCESS",
+      "detail": "outcome=SUCCESS, exitCode=0, phaseReached=VERIFY, tests: 5 passed, compileErrors=0"
+    },
+    {
+      "code": "EVIDENCE-002",
+      "kind": "RUN_RESULT",
+      "side": "TRIAL",
+      "title": "Trial run: FAILURE",
+      "detail": "outcome=FAILURE, exitCode=1, phaseReached=COMPILE, tests: no tests ran, compileErrors=1. Failure: Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.11.0:compile (default-compile) on project greeting-service: Compilation failure"
+    },
+    {
+      "code": "EVIDENCE-003",
+      "kind": "COMPILE_ERROR",
+      "side": "TRIAL",
+      "title": "TRIAL compile error at src/main/java/com/example/greeting/GreetingService.java:11:39",
+      "detail": "cannot find symbol | symbol: method truncateMiddle(java.lang.String,int) | location: class org.apache.commons.lang3.StringUtils"
+    }
+  ],
+  "failedTests": [],
+  "explanation": {
+    "status": "UNAVAILABLE",
+    "model": null,
+    "retrievalMethod": "FULL_TEXT",
+    "content": null,
+    "note": "GEMINI_API_KEY is not configured. The deterministic report is complete; the retrieved documentation below was selected without AI.",
+    "citedEvidence": [],
+    "citedKnowledge": [],
+    "unknownCitations": [],
+    "documentation": [
+      {
+        "id": "KB-SB30-02",
+        "source": "Spring Boot 3.0 Migration Guide (curated summary)",
+        "sourceUrl": "https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-3.0-Migration-Guide",
+        "title": "Jakarta EE 9+ namespace (javax to jakarta)",
+        "content": "Spring Boot 3.0 moves from Java EE to Jakarta EE 9/10 APIs. Imports such as javax.servlet, javax.persistence, javax.validation and javax.annotation (for example javax.annotation.PostConstruct) must change to jakarta.servlet, jakarta.persistence, jakarta.validation and jakarta.annotation. Code that still uses the javax packages fails to compile with errors like \"package javax.persistence does not exist\" or \"cannot find symbol\". Third-party libraries must also be versions built for Jakarta EE 9+.",
+        "cited": false
+      },
+      {
+        "id": "KB-SB3X-01",
+        "source": "Spring Boot 3.1 to 3.4 Release Notes (curated summary)",
+        "sourceUrl": "https://github.com/spring-projects/spring-boot/wiki",
+        "title": "Spring Boot 3.1",
+        "content": "Spring Boot 3.1 adds Testcontainers service connections (@ServiceConnection) and Docker Compose support (spring-boot-docker-compose). It upgrades to Hibernate 6.2. Dependency management for Apache HttpClient 4 was removed, so a project that still uses HttpClient 4 must declare its version explicitly or the build fails to resolve it.",
+        "cited": false
+      }
+    ]
+  }
+}

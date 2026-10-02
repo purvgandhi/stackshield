@@ -1,0 +1,252 @@
+Picked up JAVA_TOOL_OPTIONS: -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts -Djavax.net.ssl.trustStoreType=JKS -Dhttps.proxyHost=127.0.0.1 -Dhttps.proxyPort=41821 -Dhttp.nonProxyHosts=localhost|127.0.0.1|::1|127.*|0.*|::|169.254.*|api.anthropic.com|api-staging.anthropic.com|api-pr-preview.anthropic.com|mcp-proxy.anthropic.com|mcp-proxy-staging.anthropic.com|registry.npmjs.org|jsr.io|npm.jsr.io|pypi.org|files.pythonhosted.org|index.crates.io|proxy.golang.org|host.docker.internal|10.*|172.16.*|172.17.*|172.18.*|172.19.*|172.20.*|172.21.*|172.22.*|172.23.*|172.24.*|172.25.*|172.26.*|172.27.*|172.28.*|172.29.*|172.30.*|172.31.*|192.168.*|100.64.0.0/10|*.svc.cluster.local|*.svc.cluster.local -Djdk.http.auth.tunneling.disabledSchemes= -Djdk.http.auth.proxying.disabledSchemes=
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ---------------------< com.stacktrial:stacktrial >----------------------
+[INFO] Building StackTrial 0.1.0-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.4.1:clean (default-clean) @ stacktrial ---
+[INFO] Deleting /mnt/attach/project-files/stacktrial/backend/target
+[INFO] 
+[INFO] --- dependency:3.8.1:properties (default) @ stacktrial ---
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ stacktrial ---
+[INFO] Copying 1 resource from src/main/resources to target/classes
+[INFO] Copying 11 resources from src/main/resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.14.1:compile (default-compile) @ stacktrial ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 104 source files with javac [debug parameters release 21] to target/classes
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ stacktrial ---
+[INFO] Copying 0 resource from src/test/resources to target/test-classes
+[INFO] 
+[INFO] --- compiler:3.14.1:testCompile (default-testCompile) @ stacktrial ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 17 source files with javac [debug parameters release 21] to target/test-classes
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ stacktrial ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+Picked up JAVA_TOOL_OPTIONS: -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts -Djavax.net.ssl.trustStoreType=JKS -Dhttps.proxyHost=127.0.0.1 -Dhttps.proxyPort=41821 -Dhttp.nonProxyHosts=localhost|127.0.0.1|::1|127.*|0.*|::|169.254.*|api.anthropic.com|api-staging.anthropic.com|api-pr-preview.anthropic.com|mcp-proxy.anthropic.com|mcp-proxy-staging.anthropic.com|registry.npmjs.org|jsr.io|npm.jsr.io|pypi.org|files.pythonhosted.org|index.crates.io|proxy.golang.org|host.docker.internal|10.*|172.16.*|172.17.*|172.18.*|172.19.*|172.20.*|172.21.*|172.22.*|172.23.*|172.24.*|172.25.*|172.26.*|172.27.*|172.28.*|172.29.*|172.30.*|172.31.*|192.168.*|100.64.0.0/10|*.svc.cluster.local|*.svc.cluster.local -Djdk.http.auth.tunneling.disabledSchemes= -Djdk.http.auth.proxying.disabledSchemes=
+[INFO] Running com.stacktrial.common.LogRedactorTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.174 s -- in com.stacktrial.common.LogRedactorTest
+[INFO] Running com.stacktrial.comparison.ComparisonEngineTest
+[INFO] Tests run: 18, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.278 s -- in com.stacktrial.comparison.ComparisonEngineTest
+[INFO] Running com.stacktrial.evidence.DependencyTreeParserTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.056 s -- in com.stacktrial.evidence.DependencyTreeParserTest
+[INFO] Running com.stacktrial.evidence.MavenBuildLogParserTest
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.021 s -- in com.stacktrial.evidence.MavenBuildLogParserTest
+[INFO] Running com.stacktrial.evidence.SurefireReportParserTest
+[Fatal Error] :2:10: DOCTYPE is disallowed when the feature "http://apache.org/xml/features/disallow-doctype-decl" set to true.
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.099 s -- in com.stacktrial.evidence.SurefireReportParserTest
+[INFO] Running com.stacktrial.execution.DockerContainerRunnerIT
+11:33:00.097 [main] WARN com.stacktrial.execution.DockerContainerRunner -- Container stacktrial-it-2f9a6c22-0656-4b24-871b-79b1905738b5 exceeded timeout PT3S, killing it
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 5.631 s -- in com.stacktrial.execution.DockerContainerRunnerIT
+[INFO] Running com.stacktrial.explanation.ExplanationServiceIT
+11:33:02.049 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.stacktrial.StackTrialApplication for test class com.stacktrial.explanation.ExplanationServiceIT
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::               (v3.5.16)
+
+2026-10-02T11:33:02.686Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] c.s.explanation.ExplanationServiceIT     : Starting ExplanationServiceIT using Java 21.0.11 with PID 27100 (started by root in /mnt/attach/project-files/stacktrial/backend)
+2026-10-02T11:33:02.687Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] c.s.explanation.ExplanationServiceIT     : No active profile set, falling back to 1 default profile: "default"
+2026-10-02T11:33:04.175Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-10-02T11:33:04.273Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 81 ms. Found 6 JPA repository interfaces.
+2026-10-02T11:33:04.756Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] org.testcontainers.images.PullPolicy     : Image pull policy will be performed by: DefaultPullPolicy()
+2026-10-02T11:33:04.758Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] o.t.utility.ImageNameSubstitutor         : Image name substitution will be performed by: DefaultImageNameSubstitutor (composite of 'ConfigurationFileImageNameSubstitutor' and 'PrefixingImageNameSubstitutor')
+2026-10-02T11:33:04.772Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] org.testcontainers.DockerClientFactory   : Testcontainers version: 1.21.4
+2026-10-02T11:33:04.947Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] o.t.d.DockerClientProviderStrategy       : Loaded org.testcontainers.dockerclient.UnixSocketClientProviderStrategy from ~/.testcontainers.properties, will try it first
+2026-10-02T11:33:05.499Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] o.t.d.DockerClientProviderStrategy       : Found Docker environment with local Unix socket (unix:///var/run/docker.sock)
+2026-10-02T11:33:05.501Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] org.testcontainers.DockerClientFactory   : Docker host IP address is localhost
+2026-10-02T11:33:05.521Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] org.testcontainers.DockerClientFactory   : Connected to docker: 
+  Server Version: 29.6.2
+  API Version: 1.55
+  Operating System: Ubuntu 24.04.4 LTS
+  Total Memory: 16094 MB
+2026-10-02T11:33:05.632Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] tc.testcontainers/ryuk:0.12.0            : Creating container for image: testcontainers/ryuk:0.12.0
+2026-10-02T11:33:05.640Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] o.t.utility.RegistryAuthLocator          : Failure when attempting to lookup auth config. Please ignore if you don't have images in an authenticated registry. Details: (dockerImageName: testcontainers/ryuk:0.12.0, configFile: /root/.docker/config.json, configEnv: DOCKER_AUTH_CONFIG). Falling back to docker-java default behaviour. Exception message: Status 404: No config supplied. Checked in order: /root/.docker/config.json (file not found), DOCKER_AUTH_CONFIG (not set)
+2026-10-02T11:33:05.737Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] tc.testcontainers/ryuk:0.12.0            : Container testcontainers/ryuk:0.12.0 is starting: 9ae773dfce38ca5d0d9eef707528e4a04fcffbbcb1f9d9caf04a5cfd587e45b9
+2026-10-02T11:33:06.016Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] tc.testcontainers/ryuk:0.12.0            : Container testcontainers/ryuk:0.12.0 started in PT0.384380947S
+2026-10-02T11:33:06.023Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] o.t.utility.RyukResourceReaper           : Ryuk started - will monitor and terminate Testcontainers containers on JVM exit
+2026-10-02T11:33:06.023Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] org.testcontainers.DockerClientFactory   : Checking the system...
+2026-10-02T11:33:06.024Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] org.testcontainers.DockerClientFactory   : ?? Docker server version should be at least 1.6.0
+2026-10-02T11:33:06.024Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] tc.pgvector/pgvector:pg16                : Creating container for image: pgvector/pgvector:pg16
+2026-10-02T11:33:06.070Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] tc.pgvector/pgvector:pg16                : Container pgvector/pgvector:pg16 is starting: 3935ebede96ab39e59d5a19beabc359788a734c42fb8f3ce986dd0520bd72c9a
+2026-10-02T11:33:07.325Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] tc.pgvector/pgvector:pg16                : Container pgvector/pgvector:pg16 started in PT1.300236561S
+2026-10-02T11:33:07.326Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] tc.pgvector/pgvector:pg16                : Container is started (JDBC URL: jdbc:postgresql://localhost:32797/test?loggerLevel=OFF)
+2026-10-02T11:33:07.836Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:postgresql://localhost:32797/test?loggerLevel=OFF (PostgreSQL 16.15)
+2026-10-02T11:33:07.884Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Schema history table "public"."flyway_schema_history" does not exist yet
+2026-10-02T11:33:07.888Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] o.f.core.internal.command.DbValidate     : Successfully validated 1 migration (execution time 00:00.023s)
+2026-10-02T11:33:07.901Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Creating Schema History table "public"."flyway_schema_history" ...
+2026-10-02T11:33:07.953Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] o.f.core.internal.command.DbMigrate      : Current version of schema "public": << Empty Schema >>
+2026-10-02T11:33:07.972Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "1 - init"
+2026-10-02T11:33:08.034Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] o.f.core.internal.command.DbMigrate      : Successfully applied 1 migration to schema "public", now at version v1 (execution time 00:00.044s)
+2026-10-02T11:33:09.174Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-10-02T11:33:09.238Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.53.Final
+2026-10-02T11:33:09.277Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-10-02T11:33:09.604Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-10-02T11:33:09.641Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-10-02T11:33:09.663Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@47baf547
+2026-10-02T11:33:09.664Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-10-02T11:33:09.736Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 16.15
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-10-02T11:33:11.154Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-10-02T11:33:11.201Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-10-02T11:33:12.710Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-10-02T11:33:12.710Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-10-02T11:33:12.717Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 2 endpoints beneath base path '/actuator'
+2026-10-02T11:33:12.731Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 21 ms
+2026-10-02T11:33:12.824Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] c.s.explanation.ExplanationServiceIT     : Started ExplanationServiceIT in 10.601 seconds (process running for 19.213)
+2026-10-02T11:33:12.982Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] c.s.e.KnowledgeIngestionService          : Knowledge base loaded: 22 chunks
+2026-10-02T11:33:12.984Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] c.s.e.KnowledgeIngestionService          : GEMINI_API_KEY not set: knowledge retrieval will use PostgreSQL full-text search
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 13.20 s -- in com.stacktrial.explanation.ExplanationServiceIT
+[INFO] Running com.stacktrial.explanation.ExplanationUnitTest
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.014 s -- in com.stacktrial.explanation.ExplanationUnitTest
+[INFO] Running com.stacktrial.explanation.KnowledgeRepositoryIT
+2026-10-02T11:33:14.303Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.stacktrial.explanation.KnowledgeRepositoryIT]: KnowledgeRepositoryIT does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-10-02T11:33:14.312Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.stacktrial.StackTrialApplication for test class com.stacktrial.explanation.KnowledgeRepositoryIT
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::               (v3.5.16)
+
+2026-10-02T11:33:14.402Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] c.s.explanation.KnowledgeRepositoryIT    : Starting KnowledgeRepositoryIT using Java 21.0.11 with PID 27100 (started by root in /mnt/attach/project-files/stacktrial/backend)
+2026-10-02T11:33:14.402Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] c.s.explanation.KnowledgeRepositoryIT    : No active profile set, falling back to 1 default profile: "default"
+2026-10-02T11:33:15.932Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-10-02T11:33:15.961Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 28 ms. Found 6 JPA repository interfaces.
+2026-10-02T11:33:16.015Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] tc.pgvector/pgvector:pg16                : Creating container for image: pgvector/pgvector:pg16
+2026-10-02T11:33:16.080Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] tc.pgvector/pgvector:pg16                : Container pgvector/pgvector:pg16 is starting: cef80620985e2181241deae954518e4e33210f9c4cc01bb4b77b8c606196d5e4
+2026-10-02T11:33:17.232Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] tc.pgvector/pgvector:pg16                : Container pgvector/pgvector:pg16 started in PT1.217442277S
+2026-10-02T11:33:17.233Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] tc.pgvector/pgvector:pg16                : Container is started (JDBC URL: jdbc:postgresql://localhost:32798/test?loggerLevel=OFF)
+2026-10-02T11:33:17.385Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:postgresql://localhost:32798/test?loggerLevel=OFF (PostgreSQL 16.15)
+2026-10-02T11:33:17.396Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Schema history table "public"."flyway_schema_history" does not exist yet
+2026-10-02T11:33:17.397Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] o.f.core.internal.command.DbValidate     : Successfully validated 1 migration (execution time 00:00.004s)
+2026-10-02T11:33:17.404Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Creating Schema History table "public"."flyway_schema_history" ...
+2026-10-02T11:33:17.426Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] o.f.core.internal.command.DbMigrate      : Current version of schema "public": << Empty Schema >>
+2026-10-02T11:33:17.434Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "1 - init"
+2026-10-02T11:33:17.474Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] o.f.core.internal.command.DbMigrate      : Successfully applied 1 migration to schema "public", now at version v1 (execution time 00:00.035s)
+2026-10-02T11:33:17.507Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-10-02T11:33:17.511Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-10-02T11:33:17.522Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-10-02T11:33:17.523Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Starting...
+2026-10-02T11:33:17.535Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-2 - Added connection org.postgresql.jdbc.PgConnection@203ea126
+2026-10-02T11:33:17.535Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Start completed.
+2026-10-02T11:33:17.538Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-2)']
+	Database driver: undefined/unknown
+	Database version: 16.15
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-10-02T11:33:17.631Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-10-02T11:33:17.650Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-10-02T11:33:18.094Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 2 endpoints beneath base path '/actuator'
+2026-10-02T11:33:18.109Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] c.s.explanation.KnowledgeRepositoryIT    : Started KnowledgeRepositoryIT in 3.793 seconds (process running for 24.499)
+2026-10-02T11:33:18.175Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] c.s.e.KnowledgeIngestionService          : Knowledge base loaded: 22 chunks
+2026-10-02T11:33:18.176Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] c.s.e.KnowledgeIngestionService          : GEMINI_API_KEY not set: knowledge retrieval will use PostgreSQL full-text search
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.959 s -- in com.stacktrial.explanation.KnowledgeRepositoryIT
+[INFO] Running com.stacktrial.trial.TrialLifecycleIT
+2026-10-02T11:33:18.263Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.stacktrial.StackTrialApplication for test class com.stacktrial.trial.TrialLifecycleIT
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::               (v3.5.16)
+
+2026-10-02T11:33:19.004Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] com.stacktrial.trial.TrialLifecycleIT    : Starting TrialLifecycleIT using Java 21.0.11 with PID 27100 (started by root in /mnt/attach/project-files/stacktrial/backend)
+2026-10-02T11:33:19.005Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] com.stacktrial.trial.TrialLifecycleIT    : No active profile set, falling back to 1 default profile: "default"
+2026-10-02T11:33:20.521Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-10-02T11:33:20.554Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 31 ms. Found 6 JPA repository interfaces.
+2026-10-02T11:33:20.600Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] tc.pgvector/pgvector:pg16                : Creating container for image: pgvector/pgvector:pg16
+2026-10-02T11:33:20.663Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] tc.pgvector/pgvector:pg16                : Container pgvector/pgvector:pg16 is starting: fb71122b1675ed3d9809ae87eba3aeb9c01375b9f95bc613a95177da3e7d4bf7
+2026-10-02T11:33:21.982Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] tc.pgvector/pgvector:pg16                : Container pgvector/pgvector:pg16 started in PT1.382372029S
+2026-10-02T11:33:21.983Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] tc.pgvector/pgvector:pg16                : Container is started (JDBC URL: jdbc:postgresql://localhost:32799/test?loggerLevel=OFF)
+2026-10-02T11:33:22.271Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:postgresql://localhost:32799/test?loggerLevel=OFF (PostgreSQL 16.15)
+2026-10-02T11:33:22.283Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Schema history table "public"."flyway_schema_history" does not exist yet
+2026-10-02T11:33:22.284Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] o.f.core.internal.command.DbValidate     : Successfully validated 1 migration (execution time 00:00.004s)
+2026-10-02T11:33:22.294Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Creating Schema History table "public"."flyway_schema_history" ...
+2026-10-02T11:33:22.313Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] o.f.core.internal.command.DbMigrate      : Current version of schema "public": << Empty Schema >>
+2026-10-02T11:33:22.320Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "1 - init"
+2026-10-02T11:33:22.365Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] o.f.core.internal.command.DbMigrate      : Successfully applied 1 migration to schema "public", now at version v1 (execution time 00:00.039s)
+2026-10-02T11:33:22.392Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-10-02T11:33:22.398Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-10-02T11:33:22.410Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-10-02T11:33:22.411Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Starting...
+2026-10-02T11:33:22.421Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-3 - Added connection org.postgresql.jdbc.PgConnection@35b7156f
+2026-10-02T11:33:22.421Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Start completed.
+2026-10-02T11:33:22.425Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-3)']
+	Database driver: undefined/unknown
+	Database version: 16.15
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-10-02T11:33:22.509Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-10-02T11:33:22.523Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-10-02T11:33:22.753Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-10-02T11:33:22.753Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-10-02T11:33:22.755Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 2 endpoints beneath base path '/actuator'
+2026-10-02T11:33:22.759Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 6 ms
+2026-10-02T11:33:22.777Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] com.stacktrial.trial.TrialLifecycleIT    : Started TrialLifecycleIT in 3.808 seconds (process running for 29.166)
+2026-10-02T11:33:22.811Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] c.s.e.KnowledgeIngestionService          : Knowledge base loaded: 22 chunks
+2026-10-02T11:33:22.812Z  INFO [trial=] [step=] 27100 --- [stacktrial] [           main] c.s.e.KnowledgeIngestionService          : GEMINI_API_KEY not set: knowledge retrieval will use PostgreSQL full-text search
+2026-10-02T11:33:23.044Z  INFO [trial=b52dcdef-dc90-4aa6-a776-d9285369095e] [step=] 27100 --- [stacktrial] [ trial-worker-1] com.stacktrial.trial.TrialOrchestrator   : Trial started: Upgrade Spring Boot to 3.0.13 on file:///tmp/junit-4495213900719914966/repo@main
+2026-10-02T11:33:23.152Z  INFO [trial=b52dcdef-dc90-4aa6-a776-d9285369095e] [step=BASELINE] 27100 --- [stacktrial] [ trial-worker-1] com.stacktrial.trial.TrialOrchestrator   : BASELINE finished: SUCCESS in phase VERIFY, tests 2 passed
+2026-10-02T11:33:23.168Z  INFO [trial=b52dcdef-dc90-4aa6-a776-d9285369095e] [step=TRIAL] 27100 --- [stacktrial] [ trial-worker-1] com.stacktrial.trial.TrialOrchestrator   : TRIAL finished: FAILURE in phase TEST, tests 1 passed / 1 failed
+2026-10-02T11:33:23.196Z  INFO [trial=b52dcdef-dc90-4aa6-a776-d9285369095e] [step=ANALYZING] 27100 --- [stacktrial] [ trial-worker-1] com.stacktrial.trial.TrialOrchestrator   : Verdict REGRESSION: Baseline build succeeded but the trial build failed in phase TEST; 1 test(s) that passed in baseline fail in trial.
+2026-10-02T11:33:23.216Z  INFO [trial=b52dcdef-dc90-4aa6-a776-d9285369095e] [step=COMPLETED] 27100 --- [stacktrial] [ trial-worker-1] com.stacktrial.trial.TrialOrchestrator   : Trial completed
+2026-10-02T11:33:23.532Z  INFO [trial=bb08097d-8a72-4af8-949c-73bea3c63bb7] [step=] 27100 --- [stacktrial] [ trial-worker-1] com.stacktrial.trial.TrialOrchestrator   : Trial started: Apply uploaded git diff on file:///tmp/junit-4495213900719914966/repo@main
+2026-10-02T11:33:23.608Z  WARN [trial=bb08097d-8a72-4af8-949c-73bea3c63bb7] [step=PREPARING] 27100 --- [stacktrial] [ trial-worker-1] com.stacktrial.trial.TrialOrchestrator   : Trial failed: Diff does not apply cleanly: git apply --check --whitespace=nowarn /tmp/stacktrial-4303909924104334512.patch failed: error: x: No such file or directory
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 5.585 s -- in com.stacktrial.trial.TrialLifecycleIT
+[INFO] Running com.stacktrial.workspace.PomInspectorTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.007 s -- in com.stacktrial.workspace.PomInspectorTest
+[INFO] Running com.stacktrial.workspace.RepositoryUrlValidatorTest
+[INFO] Tests run: 11, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.016 s -- in com.stacktrial.workspace.RepositoryUrlValidatorTest
+[INFO] Running com.stacktrial.workspace.change.ChangeApplierTest
+[INFO] Tests run: 11, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.261 s -- in com.stacktrial.workspace.change.ChangeApplierTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 72, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- jar:3.4.2:jar (default-jar) @ stacktrial ---
+[INFO] Building jar: /mnt/attach/project-files/stacktrial/backend/target/stacktrial-0.1.0-SNAPSHOT.jar
+[INFO] 
+[INFO] --- spring-boot:3.5.16:repackage (repackage) @ stacktrial ---
+[INFO] Replacing main artifact /mnt/attach/project-files/stacktrial/backend/target/stacktrial-0.1.0-SNAPSHOT.jar with repackaged archive, adding nested dependencies in BOOT-INF/.
+[INFO] The original artifact has been renamed to /mnt/attach/project-files/stacktrial/backend/target/stacktrial-0.1.0-SNAPSHOT.jar.original
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  01:09 min
+[INFO] Finished at: 2026-10-02T11:33:27Z
+[INFO] ------------------------------------------------------------------------

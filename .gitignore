@@ -1,0 +1,17 @@
+# Build output
+target/
+*.class
+
+# Runtime data (workspaces, collected results, stored logs)
+data/
+backend/data/
+
+# Secrets and local config
+.env
+*.local.yml
+
+# IDE
+.idea/
+*.iml
+.vscode/
+.DS_Store
