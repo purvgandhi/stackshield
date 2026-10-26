@@ -1,89 +1,90 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments :: head(${repo.name} + ' · Deployment Readiness')}"></head>
 <body>
 <div class="app-layout">
-    <aside th:replace="~{fragments :: sidebar(${activeNav})}"></aside>
-    <div class="main-wrapper">
-        <header th:replace="~{fragments :: topbar}"></header>
+ <aside th:replace="~{fragments :: sidebar(${activeNav})}"></aside>
+ <div class="main-wrapper">
+ <header th:replace="~{fragments :: topbar}"></header>
 
-        <main class="content-container">
-            <div th:replace="~{fragments :: repoHeader(${repo}, 'readiness')}"></div>
+ <main class="content-container">
+ <div th:replace="~{fragments :: repoHeader(${repo}, 'readiness')}"></div>
 
-            <div th:if="${readiness != null}">
-                <!-- Readiness Score Card -->
-                <div class="card" style="margin-bottom: 20px;">
-                    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
-                        <div>
-                            <div class="text-muted" style="font-size: 11.5px; text-transform: uppercase; font-family: var(--mono); letter-spacing: 0.08em;">Production & Cloud Readiness Audit</div>
-                            <h2 style="margin: 4px 0 0; font-size: 18px; color: var(--text-main);" th:text="${readiness.summary}">Deployment Readiness Assessment</h2>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 12px;">
-                            <span class="text-muted mono" style="font-size: 13px;">READINESS:</span>
-                            <span class="badge" th:classappend="${readiness.scorePercentage >= 80 ? 'badge-pass' : readiness.scorePercentage >= 50 ? 'badge-warn' : 'badge-fail'}" style="font-size: 18px; padding: 6px 16px;" th:text="${readiness.scorePercentage} + '%'">85%</span>
-                        </div>
-                    </div>
-                </div>
+ <div th:if="${readiness != null}">
+ <!-- Readiness Score Card -->
+ <div class="card" style="margin-bottom: 20px;">
+ <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+ <div>
+ <div class="text-muted" style="font-size: 11.5px; text-transform: uppercase; font-family: var(--mono); letter-spacing: 0.08em;">Production & Cloud Readiness Audit</div>
+ <h2 style="margin: 4px 0 0; font-size: 18px; color: var(--text-main);" th:text="${readiness.summary}">Deployment Readiness Assessment</h2>
+ </div>
+ <div style="display: flex; align-items: center; gap: 12px;">
+ <span class="text-muted mono" style="font-size: 13px;">READINESS:</span>
+ <span class="badge" th:classappend="${readiness.scorePercentage >= 80 ? 'badge-pass' : readiness.scorePercentage >= 50 ? 'badge-warn' : 'badge-fail'}" style="font-size: 18px; padding: 6px 16px;" th:text="${readiness.scorePercentage} + '%'">85%</span>
+ </div>
+ </div>
+ </div>
 
-                <div class="grid-3">
-                    <div class="card">
-                        <div class="card-title">Passed Checks</div>
-                        <div class="stat-value text-emerald" th:text="${readiness.passedCount}">5</div>
-                        <div class="stat-sub">Meets 12-factor cloud standards</div>
-                    </div>
-                    <div class="card">
-                        <div class="card-title">Warnings</div>
-                        <div class="stat-value text-amber" th:text="${readiness.warningCount}">1</div>
-                        <div class="stat-sub">Non-blocking improvements</div>
-                    </div>
-                    <div class="card">
-                        <div class="card-title">Failed Checks</div>
-                        <div class="stat-value text-rose" th:text="${readiness.failedCount}">0</div>
-                        <div class="stat-sub">Blocking cloud readiness</div>
-                    </div>
-                </div>
+ <div class="grid-3">
+ <div class="card">
+ <div class="card-title">Passed Checks</div>
+ <div class="stat-value text-emerald" th:text="${readiness.passedCount}">5</div>
+ <div class="stat-sub">Meets 12-factor cloud standards</div>
+ </div>
+ <div class="card">
+ <div class="card-title">Warnings</div>
+ <div class="stat-value text-amber" th:text="${readiness.warningCount}">1</div>
+ <div class="stat-sub">Non-blocking improvements</div>
+ </div>
+ <div class="card">
+ <div class="card-title">Failed Checks</div>
+ <div class="stat-value text-rose" th:text="${readiness.failedCount}">0</div>
+ <div class="stat-sub">Blocking cloud readiness</div>
+ </div>
+ </div>
 
-                <!-- Readiness Checks Table -->
-                <div class="card" style="padding: 0;">
-                    <div style="padding: 16px 20px; border-bottom: 1px solid var(--border);">
-                        <h3 style="margin: 0; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted);">
-                            🎯 Production Readiness Checklist
-                        </h3>
-                    </div>
-                    <div class="table-wrap" style="border: 0; border-radius: 0 0 var(--radius) var(--radius);">
-                        <table>
-                            <thead>
-                            <tr>
-                                <th>Category</th>
-                                <th>Check</th>
-                                <th>Status</th>
-                                <th>Description</th>
-                                <th>Production Recommendation</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr th:each="c : ${readiness.checks}">
-                                <td>
-                                    <span class="code-tag" th:text="${c.category}">CONTAINERIZATION</span>
-                                </td>
-                                <td style="font-weight: 700; color: var(--text-main);" th:text="${c.name}">Dockerfile</td>
-                                <td>
-                                    <span class="badge" th:classappend="${c.status == 'PASS' ? 'badge-pass' : c.status == 'WARN' ? 'badge-warn' : 'badge-fail'}" th:text="${c.status}">PASS</span>
-                                </td>
-                                <td>
-                                    <div style="font-size: 13px;" th:text="${c.description}">Details</div>
-                                </td>
-                                <td>
-                                    <div class="mono text-cyan" style="font-size: 12px;" th:text="${c.recommendation}">Recommendation</div>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </main>
-    </div>
+ <!-- Readiness Checks Table -->
+ <div class="card" style="padding: 0;">
+ <div style="padding: 16px 20px; border-bottom: 1px solid var(--border);">
+ <h3 style="margin: 0; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted);">
+ Production Readiness Checklist
+ </h3>
+ </div>
+ <div class="table-wrap" style="border: 0; border-radius: 0 0 var(--radius) var(--radius);">
+ <table>
+ <thead>
+ <tr>
+ <th>Category</th>
+ <th>Check</th>
+ <th>Status</th>
+ <th>Description</th>
+ <th>Production Recommendation</th>
+ </tr>
+ </thead>
+ <tbody>
+ <tr th:each="c : ${readiness.checks}">
+ <td>
+ <span class="code-tag" th:text="${c.category}">CONTAINERIZATION</span>
+ </td>
+ <td style="font-weight: 700; color: var(--text-main);" th:text="${c.name}">Dockerfile</td>
+ <td>
+ <span class="badge" th:classappend="${c.status == 'PASS' ? 'badge-pass' : c.status == 'WARN' ? 'badge-warn' : 'badge-fail'}" th:text="${c.status}">PASS</span>
+ </td>
+ <td>
+ <div style="font-size: 13px;" th:text="${c.description}">Details</div>
+ </td>
+ <td>
+ <div class="mono text-purple" style="font-size: 12px;" th:text="${c.recommendation}">Recommendation</div>
+ </td>
+ </tr>
+ </tbody>
+ </table>
+ </div>
+ </div>
+ </div>
+ </main>
+ </div>
 </div>
 </body>
 </html>
+

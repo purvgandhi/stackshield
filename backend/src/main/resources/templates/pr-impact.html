@@ -1,84 +1,85 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments :: head(${repo.name} + ' · PR Impact Analyzer')}"></head>
 <body>
 <div class="app-layout">
-    <aside th:replace="~{fragments :: sidebar(${activeNav})}"></aside>
-    <div class="main-wrapper">
-        <header th:replace="~{fragments :: topbar}"></header>
+ <aside th:replace="~{fragments :: sidebar(${activeNav})}"></aside>
+ <div class="main-wrapper">
+ <header th:replace="~{fragments :: topbar}"></header>
 
-        <main class="content-container">
-            <div th:replace="~{fragments :: repoHeader(${repo}, 'pr-impact')}"></div>
+ <main class="content-container">
+ <div th:replace="~{fragments :: repoHeader(${repo}, 'pr-impact')}"></div>
 
-            <div th:if="${impact != null}">
-                <!-- Impact Assessment Banner -->
-                <div class="card" style="margin-bottom: 20px;">
-                    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
-                        <div>
-                            <div class="text-muted" style="font-size: 11.5px; text-transform: uppercase; font-family: var(--mono); letter-spacing: 0.08em;">Change Blast Radius & Risk</div>
-                            <h2 style="margin: 4px 0 0; font-size: 18px; color: var(--text-main);" th:text="${impact.summary}">PR Impact Analysis</h2>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 12px;">
-                            <span class="text-muted mono" style="font-size: 13px;">ASSESSED RISK:</span>
-                            <span class="badge" th:classappend="'sev-' + ${impact.overallRisk}" style="font-size: 16px; padding: 6px 14px;" th:text="${impact.overallRisk}">LOW</span>
-                        </div>
-                    </div>
-                </div>
+ <div th:if="${impact != null}">
+ <!-- Impact Assessment Banner -->
+ <div class="card" style="margin-bottom: 20px;">
+ <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+ <div>
+ <div class="text-muted" style="font-size: 11.5px; text-transform: uppercase; font-family: var(--mono); letter-spacing: 0.08em;">Change Blast Radius & Risk</div>
+ <h2 style="margin: 4px 0 0; font-size: 18px; color: var(--text-main);" th:text="${impact.summary}">PR Impact Analysis</h2>
+ </div>
+ <div style="display: flex; align-items: center; gap: 12px;">
+ <span class="text-muted mono" style="font-size: 13px;">ASSESSED RISK:</span>
+ <span class="badge" th:classappend="'sev-' + ${impact.overallRisk}" style="font-size: 16px; padding: 6px 14px;" th:text="${impact.overallRisk}">LOW</span>
+ </div>
+ </div>
+ </div>
 
-                <div class="grid-3">
-                    <div class="card">
-                        <div class="card-title">Changed Files</div>
-                        <div class="stat-value text-cyan" th:text="${impact.totalFilesChanged}">0</div>
-                        <div class="stat-sub" th:text="'+' + ${impact.totalAdditions} + ' / -' + ${impact.totalDeletions} + ' lines'">Lines</div>
-                    </div>
-                    <div class="card">
-                        <div class="card-title">Impacted Components</div>
-                        <div class="stat-value text-indigo" th:text="${#lists.size(impact.impactedComponents)}">0</div>
-                        <div class="stat-sub">Controllers & Services affected</div>
-                    </div>
-                    <div class="card">
-                        <div class="card-title">Suggested Verification</div>
-                        <div class="stat-value text-emerald" th:text="${#lists.size(impact.suggestedTestSuites)}">2</div>
-                        <div class="stat-sub">Automated test suites</div>
-                    </div>
-                </div>
+ <div class="grid-3">
+ <div class="card">
+ <div class="card-title">Changed Files</div>
+ <div class="stat-value text-purple" th:text="${impact.totalFilesChanged}">0</div>
+ <div class="stat-sub" th:text="'+' + ${impact.totalAdditions} + ' / -' + ${impact.totalDeletions} + ' lines'">Lines</div>
+ </div>
+ <div class="card">
+ <div class="card-title">Impacted Components</div>
+ <div class="stat-value text-indigo" th:text="${#lists.size(impact.impactedComponents)}">0</div>
+ <div class="stat-sub">Controllers & Services affected</div>
+ </div>
+ <div class="card">
+ <div class="card-title">Suggested Verification</div>
+ <div class="stat-value text-emerald" th:text="${#lists.size(impact.suggestedTestSuites)}">2</div>
+ <div class="stat-sub">Automated test suites</div>
+ </div>
+ </div>
 
-                <!-- Breaking Change Warnings -->
-                <div class="card" th:if="${not #lists.isEmpty(impact.breakingChangeWarnings)}" style="border-left: 4px solid var(--rose); margin-bottom: 20px;">
-                    <h3 style="margin: 0 0 10px; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--rose);">
-                        ⚠️ Breaking Change Alerts
-                    </h3>
-                    <ul style="margin: 0; padding-left: 20px;">
-                        <li th:each="w : ${impact.breakingChangeWarnings}" style="margin-bottom: 6px;" th:text="${w}">Warning</li>
-                    </ul>
-                </div>
+ <!-- Breaking Change Warnings -->
+ <div class="card" th:if="${not #lists.isEmpty(impact.breakingChangeWarnings)}" style="border-left: 4px solid var(--rose); margin-bottom: 20px;">
+ <h3 style="margin: 0 0 10px; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--rose);">
+ ️ Breaking Change Alerts
+ </h3>
+ <ul style="margin: 0; padding-left: 20px;">
+ <li th:each="w : ${impact.breakingChangeWarnings}" style="margin-bottom: 6px;" th:text="${w}">Warning</li>
+ </ul>
+ </div>
 
-                <!-- Impacted Components & Suggested Tests -->
-                <div class="grid-2">
-                    <div class="card">
-                        <h3 class="card-title">Impacted Architecture Nodes</h3>
-                        <div th:if="${#lists.isEmpty(impact.impactedComponents)}" class="text-muted">No components directly impacted.</div>
-                        <div th:each="c : ${impact.impactedComponents}" style="margin-bottom: 8px; padding: 8px 12px; background: rgba(0,0,0,0.2); border-radius: var(--radius-sm);">
-                            <div style="display: flex; align-items: center; justify-content: space-between;">
-                                <span class="mono" style="font-weight: 700; color: var(--text-main);" th:text="${c.name}">UserController</span>
-                                <span class="badge" th:classappend="'sev-' + ${c.risk}" th:text="${c.risk}">LOW</span>
-                            </div>
-                            <div class="text-muted" style="font-size: 12px; margin-top: 2px;" th:text="${c.impactReason}">Reason</div>
-                        </div>
-                    </div>
+ <!-- Impacted Components & Suggested Tests -->
+ <div class="grid-2">
+ <div class="card">
+ <h3 class="card-title">Impacted Architecture Nodes</h3>
+ <div th:if="${#lists.isEmpty(impact.impactedComponents)}" class="text-muted">No components directly impacted.</div>
+ <div th:each="c : ${impact.impactedComponents}" style="margin-bottom: 8px; padding: 8px 12px; background: rgba(0,0,0,0.2); border-radius: var(--radius-sm);">
+ <div style="display: flex; align-items: center; justify-content: space-between;">
+ <span class="mono" style="font-weight: 700; color: var(--text-main);" th:text="${c.name}">UserController</span>
+ <span class="badge" th:classappend="'sev-' + ${c.risk}" th:text="${c.risk}">LOW</span>
+ </div>
+ <div class="text-muted" style="font-size: 12px; margin-top: 2px;" th:text="${c.impactReason}">Reason</div>
+ </div>
+ </div>
 
-                    <div class="card">
-                        <h3 class="card-title">Suggested Regression Test Suites</h3>
-                        <ul style="margin: 0; padding-left: 20px; font-family: var(--mono); font-size: 13px; line-height: 2;">
-                            <li th:each="suite : ${impact.suggestedTestSuites}">
-                                <span class="text-cyan" th:text="${suite}">mvn test</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </main>
-    </div>
+ <div class="card">
+ <h3 class="card-title">Suggested Regression Test Suites</h3>
+ <ul style="margin: 0; padding-left: 20px; font-family: var(--mono); font-size: 13px; line-height: 2;">
+ <li th:each="suite : ${impact.suggestedTestSuites}">
+ <span class="text-purple" th:text="${suite}">mvn test</span>
+ </li>
+ </ul>
+ </div>
+ </div>
+ </div>
+ </main>
+ </div>
 </div>
 </body>
 </html>
+

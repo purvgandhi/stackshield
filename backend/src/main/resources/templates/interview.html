@@ -1,61 +1,62 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments :: head(${repo.name} + ' · Tech Interview Prep')}"></head>
 <body>
 <div class="app-layout">
-    <aside th:replace="~{fragments :: sidebar(${activeNav})}"></aside>
-    <div class="main-wrapper">
-        <header th:replace="~{fragments :: topbar}"></header>
+ <aside th:replace="~{fragments :: sidebar(${activeNav})}"></aside>
+ <div class="main-wrapper">
+ <header th:replace="~{fragments :: topbar}"></header>
 
-        <main class="content-container">
-            <div th:replace="~{fragments :: repoHeader(${repo}, 'interview')}"></div>
+ <main class="content-container">
+ <div th:replace="~{fragments :: repoHeader(${repo}, 'interview')}"></div>
 
-            <div th:if="${interview != null}">
-                <div class="card" style="margin-bottom: 20px;">
-                    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
-                        <div>
-                            <div class="text-muted" style="font-size: 11.5px; text-transform: uppercase; font-family: var(--mono); letter-spacing: 0.08em;">Repository-Grounded Interview Preparation</div>
-                            <h2 style="margin: 4px 0 0; font-size: 18px; color: var(--text-main);" th:text="${interview.summary}">Technical Deep Dive & Interview Questions</h2>
-                        </div>
-                        <span class="badge badge-info" th:text="${interview.totalQuestions} + ' Questions'">5 Questions</span>
-                    </div>
-                </div>
+ <div th:if="${interview != null}">
+ <div class="card" style="margin-bottom: 20px;">
+ <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+ <div>
+ <div class="text-muted" style="font-size: 11.5px; text-transform: uppercase; font-family: var(--mono); letter-spacing: 0.08em;">Repository-Grounded Interview Preparation</div>
+ <h2 style="margin: 4px 0 0; font-size: 18px; color: var(--text-main);" th:text="${interview.summary}">Technical Deep Dive & Interview Questions</h2>
+ </div>
+ <span class="badge badge-info" th:text="${interview.totalQuestions} + ' Questions'">5 Questions</span>
+ </div>
+ </div>
 
-                <div th:each="q, iterStat : ${interview.questions}" class="card" style="margin-bottom: 20px;">
-                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
-                        <div style="display: flex; align-items: center; gap: 8px;">
-                            <span class="badge badge-info" th:text="'#' + ${iterStat.count}">#1</span>
-                            <span class="code-tag" th:text="${q.category}">ARCHITECTURE</span>
-                        </div>
-                        <span class="badge" th:classappend="${q.difficulty == 'ADVANCED' ? 'badge-fail' : q.difficulty == 'INTERMEDIATE' ? 'badge-warn' : 'badge-pass'}" th:text="${q.difficulty}">INTERMEDIATE</span>
-                    </div>
+ <div th:each="q, iterStat : ${interview.questions}" class="card" style="margin-bottom: 20px;">
+ <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+ <div style="display: flex; align-items: center; gap: 8px;">
+ <span class="badge badge-info" th:text="'#' + ${iterStat.count}">#1</span>
+ <span class="code-tag" th:text="${q.category}">ARCHITECTURE</span>
+ </div>
+ <span class="badge" th:classappend="${q.difficulty == 'ADVANCED' ? 'badge-fail' : q.difficulty == 'INTERMEDIATE' ? 'badge-warn' : 'badge-pass'}" th:text="${q.difficulty}">INTERMEDIATE</span>
+ </div>
 
-                    <h3 style="margin: 0 0 12px; font-size: 16px; color: var(--text-main);" th:text="${q.question}">Question title</h3>
+ <h3 style="margin: 0 0 12px; font-size: 16px; color: var(--text-main);" th:text="${q.question}">Question title</h3>
 
-                    <div style="margin-bottom: 14px; padding: 12px 14px; background: rgba(0,0,0,0.2); border-radius: var(--radius-sm); border-left: 3px solid var(--emerald);">
-                        <div class="mono text-emerald" style="font-size: 12px; font-weight: 700; margin-bottom: 4px;">Expected Answer Guide:</div>
-                        <div class="text-muted" style="font-size: 13.5px; line-height: 1.6;" th:text="${q.answerGuide}">Answer guide</div>
-                    </div>
+ <div style="margin-bottom: 14px; padding: 12px 14px; background: rgba(0,0,0,0.2); border-radius: var(--radius-sm); border-left: 3px solid var(--emerald);">
+ <div class="mono text-emerald" style="font-size: 12px; font-weight: 700; margin-bottom: 4px;">Expected Answer Guide:</div>
+ <div class="text-muted" style="font-size: 13.5px; line-height: 1.6;" th:text="${q.answerGuide}">Answer guide</div>
+ </div>
 
-                    <div class="grid-2">
-                        <div>
-                            <div class="text-muted" style="font-size: 12px; font-weight: 600; margin-bottom: 6px;">Key Talking Points:</div>
-                            <ul style="margin: 0; padding-left: 18px; font-size: 13px; line-height: 1.7;">
-                                <li th:each="tp : ${q.keyTalkingPoints}" th:text="${tp}">Talking point</li>
-                            </ul>
-                        </div>
+ <div class="grid-2">
+ <div>
+ <div class="text-muted" style="font-size: 12px; font-weight: 600; margin-bottom: 6px;">Key Talking Points:</div>
+ <ul style="margin: 0; padding-left: 18px; font-size: 13px; line-height: 1.7;">
+ <li th:each="tp : ${q.keyTalkingPoints}" th:text="${tp}">Talking point</li>
+ </ul>
+ </div>
 
-                        <div>
-                            <div class="text-muted" style="font-size: 12px; font-weight: 600; margin-bottom: 6px;">Relevant Codebase Files:</div>
-                            <div style="display: flex; flex-wrap: wrap; gap: 6px;">
-                                <span th:each="rf : ${q.relatedFiles}" class="code-tag mono text-cyan" th:text="${rf}">Service.java</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </main>
-    </div>
+ <div>
+ <div class="text-muted" style="font-size: 12px; font-weight: 600; margin-bottom: 6px;">Relevant Codebase Files:</div>
+ <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+ <span th:each="rf : ${q.relatedFiles}" class="code-tag mono text-purple" th:text="${rf}">Service.java</span>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+ </main>
+ </div>
 </div>
 </body>
 </html>
+

@@ -1,0 +1,589 @@
+﻿﻿<!DOCTYPE html>
+<html>
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+ <title>Version Upgrade Check · StackShield</title>
+ <link rel="stylesheet" href="/css/app.css?v=20261027_polish_v1">
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+ <style>
+ :root {
+ --bg-page: #F4F0FF;
+ --bg-card: #FFFFFF;
+ --primary: #6C4BEF;
+ --primary-dark: #49318F;
+ --primary-hover: #5A3AD9;
+ --primary-light: #E6DEFF;
+ --primary-soft: #B9A0FF;
+ --border: #E5DDF5;
+ --border-subtle: #F0EAFB;
+ --text-main: #242033;
+ --text-secondary: #6B6580;
+ --text-muted: #8E88A3;
+ }
+
+ *, *::before, *::after {
+ box-sizing: border-box;
+ }
+
+ body {
+ margin: 0;
+ padding: 0;
+ background-color: var(--bg-page);
+ color: var(--text-main);
+ font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+ -webkit-font-smoothing: antialiased;
+ font-size: 14px;
+ line-height: 1.5;
+ }
+
+ .upgrade-layout {
+ max-width: 1140px;
+ margin: 0 auto;
+ padding: 32px 24px 60px;
+ }
+
+ .upgrade-nav {
+ display: flex;
+ align-items: center;
+ justify-content: space-between;
+ margin-bottom: 24px;
+ padding-bottom: 16px;
+ border-bottom: 1px solid var(--border);
+ }
+
+ .upgrade-breadcrumbs {
+ display: flex;
+ align-items: center;
+ gap: 8px;
+ font-size: 13.5px;
+ color: var(--text-secondary);
+ }
+
+ .upgrade-breadcrumbs a {
+ color: var(--primary);
+ text-decoration: none;
+ font-weight: 600;
+ }
+
+ .card {
+ background: var(--bg-card);
+ border: 1px solid var(--border);
+ border-radius: 10px;
+ padding: 24px;
+ box-shadow: 0 2px 6px rgba(73, 49, 143, 0.04);
+ margin-bottom: 24px;
+ }
+
+ .section-title {
+ font-size: 18px;
+ font-weight: 700;
+ color: var(--text-main);
+ margin: 0 0 6px;
+ }
+
+ .section-desc {
+ font-size: 13px;
+ color: var(--text-secondary);
+ margin: 0 0 20px;
+ }
+
+ .form-group {
+ margin-bottom: 18px;
+ }
+
+ .form-label {
+ display: block;
+ font-size: 12.5px;
+ font-weight: 600;
+ color: var(--text-main);
+ margin-bottom: 6px;
+ }
+
+ .form-control {
+ width: 100%;
+ padding: 10px 12px;
+ font-size: 13.5px;
+ font-family: inherit;
+ border: 1px solid var(--border);
+ border-radius: 6px;
+ background: #FFFFFF;
+ color: var(--text-main);
+ outline: none;
+ transition: border-color 0.15s ease, box-shadow 0.15s ease;
+ }
+
+ .form-control:focus {
+ border-color: var(--primary);
+ box-shadow: 0 0 0 3px rgba(108, 75, 239, 0.15);
+ }
+
+ .btn-primary {
+ background: var(--primary);
+ color: #FFFFFF;
+ padding: 10px 22px;
+ border-radius: 6px;
+ font-size: 13.5px;
+ font-weight: 600;
+ border: 1px solid var(--primary);
+ cursor: pointer;
+ display: inline-flex;
+ align-items: center;
+ gap: 8px;
+ box-shadow: 0 2px 8px rgba(108, 75, 239, 0.22);
+ transition: all 0.15s ease;
+ }
+
+ .btn-primary:hover {
+ background: var(--primary-hover);
+ transform: translateY(-1px);
+ box-shadow: 0 4px 14px rgba(108, 75, 239, 0.32);
+ }
+
+ .btn-secondary {
+ background: #FFFFFF;
+ color: var(--primary);
+ border: 1px solid var(--border);
+ padding: 7px 14px;
+ border-radius: 6px;
+ font-size: 13px;
+ font-weight: 600;
+ text-decoration: none;
+ display: inline-flex;
+ align-items: center;
+ gap: 6px;
+ cursor: pointer;
+ transition: all 0.15s ease;
+ }
+
+ .btn-secondary:hover {
+ background: var(--primary-light);
+ border-color: var(--primary-soft);
+ color: var(--primary-dark);
+ transform: translateY(-1px);
+ }
+
+ .table-wrap {
+ overflow-x: auto;
+ }
+
+ table {
+ width: 100%;
+ border-collapse: collapse;
+ font-size: 13px;
+ }
+
+ th {
+ text-align: left;
+ font-size: 11.5px;
+ font-weight: 600;
+ color: var(--text-secondary);
+ text-transform: uppercase;
+ letter-spacing: 0.03em;
+ padding: 10px 12px;
+ border-bottom: 1.5px solid var(--border);
+ background: #FAF8FF;
+ }
+
+ td {
+ padding: 12px;
+ border-bottom: 1px solid var(--border-subtle);
+ vertical-align: middle;
+ color: var(--text-main);
+ }
+
+ tr:last-child td {
+ border-bottom: none;
+ }
+
+ .verdict-pill {
+ font-family: 'JetBrains Mono', monospace;
+ font-size: 11.5px;
+ font-weight: 700;
+ padding: 2px 7px;
+ border-radius: 4px;
+ display: inline-block;
+ }
+
+ .verdict-pass { background: #DCFCE7; color: #166534; border: 1px solid #BBF7D0; }
+ .verdict-regression { background: #FEE2E2; color: #991B1B; border: 1px solid #FECACA; }
+ .verdict-improvement { background: #E0E7FF; color: #3730A3; border: 1px solid #C7D2FE; }
+ .verdict-neutral { background: #F3F4F6; color: #4B5563; border: 1px solid #E5E7EB; }
+
+ .fixture-pills {
+ display: flex;
+ gap: 8px;
+ flex-wrap: wrap;
+ margin-top: 10px;
+ }
+
+ .fixture-pill {
+ font-size: 12px;
+ background: #FAF8FF;
+ border: 1px solid var(--border);
+ padding: 4px 10px;
+ border-radius: 6px;
+ cursor: pointer;
+ color: var(--primary-dark);
+ font-weight: 500;
+ transition: all 0.15s ease;
+ }
+
+ .fixture-pill:hover {
+ background: var(--primary-light);
+ border-color: var(--primary-soft);
+ transform: translateY(-1px);
+ }
+ </style>
+</head>
+<body>
+
+<div class="upgrade-layout">
+ <!-- Top Navigation -->
+ <div class="upgrade-nav">
+ <div class="upgrade-breadcrumbs">
+ <a href="/" style="display: inline-flex; align-items: center; gap: 5px;">
+ <svg class="svg-icon" viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+ <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+ </svg>
+ <span>StackShield</span>
+ </a>
+ <span>/</span>
+ <span style="font-weight: 600; color: var(--text-main);">Upgrade Check</span>
+ </div>
+ <div>
+ <a href="/" class="btn-secondary">
+ <svg class="svg-icon" viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+ <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
+ </svg>
+ <span>Dashboard</span>
+ </a>
+ </div>
+ </div>
+
+ <!-- Configure Upgrade Trial Card -->
+ <div class="card">
+ <h2 class="section-title">Version Upgrade Check</h2>
+ <p class="section-desc">
+ Compare baseline and proposed framework upgrades in isolated Docker sandboxes to detect build or test regressions.
+ </p>
+
+ <form action="/trials" method="post">
+ <div class="form-group">
+ <label class="form-label">Target Repository URL</label>
+ <input type="text"
+ id="repoUrl"
+ name="repoUrl"
+ class="form-control"
+ placeholder="https://github.com/owner/repository"
+ value=""
+ required>
+
+ <div class="fixture-pills">
+ <span style="font-size: 12px; color: var(--text-secondary); align-self: center;">Quick Presets:</span>
+ <span class="fixture-pill" onclick="loadFixture('file:///C:/tmp/stacktrial-fixture-repos/breaking-upgrade', 'SPRING_BOOT_VERSION', '3.0.13')">
+ Breaking Upgrade: Spring Boot 2.7 → 3.0.13
+ </span>
+ <span class="fixture-pill" onclick="loadFixture('file:///C:/tmp/stacktrial-fixture-repos/passing-upgrade', 'DEPENDENCY_VERSION', '3.14.0', 'org.apache.commons', 'commons-lang3')">
+ Passing Upgrade: commons-lang3 3.14.0
+ </span>
+ </div>
+ </div>
+
+ <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+ <div class="form-group">
+ <label class="form-label">Baseline Git Reference</label>
+ <input type="text" id="baselineRef" name="baselineRef" class="form-control" value="main" required>
+ </div>
+ <div class="form-group">
+ <label class="form-label">Change Type</label>
+ <select id="changeType" name="changeType" class="form-control" onchange="toggleChangeFields()">
+ <option value="SPRING_BOOT_VERSION">Spring Boot Version Upgrade</option>
+ <option value="DEPENDENCY_VERSION">Dependency Version Upgrade</option>
+ <option value="GIT_DIFF">Unified Git Diff (.patch)</option>
+ </select>
+ </div>
+ </div>
+
+ <div id="dependencyFields" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 18px;">
+ <div>
+ <label class="form-label">Group ID</label>
+ <input type="text" id="groupId" name="groupId" class="form-control" placeholder="e.g. org.apache.commons">
+ </div>
+ <div>
+ <label class="form-label">Artifact ID</label>
+ <input type="text" id="artifactId" name="artifactId" class="form-control" placeholder="e.g. commons-lang3">
+ </div>
+ </div>
+
+ <div class="form-group" id="versionField">
+ <label class="form-label">Target Version</label>
+ <input type="text" id="targetVersion" name="targetVersion" class="form-control" value="3.0.13" placeholder="e.g. 3.0.13">
+ </div>
+
+ <div class="form-group" id="diffField" style="display: none;">
+ <label class="form-label">Git Patch (Unified Diff)</label>
+ <textarea id="diff" name="diff" class="form-control" rows="4" placeholder="diff --git a/pom.xml ..."></textarea>
+ </div>
+
+ <button type="submit" class="btn-primary">
+ <span>Run Upgrade Check</span>
+ <svg class="svg-icon" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+ <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+ </svg>
+ </button>
+ </form>
+ </div>
+
+ <!-- Recent Verification Runs -->
+ <div class="card">
+ <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+ <h3 class="section-title" style="font-size: 16px; margin: 0;">Recent Verification Runs</h3>
+ <span style="font-size: 12.5px; color: var(--text-secondary);">6 Total Runs</span>
+ </div>
+
+ 
+
+ <div class="table-wrap">
+ <table>
+ <thead>
+ <tr>
+ <th>Repository</th>
+ <th>Proposed Change</th>
+ <th>Verdict</th>
+ <th>Status</th>
+ <th>Created</th>
+ <th style="text-align: right;">Action</th>
+ </tr>
+ </thead>
+ <tbody>
+ <tr>
+ <td>
+ <div style="font-weight: 600;">https://github.com/LearnCodeWithDurgesh/docmind-rag-based-project</div>
+ <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-secondary);">ref: main</span>
+ </td>
+ <td style="font-size: 12.5px; max-width: 320px; word-break: break-all;">Upgrade Spring Boot to 3.0.13 — Spring Boot 4.1.0 -&gt; 3.0.13 (spring-boot-starter-parent)</td>
+ <td>
+ 
+ 
+ 
+ <span class="verdict-pill verdict-neutral">BOTH FAILED</span>
+ 
+ </td>
+ <td>
+ <span style="font-size: 12px; color: var(--text-secondary);">COMPLETED</span>
+ </td>
+ <td style="font-size: 12px; color: var(--text-secondary);">2026-10-27 00:13</td>
+ <td style="text-align: right;">
+ <a href="/trials/8e13adcd-d4fa-4729-8666-1c7ccc3447d5" style="font-size: 12.5px; font-weight: 600; color: var(--primary); text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
+ <span>View Report</span>
+ <svg class="svg-icon" viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+ <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+ </svg>
+ </a>
+ </td>
+ </tr>
+ <tr>
+ <td>
+ <div style="font-weight: 600;">file:///C:/tmp/stacktrial-fixture-repos/breaking-upgrade</div>
+ <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-secondary);">ref: main</span>
+ </td>
+ <td style="font-size: 12.5px; max-width: 320px; word-break: break-all;">Upgrade Spring Boot to 3.0.13 — Spring Boot 2.7.18 -&gt; 3.0.13 (spring-boot-starter-parent)</td>
+ <td>
+ 
+ <span class="verdict-pill verdict-regression">REGRESSION</span>
+ 
+ 
+ 
+ </td>
+ <td>
+ <span style="font-size: 12px; color: var(--text-secondary);">COMPLETED</span>
+ </td>
+ <td style="font-size: 12px; color: var(--text-secondary);">2026-10-04 12:58</td>
+ <td style="text-align: right;">
+ <a href="/trials/a7eb5838-f27a-4e53-9d08-f73a754e1c25" style="font-size: 12.5px; font-weight: 600; color: var(--primary); text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
+ <span>View Report</span>
+ <svg class="svg-icon" viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+ <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+ </svg>
+ </a>
+ </td>
+ </tr>
+ <tr>
+ <td>
+ <div style="font-weight: 600;">file:///C:/tmp/stacktrial-fixture-repos/passing-upgrade</div>
+ <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-secondary);">ref: main</span>
+ </td>
+ <td style="font-size: 12.5px; max-width: 320px; word-break: break-all;">Upgrade org.apache.commons:commons-lang3 to 3.14.0 — org.apache.commons:commons-lang3 (property commons-lang3.version: 3.13.0 -&gt; 3.14.0)</td>
+ <td>
+ <span class="verdict-pill verdict-pass">PASS</span>
+ 
+ 
+ 
+ 
+ </td>
+ <td>
+ <span style="font-size: 12px; color: var(--text-secondary);">COMPLETED</span>
+ </td>
+ <td style="font-size: 12px; color: var(--text-secondary);">2026-10-04 12:58</td>
+ <td style="text-align: right;">
+ <a href="/trials/64ff4123-56e8-4bf8-8085-8f86abbd8362" style="font-size: 12.5px; font-weight: 600; color: var(--primary); text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
+ <span>View Report</span>
+ <svg class="svg-icon" viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+ <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+ </svg>
+ </a>
+ </td>
+ </tr>
+ <tr>
+ <td>
+ <div style="font-weight: 600;">file:///C:/tmp/stacktrial-fixture-repos/breaking-upgrade</div>
+ <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-secondary);">ref: main</span>
+ </td>
+ <td style="font-size: 12.5px; max-width: 320px; word-break: break-all;">Upgrade Spring Boot to 3.0.13 — Spring Boot 2.7.18 -&gt; 3.0.13 (spring-boot-starter-parent)</td>
+ <td>
+ 
+ <span class="verdict-pill verdict-regression">REGRESSION</span>
+ 
+ 
+ 
+ </td>
+ <td>
+ <span style="font-size: 12px; color: var(--text-secondary);">COMPLETED</span>
+ </td>
+ <td style="font-size: 12px; color: var(--text-secondary);">2026-10-02 22:01</td>
+ <td style="text-align: right;">
+ <a href="/trials/66f05421-7983-4c17-927b-2f3952716c6a" style="font-size: 12.5px; font-weight: 600; color: var(--primary); text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
+ <span>View Report</span>
+ <svg class="svg-icon" viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+ <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+ </svg>
+ </a>
+ </td>
+ </tr>
+ <tr>
+ <td>
+ <div style="font-weight: 600;">file:///C:/tmp/stacktrial-fixture-repos/passing-upgrade</div>
+ <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-secondary);">ref: main</span>
+ </td>
+ <td style="font-size: 12.5px; max-width: 320px; word-break: break-all;">Upgrade org.apache.commons:commons-lang3 to 3.14.0 — org.apache.commons:commons-lang3 (property commons-lang3.version: 3.13.0 -&gt; 3.14.0)</td>
+ <td>
+ <span class="verdict-pill verdict-pass">PASS</span>
+ 
+ 
+ 
+ 
+ </td>
+ <td>
+ <span style="font-size: 12px; color: var(--text-secondary);">COMPLETED</span>
+ </td>
+ <td style="font-size: 12px; color: var(--text-secondary);">2026-10-02 22:00</td>
+ <td style="text-align: right;">
+ <a href="/trials/710b0862-b8e6-40a5-af70-6369f972c3d5" style="font-size: 12.5px; font-weight: 600; color: var(--primary); text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
+ <span>View Report</span>
+ <svg class="svg-icon" viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+ <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+ </svg>
+ </a>
+ </td>
+ </tr>
+ <tr>
+ <td>
+ <div style="font-weight: 600;">file:///C:/tmp/stacktrial-fixture-repos/breaking-upgrade</div>
+ <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-secondary);">ref: main</span>
+ </td>
+ <td style="font-size: 12.5px; max-width: 320px; word-break: break-all;">Upgrade Spring Boot to 3.0.13 — Spring Boot 2.7.18 -&gt; 3.0.13 (spring-boot-starter-parent)</td>
+ <td>
+ 
+ 
+ 
+ <span class="verdict-pill verdict-neutral">BOTH FAILED</span>
+ 
+ </td>
+ <td>
+ <span style="font-size: 12px; color: var(--text-secondary);">COMPLETED</span>
+ </td>
+ <td style="font-size: 12px; color: var(--text-secondary);">2026-10-02 18:20</td>
+ <td style="text-align: right;">
+ <a href="/trials/519341bf-17be-45c4-be75-192722855acc" style="font-size: 12.5px; font-weight: 600; color: var(--primary); text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
+ <span>View Report</span>
+ <svg class="svg-icon" viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+ <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+ </svg>
+ </a>
+ </td>
+ </tr>
+ </tbody>
+ </table>
+ </div>
+ </div>
+</div>
+
+<!-- Shared Toast Container -->
+<div id="toastContainer" class="toast-container"></div>
+<script>
+ function showToast(message, type) {
+ var container = document.getElementById('toastContainer');
+ if (!container) {
+ container = document.createElement('div');
+ container.id = 'toastContainer';
+ container.className = 'toast-container';
+ document.body.appendChild(container);
+ }
+ var toast = document.createElement('div');
+ toast.className = 'toast ' + (type === 'error' ? 'toast-error' : 'toast-success');
+ 
+ var iconSvg = type === 'error'
+ ? '<svg class="svg-icon" viewBox="0 0 24 24" width="16" height="16" stroke="#EF4444" stroke-width="2" fill="none"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>'
+ : '<svg class="svg-icon" viewBox="0 0 24 24" width="16" height="16" stroke="#6C4BEF" stroke-width="2" fill="none"><polyline points="20 6 9 17 4 12"/></svg>';
+ 
+ toast.innerHTML = iconSvg + '<span>' + message + '</span>';
+ container.appendChild(toast);
+ 
+ setTimeout(function() {
+ toast.style.opacity = '0';
+ toast.style.transform = 'translateY(8px)';
+ setTimeout(function() { toast.remove(); }, 200);
+ }, 3200);
+ }
+</script>
+
+<script>
+ function toggleChangeFields() {
+ var type = document.getElementById('changeType').value;
+ var dep = document.getElementById('dependencyFields');
+ var ver = document.getElementById('versionField');
+ var diff = document.getElementById('diffField');
+
+ if (type === 'SPRING_BOOT_VERSION') {
+ dep.style.display = 'none';
+ ver.style.display = 'block';
+ diff.style.display = 'none';
+ } else if (type === 'DEPENDENCY_VERSION') {
+ dep.style.display = 'grid';
+ ver.style.display = 'block';
+ diff.style.display = 'none';
+ } else if (type === 'GIT_DIFF') {
+ dep.style.display = 'none';
+ ver.style.display = 'none';
+ diff.style.display = 'block';
+ }
+ }
+
+ function loadFixture(url, type, ver, grp, art) {
+ document.getElementById('repoUrl').value = url;
+ document.getElementById('changeType').value = type;
+ if (ver) document.getElementById('targetVersion').value = ver;
+ if (grp) document.getElementById('groupId').value = grp;
+ if (art) document.getElementById('artifactId').value = art;
+ toggleChangeFields();
+ showToast('Loaded preset fixture');
+ }
+
+ toggleChangeFields();
+</script>
+
+</body>
+</html>

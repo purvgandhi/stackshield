@@ -1,81 +1,82 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments :: head(${repo.name} + ' · Repository AI Q&A')}"></head>
 <body>
 <div class="app-layout">
-    <aside th:replace="~{fragments :: sidebar(${activeNav})}"></aside>
-    <div class="main-wrapper">
-        <header th:replace="~{fragments :: topbar}"></header>
+ <aside th:replace="~{fragments :: sidebar(${activeNav})}"></aside>
+ <div class="main-wrapper">
+ <header th:replace="~{fragments :: topbar}"></header>
 
-        <main class="content-container">
-            <div th:replace="~{fragments :: repoHeader(${repo}, 'qa')}"></div>
+ <main class="content-container">
+ <div th:replace="~{fragments :: repoHeader(${repo}, 'qa')}"></div>
 
-            <!-- Query Input Card -->
-            <div class="card" style="margin-bottom: 24px;">
-                <h3 class="card-title">💬 Repository Grounded Q&A</h3>
-                <p class="text-muted" style="margin-top: 0; font-size: 13px;">
-                    Ask any architectural, implementation, or configuration question. Answers are strictly grounded in indexed code chunks and pgvector embeddings.
-                </p>
+ <!-- Query Input Card -->
+ <div class="card" style="margin-bottom: 24px;">
+ <h3 class="card-title"> Repository Grounded Q&A</h3>
+ <p class="text-muted" style="margin-top: 0; font-size: 13px;">
+ Ask any architectural, implementation, or configuration question. Answers are strictly grounded in indexed code chunks and pgvector embeddings.
+ </p>
 
-                <form th:action="@{'/repositories/' + ${repo.id} + '/qa'}" method="get">
-                    <div style="display: flex; gap: 10px;">
-                        <input type="text" id="qInput" name="q" th:value="${question}" placeholder="e.g. What endpoints are exposed? How is error handling implemented?" style="flex: 1;" required>
-                        <button type="submit" class="btn btn-primary">🔍 Ask Codebase</button>
-                    </div>
-                </form>
+ <form th:action="@{'/repositories/' + ${repo.id} + '/qa'}" method="get">
+ <div style="display: flex; gap: 10px;">
+ <input type="text" id="qInput" name="q" th:value="${question}" placeholder="e.g. What endpoints are exposed? How is error handling implemented?" style="flex: 1;" required>
+ <button type="submit" class="btn btn-primary"> Ask Codebase</button>
+ </div>
+ </form>
 
-                <div style="margin-top: 14px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                    <span class="text-muted" style="font-size: 12px;">Suggested:</span>
-                    <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('qInput').value = 'Explain the overall architecture and data flow';">
-                        Architecture Overview
-                    </button>
-                    <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('qInput').value = 'What REST API endpoints and controllers are defined?';">
-                        REST Endpoints
-                    </button>
-                    <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('qInput').value = 'How is database access and transactions managed?';">
-                        Database & JPA
-                    </button>
-                    <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('qInput').value = 'What testing frameworks and unit tests exist?';">
-                        Test Suites
-                    </button>
-                </div>
-            </div>
+ <div style="margin-top: 14px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+ <span class="text-muted" style="font-size: 12px;">Suggested:</span>
+ <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('qInput').value = 'Explain the overall architecture and data flow';">
+ Architecture Overview
+ </button>
+ <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('qInput').value = 'What REST API endpoints and controllers are defined?';">
+ REST Endpoints
+ </button>
+ <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('qInput').value = 'How is database access and transactions managed?';">
+ Database & JPA
+ </button>
+ <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('qInput').value = 'What testing frameworks and unit tests exist?';">
+ Test Suites
+ </button>
+ </div>
+ </div>
 
-            <!-- Q&A Response Section -->
-            <div th:if="${qaResponse != null}">
-                <div class="card" style="margin-bottom: 24px; border-left: 4px solid var(--cyan);">
-                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
-                        <div class="mono" style="font-size: 15px; font-weight: 700; color: var(--text-main);" th:text="'Q: ' + ${qaResponse.question}">Question</div>
-                        <span class="badge" th:classappend="${qaResponse.aiGenerated ? 'badge-info' : 'badge-pass'}" th:text="${qaResponse.aiGenerated ? 'AI Synthesized + Grounded' : 'Grounded Code Chunks'}">Grounded</span>
-                    </div>
+ <!-- Q&A Response Section -->
+ <div th:if="${qaResponse != null}">
+ <div class="card" style="margin-bottom: 24px; border-left: 4px solid var(--cyan);">
+ <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+ <div class="mono" style="font-size: 15px; font-weight: 700; color: var(--text-main);" th:text="'Q: ' + ${qaResponse.question}">Question</div>
+ <span class="badge" th:classappend="${qaResponse.aiGenerated ? 'badge-info' : 'badge-pass'}" th:text="${qaResponse.aiGenerated ? 'AI Synthesized + Grounded' : 'Grounded Code Chunks'}">Grounded</span>
+ </div>
 
-                    <div class="explanation" th:text="${qaResponse.answer}" style="font-size: 14px; line-height: 1.65; color: var(--text-main);">
-                        Answer content...
-                    </div>
-                </div>
+ <div class="explanation" th:text="${qaResponse.answer}" style="font-size: 14px; line-height: 1.65; color: var(--text-main);">
+ Answer content...
+ </div>
+ </div>
 
-                <!-- Retrieved Citations & Code Snippets -->
-                <div class="card" style="padding: 0;">
-                    <div style="padding: 16px 20px; border-bottom: 1px solid var(--border);">
-                        <h3 style="margin: 0; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted);">
-                            📚 Retrieved Code Citations (<span th:text="${#lists.size(qaResponse.citations)}">0</span>)
-                        </h3>
-                    </div>
+ <!-- Retrieved Citations & Code Snippets -->
+ <div class="card" style="padding: 0;">
+ <div style="padding: 16px 20px; border-bottom: 1px solid var(--border);">
+ <h3 style="margin: 0; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted);">
+ Retrieved Code Citations (<span th:text="${#lists.size(qaResponse.citations)}">0</span>)
+ </h3>
+ </div>
 
-                    <div th:each="c : ${qaResponse.citations}" style="border-bottom: 1px solid var(--border); padding: 16px 20px;">
-                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
-                            <div style="display: flex; align-items: center; gap: 8px;">
-                                <span class="mono" style="font-weight: 700; color: var(--cyan);" th:text="${c.filePath}">src/...</span>
-                                <span th:if="${c.symbolName != null}" class="code-tag" th:text="${c.symbolName}">MyClass</span>
-                            </div>
-                            <span class="mono text-muted" style="font-size: 11px;" th:text="'Score: ' + ${#numbers.formatDecimal(c.score, 1, 3)}">0.850</span>
-                        </div>
-                        <pre class="terminal" th:text="${c.snippet}">code snippet...</pre>
-                    </div>
-                </div>
-            </div>
-        </main>
-    </div>
+ <div th:each="c : ${qaResponse.citations}" style="border-bottom: 1px solid var(--border); padding: 16px 20px;">
+ <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+ <div style="display: flex; align-items: center; gap: 8px;">
+ <span class="mono" style="font-weight: 700; color: var(--cyan);" th:text="${c.filePath}">src/...</span>
+ <span th:if="${c.symbolName != null}" class="code-tag" th:text="${c.symbolName}">MyClass</span>
+ </div>
+ <span class="mono text-muted" style="font-size: 11px;" th:text="'Score: ' + ${#numbers.formatDecimal(c.score, 1, 3)}">0.850</span>
+ </div>
+ <pre class="terminal" th:text="${c.snippet}">code snippet...</pre>
+ </div>
+ </div>
+ </div>
+ </main>
+ </div>
 </div>
 </body>
 </html>
+

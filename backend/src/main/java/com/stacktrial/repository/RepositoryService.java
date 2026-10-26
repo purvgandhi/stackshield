@@ -2,6 +2,8 @@ package com.stacktrial.repository;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.stacktrial.analyzer.CodebaseAnalysisReport;
+import com.stacktrial.analyzer.CodebaseAnalyzerService;
 import com.stacktrial.architecture.ArchitectureExtractorService;
 import com.stacktrial.architecture.ArchitectureResult;
 import com.stacktrial.common.StackTrialProperties;
@@ -50,6 +52,7 @@ public class RepositoryService {
     private final PrAnalyzerService prAnalyzer;
     private final InterviewService interviewService;
     private final RepositoryQaService qaService;
+    private final CodebaseAnalyzerService analyzer;
     private final ObjectMapper json;
     private final Path storageRoot;
     private final Duration cloneTimeout;
@@ -66,6 +69,7 @@ public class RepositoryService {
             PrAnalyzerService prAnalyzer,
             InterviewService interviewService,
             RepositoryQaService qaService,
+            CodebaseAnalyzerService analyzer,
             ObjectMapper json,
             StackTrialProperties properties) {
         this.repoRepository = repoRepository;
@@ -79,6 +83,7 @@ public class RepositoryService {
         this.prAnalyzer = prAnalyzer;
         this.interviewService = interviewService;
         this.qaService = qaService;
+        this.analyzer = analyzer;
         this.json = json;
         this.storageRoot = properties.dataDir().resolve("repositories").toAbsolutePath();
         this.cloneTimeout = properties.workspace().cloneTimeout();
@@ -139,7 +144,11 @@ public class RepositoryService {
         } catch (Exception e) {
             log.error("Failed importing repository {}: {}", cleanUrl, e.getMessage(), e);
             repo.setStatus(RepositoryStatus.FAILED);
-            repo.setStatusMessage("Import failed: " + e.getMessage());
+            String userMsg = "Import failed: " + e.getMessage();
+            if (e.getMessage() != null && (e.getMessage().contains("could not read Username") || e.getMessage().contains("not found") || e.getMessage().contains("Authentication failed"))) {
+                userMsg = "Repository inaccessible: The repository does not exist, is private, or requires authentication.";
+            }
+            repo.setStatusMessage(userMsg);
             repo.setUpdatedAt(Instant.now());
             return repoRepository.save(repo);
         }
@@ -168,6 +177,14 @@ public class RepositoryService {
     }
 
     private void analyzeAndIndex(ImportedRepository repo, Path repoPath) {
+        // 0. Codebase Analyzer (Main Feature)
+        try {
+            CodebaseAnalysisReport analysisReport = analyzer.analyze(repo.getId(), repo.getRepoUrl(), repo.getName(), repo.getDefaultRef(), repoPath);
+            repo.setAnalysisResultJson(toJson(analysisReport));
+        } catch (Exception e) {
+            log.warn("Error running CodebaseAnalyzerService: {}", e.getMessage());
+        }
+
         // 1. Scanner
         ScanResult scanResult = scanner.scan(repoPath);
         repo.setScanResultJson(toJson(scanResult));
@@ -202,6 +219,24 @@ public class RepositoryService {
         } catch (Exception e) {
             log.warn("Failed indexing code chunks for Q&A: {}", e.getMessage());
         }
+    }
+
+    public CodebaseAnalysisReport getOrComputeAnalysis(ImportedRepository repo) {
+        if (repo.getAnalysisResultJson() != null && !repo.getAnalysisResultJson().isBlank()) {
+            try {
+                return json.readValue(repo.getAnalysisResultJson(), CodebaseAnalysisReport.class);
+            } catch (Exception e) {
+                log.warn("Failed to parse cached analysis result: {}", e.getMessage());
+            }
+        }
+        Path repoPath = Path.of(repo.getLocalPath());
+        if (Files.exists(repoPath)) {
+            CodebaseAnalysisReport report = analyzer.analyze(repo.getId(), repo.getRepoUrl(), repo.getName(), repo.getDefaultRef(), repoPath);
+            repo.setAnalysisResultJson(toJson(report));
+            repoRepository.save(repo);
+            return report;
+        }
+        return null;
     }
 
     public List<ImportedRepository> listAll() {

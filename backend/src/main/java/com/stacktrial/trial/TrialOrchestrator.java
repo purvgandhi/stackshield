@@ -111,14 +111,8 @@ public class TrialOrchestrator {
             store.saveComparison(trialId, comparison);
             log.info("Verdict {}: {}", comparison.verdict(), comparison.verdictReason());
 
-            // ---- EXPLAINING
-            step(trialId, TrialStatus.EXPLAINING, "Retrieving documentation and explaining findings");
-            Trial current = store.get(trialId);
-            explanations.explain(new ExplanationInput(trialId, current.getChangeSummary(), comparison.verdict(),
-                    comparison.verdictReason(), comparison.findings(), comparison.evidence()));
-
             step(trialId, TrialStatus.COMPLETED, "Completed");
-            log.info("Trial completed");
+            log.info("Trial completed successfully with deterministic verdict: {}", comparison.verdict());
         } catch (TrialFailureException | UnsupportedProjectException | ChangeApplicationException
                  | GitCommandException | ContainerExecutionException | IllegalArgumentException e) {
             log.warn("Trial failed: {}", e.getMessage());

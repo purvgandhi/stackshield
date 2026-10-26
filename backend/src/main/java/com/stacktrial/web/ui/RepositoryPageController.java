@@ -1,6 +1,7 @@
 package com.stacktrial.web.ui;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.stacktrial.analyzer.CodebaseAnalysisReport;
 import com.stacktrial.architecture.ArchitectureResult;
 import com.stacktrial.common.NotFoundException;
 import com.stacktrial.doctor.DoctorResult;
@@ -13,11 +14,14 @@ import com.stacktrial.qa.RepositoryQaService;
 import com.stacktrial.readiness.ReadinessResult;
 import com.stacktrial.repository.ImportedRepository;
 import com.stacktrial.repository.RepositoryService;
+import com.stacktrial.repository.RepositoryStatus;
 import com.stacktrial.scanner.ScanResult;
 import com.stacktrial.security.SecurityResult;
+import com.stacktrial.trial.TrialReport;
 import com.stacktrial.trial.TrialReportService;
 import com.stacktrial.trial.TrialService;
 import com.stacktrial.web.api.TrialSummary;
+import com.stacktrial.workspace.RepositoryUrlValidator;
 import com.stacktrial.workspace.change.ChangeType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,6 +47,7 @@ public class RepositoryPageController {
     private final ProjectRunnerService projectRunner;
     private final TrialService trials;
     private final TrialReportService reports;
+    private final RepositoryUrlValidator validator;
     private final ObjectMapper json;
 
     public RepositoryPageController(
@@ -51,38 +56,111 @@ public class RepositoryPageController {
             ProjectRunnerService projectRunner,
             TrialService trials,
             TrialReportService reports,
+            RepositoryUrlValidator validator,
             ObjectMapper json) {
         this.repositoryService = repositoryService;
         this.qaService = qaService;
         this.projectRunner = projectRunner;
         this.trials = trials;
         this.reports = reports;
+        this.validator = validator;
         this.json = json;
     }
 
     @GetMapping("/")
-    public String dashboard(Model model) {
+    public String home(@RequestParam(value = "error", required = false) String error, Model model) {
+        if (error != null && !error.isBlank()) {
+            model.addAttribute("error", error);
+        }
+        List<ImportedRepository> repos = repositoryService.listAll();
+        model.addAttribute("recentRepos", repos.stream().limit(5).toList());
+        model.addAttribute("totalRepos", repos.size());
+        model.addAttribute("activeNav", "dashboard");
+        return "landing";
+    }
+
+    @GetMapping("/analyze")
+    public String analyzeRedirect() {
+        return "redirect:/#analyzer";
+    }
+
+    @PostMapping("/analyze")
+    public String analyzeRepo(
+            @RequestParam("repoUrl") String repoUrl,
+            @RequestParam(value = "ref", required = false) String ref,
+            Model model) {
+        String cleanUrl = repoUrl != null ? repoUrl.strip() : "";
+        String cleanRef = (ref == null || ref.isBlank()) ? "main" : ref.strip();
+
+        try {
+            validator.validate(cleanUrl, cleanRef);
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", "Invalid repository URL: " + e.getMessage());
+            model.addAttribute("recentRepos", repositoryService.listAll().stream().limit(5).toList());
+            model.addAttribute("activeNav", "dashboard");
+            return "landing";
+        }
+
+        try {
+            ImportedRepository repo = repositoryService.importRepository(cleanUrl, cleanRef);
+            if (repo.getStatus() == RepositoryStatus.FAILED) {
+                model.addAttribute("error", "Repository analysis failed: " + (repo.getStatusMessage() != null ? repo.getStatusMessage() : "Could not clone or access repository."));
+                model.addAttribute("recentRepos", repositoryService.listAll().stream().limit(5).toList());
+                model.addAttribute("activeNav", "dashboard");
+                return "landing";
+            }
+            return "redirect:/analysis/" + repo.getId();
+        } catch (Exception e) {
+            log.error("Failed to analyze repository {}: {}", cleanUrl, e.getMessage(), e);
+            model.addAttribute("error", "Could not access repository: " + e.getMessage());
+            model.addAttribute("recentRepos", repositoryService.listAll().stream().limit(5).toList());
+            model.addAttribute("activeNav", "dashboard");
+            return "landing";
+        }
+    }
+
+    @GetMapping("/analysis/{id}")
+    public String analysisReport(@PathVariable UUID id, Model model) {
+        ImportedRepository repo = getRepoOrThrow(id);
+        CodebaseAnalysisReport report = repositoryService.getOrComputeAnalysis(repo);
+        if (report == null) {
+            model.addAttribute("error", "Analysis report is still generating or unavailable for this repository.");
+            return "redirect:/history";
+        }
+        model.addAttribute("repo", repo);
+        model.addAttribute("report", report);
+        model.addAttribute("activeNav", "history");
+        return "analysis-report";
+    }
+
+    @GetMapping("/history")
+    public String analysisHistory(Model model) {
+        List<ImportedRepository> repos = repositoryService.listAll();
+        model.addAttribute("repos", repos);
+        model.addAttribute("activeNav", "history");
+        return "history";
+    }
+
+    @GetMapping("/upgrade-check")
+    public String upgradeCheck(
+            @RequestParam(value = "repoUrl", required = false) String repoUrl,
+            Model model) {
         List<ImportedRepository> repos = repositoryService.listAll();
         List<TrialSummary> recentTrials = trials.recent().stream().map(TrialSummary::of).toList();
-
-        long passCount = recentTrials.stream().filter(t -> "PASS".equalsIgnoreCase(t.verdict()) || "IMPROVEMENT".equalsIgnoreCase(t.verdict())).count();
-        double passRate = recentTrials.isEmpty() ? 100.0 : ((double) passCount / recentTrials.size()) * 100.0;
-
         model.addAttribute("repos", repos);
         model.addAttribute("trials", recentTrials);
-        model.addAttribute("totalRepos", repos.size());
-        model.addAttribute("totalTrials", recentTrials.size());
-        model.addAttribute("passRate", Math.round(passRate));
-        model.addAttribute("activeNav", "dashboard");
-        return "dashboard";
+        model.addAttribute("activeNav", "upgrades");
+        return "upgrade-check";
+    }
+
+    @GetMapping("/dashboard")
+    public String dashboard() {
+        return "redirect:/";
     }
 
     @GetMapping("/repositories")
-    public String repositories(Model model) {
-        List<ImportedRepository> repos = repositoryService.listAll();
-        model.addAttribute("repos", repos);
-        model.addAttribute("activeNav", "repositories");
-        return "repositories";
+    public String repositories() {
+        return "redirect:/history";
     }
 
     @PostMapping("/repositories/import")
@@ -90,20 +168,17 @@ public class RepositoryPageController {
             @RequestParam("repoUrl") String repoUrl,
             @RequestParam(value = "ref", required = false) String ref,
             Model model) {
-        try {
-            ImportedRepository repo = repositoryService.importRepository(repoUrl, ref);
-            return "redirect:/repositories/" + repo.getId() + "/overview";
-        } catch (Exception e) {
-            model.addAttribute("error", e.getMessage());
-            model.addAttribute("repos", repositoryService.listAll());
-            model.addAttribute("activeNav", "repositories");
-            return "repositories";
-        }
+        return analyzeRepo(repoUrl, ref, model);
     }
 
     @GetMapping("/repositories/{id}")
     public String repoDefault(@PathVariable UUID id) {
-        return "redirect:/repositories/" + id + "/overview";
+        return "redirect:/analysis/" + id;
+    }
+
+    @GetMapping("/trials")
+    public String trialsHistory() {
+        return "redirect:/upgrade-check";
     }
 
     @GetMapping("/repositories/{id}/overview")
@@ -200,7 +275,7 @@ public class RepositoryPageController {
     @PostMapping("/repositories/{id}/delete")
     public String delete(@PathVariable UUID id) {
         repositoryService.delete(id);
-        return "redirect:/repositories";
+        return "redirect:/history";
     }
 
     @GetMapping("/trials/new")

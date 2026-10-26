@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "public": true,
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/", "destination": "/public/index.html" },
+    { "source": "/history", "destination": "/public/history.html" },
+    { "source": "/upgrade-check", "destination": "/public/upgrade-check.html" },
+    { "source": "/analysis/(.*)", "destination": "/public/analysis.html" },
+    { "source": "/(.*)", "destination": "/public/$1" }
+  ]
+}

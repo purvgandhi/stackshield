@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+ <title>Analysis History · StackShield</title>
+ <link rel="stylesheet" th:href="@{/css/app.css(v='20261027_polish_v1')}">
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+ <style>
+ :root {
+ --bg-page: #F4F0FF;
+ --bg-card: #FFFFFF;
+ --primary: #6C4BEF;
+ --primary-dark: #49318F;
+ --primary-hover: #5A3AD9;
+ --primary-light: #E6DEFF;
+ --primary-soft: #B9A0FF;
+ --border: #E5DDF5;
+ --border-subtle: #F0EAFB;
+ --text-main: #242033;
+ --text-secondary: #6B6580;
+ --text-muted: #8E88A3;
+ }
+
+ *, *::before, *::after {
+ box-sizing: border-box;
+ }
+
+ body {
+ margin: 0;
+ padding: 0;
+ background-color: var(--bg-page);
+ color: var(--text-main);
+ font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+ -webkit-font-smoothing: antialiased;
+ font-size: 14px;
+ line-height: 1.5;
+ }
+
+ .history-layout {
+ max-width: 1140px;
+ margin: 0 auto;
+ padding: 32px 24px 60px;
+ }
+
+ .history-nav {
+ display: flex;
+ align-items: center;
+ justify-content: space-between;
+ margin-bottom: 24px;
+ padding-bottom: 16px;
+ border-bottom: 1px solid var(--border);
+ }
+
+ .history-breadcrumbs {
+ display: flex;
+ align-items: center;
+ gap: 8px;
+ font-size: 13.5px;
+ color: var(--text-secondary);
+ }
+
+ .history-breadcrumbs a {
+ color: var(--primary);
+ text-decoration: none;
+ font-weight: 600;
+ }
+
+ .history-card {
+ background: var(--bg-card);
+ border: 1px solid var(--border);
+ border-radius: 10px;
+ padding: 24px;
+ box-shadow: 0 2px 6px rgba(73, 49, 143, 0.04);
+ }
+
+ .history-header {
+ display: flex;
+ align-items: center;
+ justify-content: space-between;
+ margin-bottom: 20px;
+ padding-bottom: 16px;
+ border-bottom: 1px solid var(--border-subtle);
+ }
+
+ .history-title {
+ font-size: 20px;
+ font-weight: 700;
+ color: var(--text-main);
+ margin: 0;
+ }
+
+ .table-wrap {
+ overflow-x: auto;
+ }
+
+ table {
+ width: 100%;
+ border-collapse: collapse;
+ font-size: 13px;
+ }
+
+ th {
+ text-align: left;
+ font-size: 11.5px;
+ font-weight: 600;
+ color: var(--text-secondary);
+ text-transform: uppercase;
+ letter-spacing: 0.03em;
+ padding: 10px 14px;
+ border-bottom: 1.5px solid var(--border);
+ background: #FAF8FF;
+ }
+
+ td {
+ padding: 12px 14px;
+ border-bottom: 1px solid var(--border-subtle);
+ vertical-align: middle;
+ color: var(--text-main);
+ }
+
+ tr:last-child td {
+ border-bottom: none;
+ }
+
+ .btn-primary-sm {
+ background: var(--primary);
+ color: #FFFFFF;
+ padding: 6px 14px;
+ border-radius: 6px;
+ font-size: 12.5px;
+ font-weight: 600;
+ text-decoration: none;
+ display: inline-flex;
+ align-items: center;
+ gap: 6px;
+ border: 1px solid var(--primary);
+ cursor: pointer;
+ box-shadow: 0 2px 6px rgba(108, 75, 239, 0.2);
+ transition: all 0.15s ease;
+ }
+
+ .btn-primary-sm:hover {
+ background: var(--primary-hover);
+ transform: translateY(-1px);
+ box-shadow: 0 4px 10px rgba(108, 75, 239, 0.3);
+ }
+
+ .btn-secondary-sm {
+ background: #FFFFFF;
+ color: var(--primary);
+ border: 1px solid var(--border);
+ padding: 6px 12px;
+ border-radius: 6px;
+ font-size: 12.5px;
+ font-weight: 600;
+ text-decoration: none;
+ display: inline-flex;
+ align-items: center;
+ gap: 6px;
+ cursor: pointer;
+ transition: all 0.15s ease;
+ }
+
+ .btn-secondary-sm:hover {
+ background: var(--primary-light);
+ border-color: var(--primary-soft);
+ color: var(--primary-dark);
+ transform: translateY(-1px);
+ }
+
+ .btn-danger-sm {
+ background: #FFFFFF;
+ color: #DC2626;
+ border: 1px solid #FECACA;
+ padding: 5px 10px;
+ border-radius: 6px;
+ font-size: 12px;
+ cursor: pointer;
+ transition: all 0.15s ease;
+ }
+
+ .btn-danger-sm:hover {
+ background: #FEF2F2;
+ border-color: #F87171;
+ }
+
+ .empty-history {
+ text-align: center;
+ padding: 50px 20px;
+ color: var(--text-secondary);
+ }
+ </style>
+</head>
+<body>
+
+<div class="history-layout">
+ <!-- Top Bar Navigation -->
+ <div class="history-nav">
+ <div class="history-breadcrumbs">
+ <a th:href="@{/}" style="display: inline-flex; align-items: center; gap: 5px;">
+ <svg class="svg-icon" viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+ <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+ </svg>
+ <span>StackShield</span>
+ </a>
+ <span>/</span>
+ <span style="font-weight: 600; color: var(--text-main);">Analysis History</span>
+ </div>
+ <div style="display: flex; gap: 10px; align-items: center;">
+ <a th:href="@{/}" class="btn-primary-sm">
+ <svg class="svg-icon" viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+ <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+ </svg>
+ <span>Analyze Repository</span>
+ </a>
+ <a th:href="@{/upgrade-check}" class="btn-secondary-sm">
+ <svg class="svg-icon" viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+ <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+ </svg>
+ <span>Upgrade Check</span>
+ </a>
+ </div>
+ </div>
+
+ <!-- History Panel -->
+ <div class="history-card">
+ <div class="history-header">
+ <div>
+ <h1 class="history-title">Codebase Analysis History</h1>
+ <p style="margin: 4px 0 0; font-size: 13px; color: var(--text-secondary);">
+ Repositories scanned and persisted in PostgreSQL.
+ </p>
+ </div>
+ <div style="display: flex; align-items: center; gap: 14px;">
+ <div style="display: flex; align-items: center; gap: 8px;" title="Activity Trend">
+ <span style="font-size: 11.5px; color: var(--text-secondary); text-transform: uppercase; font-weight: 600; letter-spacing: 0.03em;">Activity</span>
+ <svg width="68" height="20" viewBox="0 0 68 20" fill="none">
+ <path d="M2 15 L18 11 L34 6 L48 10 L66 3" stroke="#6C4BEF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+ <circle cx="66" cy="3" r="2.5" fill="#6C4BEF"/>
+ </svg>
+ </div>
+ <div style="font-size: 13px; font-weight: 600; color: var(--text-secondary);" th:text="${repos.size() + ' Total Analyzed'}">
+ 0 Total Analyzed
+ </div>
+ </div>
+ </div>
+
+ <div th:if="${#lists.isEmpty(repos)}" class="empty-history">
+ <div style="margin-bottom: 12px;">
+ <svg class="svg-icon" viewBox="0 0 24 24" width="34" height="34" stroke="var(--primary-soft)" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round">
+ <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+ </svg>
+ </div>
+ <div style="font-weight: 600; font-size: 15px; color: var(--text-main); margin-bottom: 6px;">No repositories analyzed yet</div>
+ <div style="font-size: 13px; margin-bottom: 18px;">Paste a repository URL on the dashboard to run static analysis.</div>
+ <a th:href="@{/}" class="btn-primary-sm">Analyze Repository</a>
+ </div>
+
+ <div class="table-wrap" th:unless="${#lists.isEmpty(repos)}">
+ <table>
+ <thead>
+ <tr>
+ <th>Repository</th>
+ <th>Ref</th>
+ <th>Status</th>
+ <th>Scanned At</th>
+ <th style="text-align: right;">Actions</th>
+ </tr>
+ </thead>
+ <tbody>
+ <tr th:each="r : ${repos}">
+ <td>
+ <div style="font-weight: 600; font-size: 14px;" th:text="${r.name}">repository</div>
+ <div style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: var(--text-secondary);" th:text="${r.repoUrl}">https://...</div>
+ </td>
+ <td>
+ <span style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px; background: #FAF8FF; border: 1px solid var(--border); padding: 2px 7px; border-radius: 4px;" th:text="${r.defaultRef}">main</span>
+ </td>
+ <td>
+ <span class="badge badge-pass" th:if="${r.status.name() == 'READY'}">READY</span>
+ <span class="badge badge-warn" th:if="${r.status.name() == 'ANALYZING' or r.status.name() == 'IMPORTING'}">ANALYZING</span>
+ <span class="badge badge-fail" th:if="${r.status.name() == 'FAILED'}">FAILED</span>
+ </td>
+ <td style="color: var(--text-secondary); font-size: 12.5px;" th:text="${#temporals.format(r.createdAt, 'yyyy-MM-dd HH:mm')}">
+ 2026-10-27 00:00
+ </td>
+ <td style="text-align: right;">
+ <div style="display: inline-flex; align-items: center; gap: 8px;">
+ <a th:href="@{'/analysis/' + ${r.id}}" class="btn-primary-sm">
+ <span>View Report</span>
+ <svg class="svg-icon" viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+ <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+ </svg>
+ </a>
+ <form th:action="@{'/repositories/' + ${r.id} + '/delete'}" method="post" style="display:inline;" onsubmit="return confirm('Delete this repository analysis?');">
+ <button type="submit" class="btn-danger-sm">Delete</button>
+ </form>
+ </div>
+ </td>
+ </tr>
+ </tbody>
+ </table>
+ </div>
+ </div>
+</div>
+
+<!-- Shared Toast Container -->
+<div th:replace="~{fragments :: toastContainer}"></div>
+<div th:replace="~{fragments :: toastScript}"></div>
+
+</body>
+</html>

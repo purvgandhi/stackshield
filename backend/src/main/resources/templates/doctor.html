@@ -1,88 +1,89 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments :: head(${repo.name} + ' · Doctor')}"></head>
 <body>
 <div class="app-layout">
-    <aside th:replace="~{fragments :: sidebar(${activeNav})}"></aside>
-    <div class="main-wrapper">
-        <header th:replace="~{fragments :: topbar}"></header>
+ <aside th:replace="~{fragments :: sidebar(${activeNav})}"></aside>
+ <div class="main-wrapper">
+ <header th:replace="~{fragments :: topbar}"></header>
 
-        <main class="content-container">
-            <div th:replace="~{fragments :: repoHeader(${repo}, 'doctor')}"></div>
+ <main class="content-container">
+ <div th:replace="~{fragments :: repoHeader(${repo}, 'doctor')}"></div>
 
-            <div th:if="${doctor != null}">
-                <!-- Overall Status Banner -->
-                <div class="card" style="margin-bottom: 20px;">
-                    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
-                        <div>
-                            <div class="text-muted" style="font-size: 11.5px; text-transform: uppercase; font-family: var(--mono); letter-spacing: 0.08em;">Diagnostic Health Assessment</div>
-                            <h2 style="margin: 4px 0 0; font-size: 18px; color: var(--text-main);" th:text="${doctor.summary}">Environment Doctor Diagnostics</h2>
-                        </div>
-                        <span class="badge" th:classappend="${doctor.overallStatus == 'READY' ? 'badge-pass' : doctor.overallStatus == 'WARNINGS' ? 'badge-warn' : 'badge-fail'}" style="font-size: 14px; padding: 6px 14px;" th:text="${doctor.overallStatus}">READY</span>
-                    </div>
-                </div>
+ <div th:if="${doctor != null}">
+ <!-- Overall Status Banner -->
+ <div class="card" style="margin-bottom: 20px;">
+ <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+ <div>
+ <div class="text-muted" style="font-size: 11.5px; text-transform: uppercase; font-family: var(--mono); letter-spacing: 0.08em;">Diagnostic Health Assessment</div>
+ <h2 style="margin: 4px 0 0; font-size: 18px; color: var(--text-main);" th:text="${doctor.summary}">Environment Doctor Diagnostics</h2>
+ </div>
+ <span class="badge" th:classappend="${doctor.overallStatus == 'READY' ? 'badge-pass' : doctor.overallStatus == 'WARNINGS' ? 'badge-warn' : 'badge-fail'}" style="font-size: 14px; padding: 6px 14px;" th:text="${doctor.overallStatus}">READY</span>
+ </div>
+ </div>
 
-                <div class="grid-3">
-                    <div class="card">
-                        <div class="card-title">Passed Checks</div>
-                        <div class="stat-value text-emerald" th:text="${doctor.passedCount}">5</div>
-                        <div class="stat-sub">Valid environment configurations</div>
-                    </div>
-                    <div class="card">
-                        <div class="card-title">Warnings</div>
-                        <div class="stat-value text-amber" th:text="${doctor.warningCount}">1</div>
-                        <div class="stat-sub">Non-blocking recommendations</div>
-                    </div>
-                    <div class="card">
-                        <div class="card-title">Failed / Blocking</div>
-                        <div class="stat-value text-rose" th:text="${doctor.failedCount}">0</div>
-                        <div class="stat-sub">Issues blocking successful builds</div>
-                    </div>
-                </div>
+ <div class="grid-3">
+ <div class="card">
+ <div class="card-title">Passed Checks</div>
+ <div class="stat-value text-emerald" th:text="${doctor.passedCount}">5</div>
+ <div class="stat-sub">Valid environment configurations</div>
+ </div>
+ <div class="card">
+ <div class="card-title">Warnings</div>
+ <div class="stat-value text-amber" th:text="${doctor.warningCount}">1</div>
+ <div class="stat-sub">Non-blocking recommendations</div>
+ </div>
+ <div class="card">
+ <div class="card-title">Failed / Blocking</div>
+ <div class="stat-value text-rose" th:text="${doctor.failedCount}">0</div>
+ <div class="stat-sub">Issues blocking successful builds</div>
+ </div>
+ </div>
 
-                <!-- Doctor Diagnostic Items -->
-                <div class="card" style="padding: 0;">
-                    <div style="padding: 16px 20px; border-bottom: 1px solid var(--border);">
-                        <h3 style="margin: 0; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted);">
-                            🩺 Diagnostic Checks
-                        </h3>
-                    </div>
-                    <div class="table-wrap" style="border: 0; border-radius: 0 0 var(--radius) var(--radius);">
-                        <table>
-                            <thead>
-                            <tr>
-                                <th>Category</th>
-                                <th>Check Name</th>
-                                <th>Status</th>
-                                <th>Finding & Evidence</th>
-                                <th>Suggested Action</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr th:each="chk : ${doctor.checks}">
-                                <td>
-                                    <span class="code-tag" th:text="${chk.category}">RUNTIME</span>
-                                </td>
-                                <td style="font-weight: 700; color: var(--text-main);" th:text="${chk.name}">Java Version</td>
-                                <td>
-                                    <span class="badge" th:classappend="${chk.status == 'PASS' ? 'badge-pass' : chk.status == 'WARN' ? 'badge-warn' : 'badge-fail'}" th:text="${chk.status}">PASS</span>
-                                </td>
-                                <td>
-                                    <div style="font-weight: 500;" th:text="${chk.problem}">Check details</div>
-                                    <div th:if="${chk.evidence != null and !chk.evidence.isEmpty()}" class="mono text-muted" style="font-size: 11.5px; margin-top: 4px;" th:text="'Evidence: ' + ${chk.evidence}">Evidence</div>
-                                    <div class="text-muted" style="font-size: 11.5px; margin-top: 2px;" th:text="${chk.whyItMatters}">Impact</div>
-                                </td>
-                                <td>
-                                    <div class="mono text-cyan" style="font-size: 12px;" th:text="${chk.suggestedFix}">None needed</div>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </main>
-    </div>
+ <!-- Doctor Diagnostic Items -->
+ <div class="card" style="padding: 0;">
+ <div style="padding: 16px 20px; border-bottom: 1px solid var(--border);">
+ <h3 style="margin: 0; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted);">
+ Diagnostic Checks
+ </h3>
+ </div>
+ <div class="table-wrap" style="border: 0; border-radius: 0 0 var(--radius) var(--radius);">
+ <table>
+ <thead>
+ <tr>
+ <th>Category</th>
+ <th>Check Name</th>
+ <th>Status</th>
+ <th>Finding & Evidence</th>
+ <th>Suggested Action</th>
+ </tr>
+ </thead>
+ <tbody>
+ <tr th:each="chk : ${doctor.checks}">
+ <td>
+ <span class="code-tag" th:text="${chk.category}">RUNTIME</span>
+ </td>
+ <td style="font-weight: 700; color: var(--text-main);" th:text="${chk.name}">Java Version</td>
+ <td>
+ <span class="badge" th:classappend="${chk.status == 'PASS' ? 'badge-pass' : chk.status == 'WARN' ? 'badge-warn' : 'badge-fail'}" th:text="${chk.status}">PASS</span>
+ </td>
+ <td>
+ <div style="font-weight: 500;" th:text="${chk.problem}">Check details</div>
+ <div th:if="${chk.evidence != null and !chk.evidence.isEmpty()}" class="mono text-muted" style="font-size: 11.5px; margin-top: 4px;" th:text="'Evidence: ' + ${chk.evidence}">Evidence</div>
+ <div class="text-muted" style="font-size: 11.5px; margin-top: 2px;" th:text="${chk.whyItMatters}">Impact</div>
+ </td>
+ <td>
+ <div class="mono text-purple" style="font-size: 12px;" th:text="${chk.suggestedFix}">None needed</div>
+ </td>
+ </tr>
+ </tbody>
+ </table>
+ </div>
+ </div>
+ </div>
+ </main>
+ </div>
 </div>
 </body>
 </html>
+

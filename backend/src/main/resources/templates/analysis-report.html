@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="'Analysis Report · ' + ${report.repoName} + ' · StackShield'">Analysis Report · StackShield</title>
+    <link rel="stylesheet" th:href="@{/css/app.css(v='20261027_polish_v2')}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-page: #F4F0FF;
+            --bg-card: #FFFFFF;
+            --primary: #6C4BEF;
+            --primary-dark: #49318F;
+            --primary-hover: #5A3AD9;
+            --primary-light: #E6DEFF;
+            --primary-soft: #B9A0FF;
+            --border: #E5DDF5;
+            --border-subtle: #F0EAFB;
+            --text-main: #242033;
+            --text-secondary: #6B6580;
+            --text-muted: #8E88A3;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-page);
+            color: var(--text-main);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .report-layout {
+            max-width: 1140px;
+            margin: 0 auto;
+            padding: 32px 24px 60px;
+        }
+
+        /* Top Bar Navigation */
+        .report-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .report-breadcrumbs {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13.5px;
+            color: var(--text-secondary);
+        }
+
+        .report-breadcrumbs a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .btn-secondary {
+            background: #FFFFFF;
+            color: var(--primary);
+            border: 1px solid var(--border);
+            padding: 7px 14px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            border-color: var(--primary-soft);
+            transform: translateY(-1px);
+        }
+
+        /* 1. Overview Section */
+        .overview-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 24px;
+            box-shadow: 0 2px 6px rgba(73, 49, 143, 0.04);
+            margin-bottom: 24px;
+        }
+
+        .overview-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .repo-title-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .repo-name {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-main);
+            margin: 0;
+        }
+
+        .badge-ref {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11.5px;
+            background: #FAF8FF;
+            border: 1px solid var(--border);
+            padding: 2px 8px;
+            border-radius: 4px;
+            color: var(--primary-dark);
+        }
+
+        .grade-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #FAF8FF;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 8px 16px;
+        }
+
+        .grade-letter {
+            width: 38px;
+            height: 38px;
+            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 800;
+        }
+
+        .grade-A { background: #DCFCE7; color: #166534; }
+        .grade-B { background: #F0FDF4; color: #15803D; }
+        .grade-C { background: #FEF9C3; color: #854D0E; }
+        .grade-D { background: #FFEDD5; color: #9A3412; }
+        .grade-F { background: #FEE2E2; color: #991B1B; }
+
+        /* Overview KPI Grid */
+        .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        .overview-kpi {
+            background: #FAF8FF;
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            padding: 14px 16px;
+        }
+
+        .kpi-label {
+            font-size: 11.5px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+
+        .kpi-val {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        /* 2. Priority Action Items (Summary) */
+        .priority-card {
+            background: #FAF8FF;
+            border: 1.5px solid var(--primary-soft);
+            border-radius: 10px;
+            padding: 20px 24px;
+            margin-bottom: 24px;
+        }
+
+        .priority-title {
+            font-size: 14.5px;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin: 0 0 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .priority-list {
+            margin: 0;
+            padding-left: 20px;
+            color: var(--text-main);
+            font-size: 13.5px;
+        }
+
+        .priority-list li {
+            margin-bottom: 6px;
+            line-height: 1.45;
+        }
+
+        /* Category Filter Tabs */
+        .category-filter-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 7px 14px;
+            border-radius: 6px;
+            font-size: 12.5px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.15s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .filter-btn.active, .filter-btn:hover {
+            background: var(--primary);
+            color: #FFFFFF;
+            border-color: var(--primary);
+        }
+
+        /* 3. Findings Cards */
+        .findings-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .finding-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 18px 20px;
+            box-shadow: 0 1px 3px rgba(36, 32, 51, 0.04);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.15s ease;
+        }
+
+        .finding-card:hover {
+            border-color: var(--primary-soft);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 14px rgba(73, 49, 143, 0.06);
+        }
+
+        .finding-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .finding-title-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .finding-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-main);
+            margin: 0;
+        }
+
+        /* Severity Badges */
+        .severity-badge {
+            font-size: 11px;
+            font-weight: 700;
+            padding: 2px 7px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        .severity-high { background: #FEE2E2; color: #991B1B; border: 1px solid #FECACA; }
+        .severity-medium { background: #FEF3C7; color: #92400E; border: 1px solid #FDE68A; }
+        .severity-low { background: #E0E7FF; color: #3730A3; border: 1px solid #C7D2FE; }
+
+        .category-pill {
+            font-size: 11.5px;
+            background: #FAF8FF;
+            border: 1px solid var(--border);
+            padding: 2px 8px;
+            border-radius: 4px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .finding-file {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: var(--primary);
+            background: #FAF8FF;
+            border: 1px solid var(--border-subtle);
+            padding: 3px 8px;
+            border-radius: 4px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 10px;
+            word-break: break-all;
+        }
+
+        .finding-section {
+            margin-bottom: 8px;
+        }
+
+        .finding-label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            color: var(--text-secondary);
+            margin-bottom: 2px;
+        }
+
+        .finding-desc {
+            font-size: 13px;
+            color: var(--text-main);
+            margin: 0;
+            line-height: 1.45;
+        }
+
+        .finding-remediation {
+            background: #FAF8FF;
+            border-left: 3px solid var(--primary);
+            padding: 8px 12px;
+            border-radius: 0 4px 4px 0;
+            margin-top: 10px;
+            font-size: 12.5px;
+            color: var(--text-main);
+        }
+
+        /* Scope Box */
+        .scope-box {
+            background: #FAF8FF;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin-top: 32px;
+            font-size: 12.5px;
+            color: var(--text-secondary);
+            line-height: 1.45;
+        }
+
+        @media (max-width: 768px) {
+            .overview-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="report-layout">
+    <!-- Top Navigation -->
+    <div class="report-nav">
+        <div class="report-breadcrumbs">
+            <a th:href="@{/}" style="display: inline-flex; align-items: center; gap: 5px;">
+                <svg class="svg-icon" viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                </svg>
+                <span>StackShield</span>
+            </a>
+            <span>/</span>
+            <a th:href="@{/history}">Analysis History</a>
+            <span>/</span>
+            <span style="font-weight: 600; color: var(--text-main);" th:text="${report.repoName}">Repository</span>
+        </div>
+        <div style="display: flex; gap: 10px; align-items: center;">
+            <button type="button" class="btn-secondary" onclick="copyReportUrl()">
+                <svg class="svg-icon" viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                </svg>
+                <span>Copy URL</span>
+            </button>
+            <a th:href="@{/history}" class="btn-secondary">
+                <svg class="svg-icon" viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
+                </svg>
+                <span>Analysis History</span>
+            </a>
+            <a th:href="@{'/upgrade-check?repoUrl=' + ${report.repoUrl}}" class="btn-secondary">
+                <svg class="svg-icon" viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                </svg>
+                <span>Upgrade Check</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- 1. Overview Section -->
+    <div class="overview-card">
+        <div class="overview-header">
+            <div>
+                <div class="repo-title-row">
+                    <h1 class="repo-name" th:text="${report.repoName}">spring-petclinic</h1>
+                    <span class="badge-ref" th:text="${report.defaultRef}">main</span>
+                </div>
+                <div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text-secondary); margin-top: 4px;" th:text="${report.repoUrl}">
+                    https://github.com/spring-projects/spring-petclinic
+                </div>
+            </div>
+
+            <!-- Health Grade -->
+            <div class="grade-box">
+                <div>
+                    <div style="font-size: 11px; text-transform: uppercase; font-weight: 700; color: var(--text-secondary);">Health Grade</div>
+                    <div style="font-size: 12.5px; font-weight: 600; color: var(--text-main);" th:text="${report.findings.size() + ' Total Findings'}">12 Findings</div>
+                </div>
+                <span class="grade-letter"
+                      th:classappend="'grade-' + ${report.healthGrade}"
+                      th:text="${report.healthGrade}">A</span>
+            </div>
+        </div>
+
+        <!-- 4 KPI Metrics -->
+        <div class="overview-grid">
+            <div class="overview-kpi">
+                <div class="kpi-label">Primary Language</div>
+                <div class="kpi-val" th:text="${report.primaryLanguage}">Java</div>
+            </div>
+            <div class="overview-kpi">
+                <div class="kpi-label">Project Type</div>
+                <div class="kpi-val" th:text="${report.projectType}">Spring Boot Maven</div>
+            </div>
+            <div class="overview-kpi">
+                <div class="kpi-label">Files Scanned</div>
+                <div class="kpi-val" th:text="${report.totalFiles + ' files (' + report.javaFilesCount + ' Java)'}">48 (32 Java)</div>
+            </div>
+            <div class="overview-kpi">
+                <div class="kpi-label">Lines of Code</div>
+                <div class="kpi-val" th:text="${#numbers.formatInteger(report.linesOfCode, 1, 'COMMA') + ' LOC'}">3,450 LOC</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Small Visual Graph: Findings Breakdown -->
+    <div class="graph-card">
+        <div class="graph-card-header">
+            <div>
+                <h2 class="graph-card-title">Findings Breakdown</h2>
+                <div class="graph-card-subtitle">Visual distribution across categories and severity levels</div>
+            </div>
+            <div style="font-size: 12px; color: var(--text-secondary); font-family: 'JetBrains Mono', monospace;" th:text="${report.findings.size() + ' Total Findings'}">
+                0 Total Findings
+            </div>
+        </div>
+
+        <div class="graph-grid">
+            <!-- Left: Category Distribution Horizontal Bar Graph -->
+            <div>
+                <div class="graph-col-label">Findings by Category</div>
+                <div class="bar-chart-list">
+                    <!-- Security -->
+                    <div class="bar-chart-row" onclick="filterCategoryFromChart('Security Risks')" title="Click to filter by Security">
+                        <span class="bar-label">Security</span>
+                        <div class="bar-track">
+                            <div class="bar-fill" th:style="'width: ' + (${report.findings.isEmpty()} ? 0 : (${report.securityCount} * 100 / ${report.findings.size()})) + '%;'"></div>
+                        </div>
+                        <span class="bar-val" th:text="${report.securityCount}">0</span>
+                    </div>
+
+                    <!-- Code Quality -->
+                    <div class="bar-chart-row" onclick="filterCategoryFromChart('Code Quality')" title="Click to filter by Code Quality">
+                        <span class="bar-label">Code Quality</span>
+                        <div class="bar-track">
+                            <div class="bar-fill" th:style="'width: ' + (${report.findings.isEmpty()} ? 0 : (${report.codeQualityCount} * 100 / ${report.findings.size()})) + '%;'"></div>
+                        </div>
+                        <span class="bar-val" th:text="${report.codeQualityCount}">0</span>
+                    </div>
+
+                    <!-- Dependencies -->
+                    <div class="bar-chart-row" onclick="filterCategoryFromChart('Dependencies')" title="Click to filter by Dependencies">
+                        <span class="bar-label">Dependencies</span>
+                        <div class="bar-track">
+                            <div class="bar-fill" th:style="'width: ' + (${report.findings.isEmpty()} ? 0 : (${report.dependencyCount} * 100 / ${report.findings.size()})) + '%;'"></div>
+                        </div>
+                        <span class="bar-val" th:text="${report.dependencyCount}">0</span>
+                    </div>
+
+                    <!-- Configuration -->
+                    <div class="bar-chart-row" onclick="filterCategoryFromChart('Configuration')" title="Click to filter by Configuration">
+                        <span class="bar-label">Configuration</span>
+                        <div class="bar-track">
+                            <div class="bar-fill" th:style="'width: ' + (${report.findings.isEmpty()} ? 0 : (${report.configurationCount} * 100 / ${report.findings.size()})) + '%;'"></div>
+                        </div>
+                        <span class="bar-val" th:text="${report.configurationCount}">0</span>
+                    </div>
+
+                    <!-- Suggestions -->
+                    <div class="bar-chart-row" onclick="filterCategoryFromChart('Improvement Suggestions')" title="Click to filter by Suggestions">
+                        <span class="bar-label">Suggestions</span>
+                        <div class="bar-track">
+                            <div class="bar-fill" th:style="'width: ' + (${report.findings.isEmpty()} ? 0 : (${report.improvementCount} * 100 / ${report.findings.size()})) + '%;'"></div>
+                        </div>
+                        <span class="bar-val" th:text="${report.improvementCount}">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Severity Breakdown Donut Chart -->
+            <div>
+                <div class="graph-col-label">Findings by Severity</div>
+                <div class="donut-chart-container">
+                    <div class="donut-svg-wrap">
+                        <svg class="donut-chart" viewBox="0 0 100 100" width="110" height="110" id="donutSvg"
+                             th:data-high="${report.highSeverityCount()}"
+                             th:data-med="${report.mediumSeverityCount()}"
+                             th:data-low="${report.lowSeverityCount()}"
+                             th:data-total="${report.findings.size()}">
+                            <!-- Background Track -->
+                            <circle cx="50" cy="50" r="38" fill="none" stroke="#F0EAFB" stroke-width="11" />
+                            <!-- Dynamic Segments rendered by JS -->
+                            <circle id="donutHigh" cx="50" cy="50" r="38" fill="none" stroke="#EF4444" stroke-width="11" stroke-dasharray="0 238.76" stroke-dashoffset="0" />
+                            <circle id="donutMed" cx="50" cy="50" r="38" fill="none" stroke="#F59E0B" stroke-width="11" stroke-dasharray="0 238.76" stroke-dashoffset="0" />
+                            <circle id="donutLow" cx="50" cy="50" r="38" fill="none" stroke="#6C4BEF" stroke-width="11" stroke-dasharray="0 238.76" stroke-dashoffset="0" />
+                        </svg>
+                        <div class="donut-center-text">
+                            <span class="donut-center-num" th:text="${report.findings.size()}">0</span>
+                            <span class="donut-center-label">TOTAL</span>
+                        </div>
+                    </div>
+
+                    <div class="donut-legend">
+                        <div class="legend-row">
+                            <span class="legend-dot" style="background: #EF4444;"></span>
+                            <span class="legend-text">High Severity</span>
+                            <span class="legend-count" th:text="${report.highSeverityCount()}">0</span>
+                        </div>
+                        <div class="legend-row">
+                            <span class="legend-dot" style="background: #F59E0B;"></span>
+                            <span class="legend-text">Medium Severity</span>
+                            <span class="legend-count" th:text="${report.mediumSeverityCount()}">0</span>
+                        </div>
+                        <div class="legend-row">
+                            <span class="legend-dot" style="background: #6C4BEF;"></span>
+                            <span class="legend-text">Low Severity</span>
+                            <span class="legend-count" th:text="${report.lowSeverityCount()}">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. Priority Action Items (Summary) -->
+    <div class="priority-card" th:if="${report.topPriorities != null and !#lists.isEmpty(report.topPriorities)}">
+        <div class="priority-title">
+            <svg class="svg-icon" viewBox="0 0 24 24" width="16" height="16" stroke="var(--primary-dark)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
+            </svg>
+            <span>Recommended Action Items</span>
+        </div>
+        <ul class="priority-list">
+            <li th:each="priority : ${report.topPriorities}" th:text="${priority}">
+                Action item
+            </li>
+        </ul>
+    </div>
+
+    <!-- 3. Category Filter Tabs -->
+    <div class="category-filter-row">
+        <button class="filter-btn active" onclick="filterCategory('all', this)">
+            <span>All</span>
+            <span th:text="'(' + ${report.findings.size()} + ')'">(0)</span>
+        </button>
+        <button class="filter-btn" onclick="filterCategory('Security Risks', this)">
+            <span>Security</span>
+            <span th:text="'(' + ${report.securityCount} + ')'">(0)</span>
+        </button>
+        <button class="filter-btn" onclick="filterCategory('Code Quality', this)">
+            <span>Code Quality</span>
+            <span th:text="'(' + ${report.codeQualityCount} + ')'">(0)</span>
+        </button>
+        <button class="filter-btn" onclick="filterCategory('Dependencies', this)">
+            <span>Dependencies</span>
+            <span th:text="'(' + ${report.dependencyCount} + ')'">(0)</span>
+        </button>
+        <button class="filter-btn" onclick="filterCategory('Configuration', this)">
+            <span>Configuration</span>
+            <span th:text="'(' + ${report.configurationCount} + ')'">(0)</span>
+        </button>
+        <button class="filter-btn" onclick="filterCategory('Improvement Suggestions', this)">
+            <span>Suggestions</span>
+            <span th:text="'(' + ${report.improvementCount} + ')'">(0)</span>
+        </button>
+    </div>
+
+    <!-- 4. Findings List -->
+    <div class="findings-list">
+        <div class="finding-card fade-in" th:each="f : ${report.findings}" th:attr="data-category=${f.category}">
+            <div class="finding-header">
+                <div class="finding-title-group">
+                    <span class="severity-badge"
+                          th:classappend="'severity-' + ${#strings.toLowerCase(f.severity)}"
+                          th:text="${f.severity}">HIGH</span>
+                    <h3 class="finding-title" th:text="${f.title}">Finding Title</h3>
+                </div>
+                <span class="category-pill" th:text="${f.category}">Category</span>
+            </div>
+
+            <div class="finding-file">
+                <svg class="svg-icon" viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
+                </svg>
+                <span th:text="${f.affectedItem}">src/main/resources/application.properties:14</span>
+            </div>
+
+            <div class="finding-section">
+                <div class="finding-label">Why it matters</div>
+                <p class="finding-desc" th:text="${f.whyItMatters}">Explanation of impact.</p>
+            </div>
+
+            <div class="finding-remediation">
+                <strong style="color: var(--primary);">Recommended Fix: </strong>
+                <span th:text="${f.recommendation}">Recommendation details.</span>
+            </div>
+        </div>
+
+        <!-- Empty state when no findings match -->
+        <div id="noFindingsMsg" style="display: none; background: #FFFFFF; border: 1px solid var(--border); border-radius: 8px; padding: 28px; text-align: center; color: var(--text-secondary);">
+            No findings in this category.
+        </div>
+    </div>
+
+    <!-- 5. Professional Scope Box -->
+    <div class="scope-box">
+        <strong>Analysis Scope:</strong>
+        This report is generated via deterministic, rule-based static analysis without executing repository code. Review recommendations before applying changes.
+    </div>
+</div>
+
+<!-- Shared Toast Container -->
+<div th:replace="~{fragments :: toastContainer}"></div>
+<div th:replace="~{fragments :: toastScript}"></div>
+
+<script>
+    function filterCategory(cat, btn) {
+        document.querySelectorAll('.filter-btn').forEach(function(b) {
+            b.classList.remove('active');
+        });
+        if (btn) btn.classList.add('active');
+
+        var cards = document.querySelectorAll('.finding-card');
+        var visibleCount = 0;
+        cards.forEach(function(card) {
+            if (cat === 'all' || card.getAttribute('data-category') === cat) {
+                card.style.display = 'block';
+                card.classList.remove('fade-in');
+                void card.offsetWidth; // trigger reflow
+                card.classList.add('fade-in');
+                visibleCount++;
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        var noMsg = document.getElementById('noFindingsMsg');
+        if (visibleCount === 0) {
+            noMsg.style.display = 'block';
+        } else {
+            noMsg.style.display = 'none';
+        }
+    }
+
+    function filterCategoryFromChart(cat) {
+        var btns = document.querySelectorAll('.filter-btn');
+        btns.forEach(function(b) {
+            if (b.innerText.toLowerCase().includes(cat.toLowerCase().split(' ')[0])) {
+                filterCategory(cat, b);
+            }
+        });
+        var target = document.querySelector('.category-filter-row');
+        if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+    }
+
+    function copyReportUrl() {
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(window.location.href);
+            showToast('Report URL copied to clipboard');
+        } else {
+            showToast('Report URL copied');
+        }
+    }
+
+    // Render SVG Donut Chart
+    document.addEventListener('DOMContentLoaded', function() {
+        var svg = document.getElementById('donutSvg');
+        if (!svg) return;
+        var high = parseInt(svg.getAttribute('data-high') || '0', 10);
+        var med = parseInt(svg.getAttribute('data-med') || '0', 10);
+        var low = parseInt(svg.getAttribute('data-low') || '0', 10);
+        var total = high + med + low;
+        var C = 238.76; // 2 * PI * 38
+
+        if (total === 0) return;
+
+        var highLen = (high / total) * C;
+        var medLen = (med / total) * C;
+        var lowLen = (low / total) * C;
+
+        var elHigh = document.getElementById('donutHigh');
+        var elMed = document.getElementById('donutMed');
+        var elLow = document.getElementById('donutLow');
+
+        if (elHigh) {
+            elHigh.setAttribute('stroke-dasharray', highLen + ' ' + (C - highLen));
+            elHigh.setAttribute('stroke-dashoffset', '0');
+        }
+        if (elMed) {
+            elMed.setAttribute('stroke-dasharray', medLen + ' ' + (C - medLen));
+            elMed.setAttribute('stroke-dashoffset', '-' + highLen);
+        }
+        if (elLow) {
+            elLow.setAttribute('stroke-dasharray', lowLen + ' ' + (C - lowLen));
+            elLow.setAttribute('stroke-dashoffset', '-' + (highLen + medLen));
+        }
+    });
+</script>
+
+</body>
+</html>

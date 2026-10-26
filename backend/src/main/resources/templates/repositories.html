@@ -1,86 +1,98 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments :: head('Repositories')}"></head>
 <body>
 <div class="app-layout">
-    <aside th:replace="~{fragments :: sidebar(${activeNav})}"></aside>
-    <div class="main-wrapper">
-        <header th:replace="~{fragments :: topbar}"></header>
+ <aside th:replace="~{fragments :: sidebar('repositories')}"></aside>
 
-        <main class="content-container">
-            <div style="margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between;">
-                <div>
-                    <h1 style="margin: 0; font-size: 22px; color: var(--text-main);">Repository Hub</h1>
-                    <div class="text-muted" style="font-size: 13px; margin-top: 4px;">Manage, scan, diagnose, and run verification trials on imported codebases.</div>
-                </div>
-            </div>
+ <div class="main-wrapper">
+ <header th:replace="~{fragments :: topbar}"></header>
 
-            <!-- Import Card -->
-            <div class="card" style="margin-bottom: 24px;">
-                <h2 style="margin-top: 0; margin-bottom: 12px; font-size: 15px; color: var(--text-main);">Import New Repository</h2>
-                <form th:action="@{/repositories/import}" method="post">
-                    <div style="display: grid; grid-template-columns: 3fr 1fr auto; gap: 12px; align-items: center;">
-                        <input type="text" id="repoUrlInput" name="repoUrl" placeholder="https://github.com/org/repo.git or file:///path" required>
-                        <input type="text" name="ref" placeholder="Branch / Ref (main)">
-                        <button type="submit" class="btn btn-primary">⚡ Import & Scan</button>
-                    </div>
-                </form>
-                <div style="margin-top: 14px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-                    <span class="text-muted" style="font-size: 12px;">Quick Demo Fixtures:</span>
-                    <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('repoUrlInput').value = 'file:///C:/tmp/stacktrial-fixture-repos/passing-upgrade';">
-                        🧪 Passing Upgrade Fixture
-                    </button>
-                    <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('repoUrlInput').value = 'file:///C:/tmp/stacktrial-fixture-repos/breaking-upgrade';">
-                        ⚠️ Breaking Upgrade Fixture
-                    </button>
-                </div>
-            </div>
+ <main class="content-container">
+ <div class="welcome-hero">
+ <div>
+ <h1 class="welcome-title">Repositories</h1>
+ <p class="welcome-subtitle">Import and manage Java codebases tracked for automated verification.</p>
+ </div>
+ </div>
 
-            <!-- Repositories Grid -->
-            <div class="card" style="padding: 0;">
-                <div class="table-wrap">
-                    <table>
-                        <thead>
-                        <tr>
-                            <th>Repository</th>
-                            <th>Default Ref</th>
-                            <th>Status</th>
-                            <th>Created</th>
-                            <th>Actions</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr th:if="${#lists.isEmpty(repos)}">
-                            <td colspan="5" class="text-muted" style="text-align: center; padding: 32px;">
-                                No repositories imported yet. Enter a GitHub or local repository URL above.
-                            </td>
-                        </tr>
-                        <tr th:each="r : ${repos}">
-                            <td>
-                                <div style="font-size: 15px; font-weight: 700;">
-                                    <a th:href="@{'/repositories/' + ${r.id} + '/overview'}" th:text="'📦 ' + ${r.name}">service</a>
-                                </div>
-                                <div class="mono text-muted" style="font-size: 12px; margin-top: 2px;" th:text="${r.repoUrl}">https://...</div>
-                            </td>
-                            <td><span class="code-tag" th:text="${r.defaultRef}">main</span></td>
-                            <td>
-                                <span class="badge" th:classappend="'stat-' + ${r.status}" th:text="${r.status}">READY</span>
-                            </td>
-                            <td class="mono text-muted" style="font-size: 12px;" th:text="${#temporals.format(r.createdAt, 'yyyy-MM-dd HH:mm')}">time</td>
-                            <td>
-                                <div style="display: flex; gap: 6px;">
-                                    <a th:href="@{'/repositories/' + ${r.id} + '/overview'}" class="btn btn-secondary btn-sm">Inspect</a>
-                                    <a th:href="@{'/repositories/' + ${r.id} + '/run'}" class="btn btn-secondary btn-sm">Run</a>
-                                    <a th:href="@{'/trials/new?repoUrl=' + ${r.repoUrl}}" class="btn btn-primary btn-sm">Trial</a>
-                                </div>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </main>
-    </div>
+ <!-- Import Form Card -->
+ <div class="panel-card" style="margin-bottom: 24px;">
+ <div class="panel-header">
+ <h2 class="panel-title">Import Repository</h2>
+ </div>
+ <div style="padding: 24px;">
+ <form th:action="@{/repositories/import}" method="post">
+ <div style="display: grid; grid-template-columns: 3fr 1fr auto; gap: 14px; align-items: center;">
+ <input type="text" id="repoUrlInput" name="repoUrl" placeholder="https://github.com/org/repo.git or file:///path" required>
+ <input type="text" name="ref" placeholder="Branch / Ref (main)">
+ <button type="submit" class="btn btn-primary">Import Repository</button>
+ </div>
+ </form>
+ <div style="margin-top: 16px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+ <span class="mono" style="font-size: 11.5px; color: var(--text-secondary); font-weight: 600;">Quick Fixtures:</span>
+ <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('repoUrlInput').value = 'file:///C:/tmp/stacktrial-fixture-repos/passing-upgrade';">
+ Passing Upgrade Fixture
+ </button>
+ <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('repoUrlInput').value = 'file:///C:/tmp/stacktrial-fixture-repos/breaking-upgrade';">
+ Breaking Upgrade Fixture
+ </button>
+ </div>
+ </div>
+ </div>
+
+ <!-- Repositories List -->
+ <div class="panel-card">
+ <div class="panel-header">
+ <h2 class="panel-title">
+ <span>Tracked Repositories (<span th:text="${#lists.size(repos)}">0</span>)</span>
+ </h2>
+ </div>
+ <div class="panel-body">
+ <div th:if="${#lists.isEmpty(repos)}" class="empty-state">
+ <div class="empty-state-title">No repositories imported yet</div>
+ <div class="empty-state-desc">Import a Git repository using the form above to get started.</div>
+ </div>
+
+ <div class="table-wrap" th:unless="${#lists.isEmpty(repos)}">
+ <table>
+ <thead>
+ <tr>
+ <th>Repository Name & Target</th>
+ <th>Default Ref</th>
+ <th>Status</th>
+ <th>Created</th>
+ <th style="text-align: right;">Actions</th>
+ </tr>
+ </thead>
+ <tbody>
+ <tr th:each="r : ${repos}">
+ <td>
+ <div style="font-size: 14px; font-weight: 700; color: var(--text-main);" th:text="${r.name}">service</div>
+ <div class="mono" style="font-size: 11.5px; margin-top: 2px; color: var(--text-secondary);" th:text="${r.repoUrl}">https://...</div>
+ </td>
+ <td><span class="code-tag" th:text="${r.defaultRef}">main</span></td>
+ <td>
+ <span class="badge" th:classappend="'badge-' + (${r.status} == 'READY' ? 'pass' : 'warn')" th:text="${r.status}">READY</span>
+ </td>
+ <td style="color: var(--text-secondary); font-size: 12.5px;" th:text="${#temporals.format(r.createdAt, 'yyyy-MM-dd HH:mm')}">time</td>
+ <td style="text-align: right;">
+ <div style="display: inline-flex; gap: 8px;">
+ <a th:href="@{'/trials/new?repoUrl=' + ${r.repoUrl}}" class="btn btn-primary btn-sm">Verify</a>
+ <form th:action="@{'/repositories/' + ${r.id} + '/delete'}" method="post" style="display:inline;" onsubmit="return confirm('Delete this repository?');">
+ <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+ </form>
+ </div>
+ </td>
+ </tr>
+ </tbody>
+ </table>
+ </div>
+ </div>
+ </div>
+ </main>
+ </div>
 </div>
 </body>
 </html>
+

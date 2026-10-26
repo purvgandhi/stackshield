@@ -66,6 +66,10 @@ public class ImportedRepository {
     @Column(name = "interview_result")
     private String interviewResultJson;
 
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(name = "analysis_result")
+    private String analysisResultJson;
+
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
@@ -198,6 +202,14 @@ public class ImportedRepository {
 
     public void setInterviewResultJson(String interviewResultJson) {
         this.interviewResultJson = interviewResultJson;
+    }
+
+    public String getAnalysisResultJson() {
+        return analysisResultJson;
+    }
+
+    public void setAnalysisResultJson(String analysisResultJson) {
+        this.analysisResultJson = analysisResultJson;
     }
 
     public Instant getCreatedAt() {

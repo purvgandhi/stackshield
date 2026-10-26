@@ -1,88 +1,89 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments :: head(${repo.name} + ' · Docker Sandbox Run')}"></head>
 <body>
 <div class="app-layout">
-    <aside th:replace="~{fragments :: sidebar(${activeNav})}"></aside>
-    <div class="main-wrapper">
-        <header th:replace="~{fragments :: topbar}"></header>
+ <aside th:replace="~{fragments :: sidebar(${activeNav})}"></aside>
+ <div class="main-wrapper">
+ <header th:replace="~{fragments :: topbar}"></header>
 
-        <main class="content-container">
-            <div th:replace="~{fragments :: repoHeader(${repo}, 'run')}"></div>
+ <main class="content-container">
+ <div th:replace="~{fragments :: repoHeader(${repo}, 'run')}"></div>
 
-            <!-- Command Launcher Form -->
-            <div class="card" style="margin-bottom: 24px;">
-                <h3 class="card-title">🚀 Launch Sandboxed Container Run</h3>
-                <p class="text-muted" style="margin-top: 0; font-size: 13px;">
-                    Runs cleanly in an isolated, resource-governed Docker container. Host filesystem is never touched.
-                </p>
-                <form th:action="@{'/repositories/' + ${repo.id} + '/run'}" method="post">
-                    <div class="grid-2">
-                        <div class="form-group">
-                            <label class="form-label">Command to Execute</label>
-                            <input type="text" name="command" value="mvn test" placeholder="e.g. mvn test, mvn compile, mvn verify" required>
-                            <div class="form-help">Executed as non-root user inside container `/workspace`.</div>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Docker Runner Image (Optional override)</label>
-                            <input type="text" name="image" placeholder="Default: Auto-resolved from Java version (e.g. maven:3.9-eclipse-temurin-21-alpine)">
-                            <div class="form-help">Leave empty to use automatic image resolver.</div>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-primary">🐳 Execute in Sandbox</button>
-                </form>
-            </div>
+ <!-- Command Launcher Form -->
+ <div class="card" style="margin-bottom: 24px;">
+ <h3 class="card-title"> Launch Sandboxed Container Run</h3>
+ <p class="text-muted" style="margin-top: 0; font-size: 13px;">
+ Runs cleanly in an isolated, resource-governed Docker container. Host filesystem is never touched.
+ </p>
+ <form th:action="@{'/repositories/' + ${repo.id} + '/run'}" method="post">
+ <div class="grid-2">
+ <div class="form-group">
+ <label class="form-label">Command to Execute</label>
+ <input type="text" name="command" value="mvn test" placeholder="e.g. mvn test, mvn compile, mvn verify" required>
+ <div class="form-help">Executed as non-root user inside container `/workspace`.</div>
+ </div>
+ <div class="form-group">
+ <label class="form-label">Docker Runner Image (Optional override)</label>
+ <input type="text" name="image" placeholder="Default: Auto-resolved from Java version (e.g. maven:3.9-eclipse-temurin-21-alpine)">
+ <div class="form-help">Leave empty to use automatic image resolver.</div>
+ </div>
+ </div>
+ <button type="submit" class="btn btn-primary"> Execute in Sandbox</button>
+ </form>
+ </div>
 
-            <!-- Sandbox Isolation Info -->
-            <div class="grid-3" style="margin-bottom: 24px;">
-                <div class="card" style="padding: 12px 16px;">
-                    <div class="mono text-cyan" style="font-size: 12px; font-weight: 700;">🔒 Container Isolation</div>
-                    <div class="text-muted" style="font-size: 12px; margin-top: 4px;">User 10001:10001 · All Linux capabilities dropped · No-new-privileges</div>
-                </div>
-                <div class="card" style="padding: 12px 16px;">
-                    <div class="mono text-emerald" style="font-size: 12px; font-weight: 700;">⚡ Resource Limits</div>
-                    <div class="text-muted" style="font-size: 12px; margin-top: 4px;">2 CPUs · 2048 MB RAM · Hard timeout enforcement</div>
-                </div>
-                <div class="card" style="padding: 12px 16px;">
-                    <div class="mono text-indigo" style="font-size: 12px; font-weight: 700;">🧹 Ephemeral Cleanliness</div>
-                    <div class="text-muted" style="font-size: 12px; margin-top: 4px;">Container destroyed and purged immediately after run</div>
-                </div>
-            </div>
+ <!-- Sandbox Isolation Info -->
+ <div class="grid-3" style="margin-bottom: 24px;">
+ <div class="card" style="padding: 12px 16px;">
+ <div class="mono text-purple" style="font-size: 12px; font-weight: 700;"> Container Isolation</div>
+ <div class="text-muted" style="font-size: 12px; margin-top: 4px;">User 10001:10001 · All Linux capabilities dropped · No-new-privileges</div>
+ </div>
+ <div class="card" style="padding: 12px 16px;">
+ <div class="mono text-emerald" style="font-size: 12px; font-weight: 700;"> Resource Limits</div>
+ <div class="text-muted" style="font-size: 12px; margin-top: 4px;">2 CPUs · 2048 MB RAM · Hard timeout enforcement</div>
+ </div>
+ <div class="card" style="padding: 12px 16px;">
+ <div class="mono text-indigo" style="font-size: 12px; font-weight: 700;"> Ephemeral Cleanliness</div>
+ <div class="text-muted" style="font-size: 12px; margin-top: 4px;">Container destroyed and purged immediately after run</div>
+ </div>
+ </div>
 
-            <!-- Execution History -->
-            <div class="card" style="padding: 0;">
-                <div style="padding: 16px 20px; border-bottom: 1px solid var(--border);">
-                    <h3 style="margin: 0; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted);">
-                        📋 Sandbox Execution Runs (<span th:text="${#lists.size(runs)}">0</span>)
-                    </h3>
-                </div>
+ <!-- Execution History -->
+ <div class="card" style="padding: 0;">
+ <div style="padding: 16px 20px; border-bottom: 1px solid var(--border);">
+ <h3 style="margin: 0; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted);">
+ Sandbox Execution Runs (<span th:text="${#lists.size(runs)}">0</span>)
+ </h3>
+ </div>
 
-                <div th:if="${#lists.isEmpty(runs)}" style="padding: 32px; text-align: center;" class="text-muted">
-                    No runs yet. Launch a command above to test in Docker.
-                </div>
+ <div th:if="${#lists.isEmpty(runs)}" style="padding: 32px; text-align: center;" class="text-muted">
+ No runs yet. Launch a command above to test in Docker.
+ </div>
 
-                <div th:each="r, iterStat : ${runs}" style="border-bottom: 1px solid var(--border); padding: 16px 20px;">
-                    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 8px;">
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <span class="badge" th:classappend="'o-' + ${r.outcome}" th:text="${r.outcome}">PASS</span>
-                            <span class="mono" style="font-weight: 700; font-size: 14px; color: var(--text-main);" th:text="${r.command}">mvn test</span>
-                            <span class="code-tag text-muted" style="font-size: 11px;" th:text="${r.image}">maven:3.9-eclipse-temurin-21-alpine</span>
-                        </div>
-                        <div class="mono text-muted" style="font-size: 12px;">
-                            <span th:text="${r.durationMs} + ' ms'">4200 ms</span> · Exit code <span th:text="${r.exitCode}">0</span> ·
-                            <span th:text="${#temporals.format(r.createdAt, 'HH:mm:ss')}">14:02:11</span>
-                        </div>
-                    </div>
+ <div th:each="r, iterStat : ${runs}" style="border-bottom: 1px solid var(--border); padding: 16px 20px;">
+ <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 8px;">
+ <div style="display: flex; align-items: center; gap: 10px;">
+ <span class="badge" th:classappend="'o-' + ${r.outcome}" th:text="${r.outcome}">PASS</span>
+ <span class="mono" style="font-weight: 700; font-size: 14px; color: var(--text-main);" th:text="${r.command}">mvn test</span>
+ <span class="code-tag text-muted" style="font-size: 11px;" th:text="${r.image}">maven:3.9-eclipse-temurin-21-alpine</span>
+ </div>
+ <div class="mono text-muted" style="font-size: 12px;">
+ <span th:text="${r.durationMs} + ' ms'">4200 ms</span> · Exit code <span th:text="${r.exitCode}">0</span> ·
+ <span th:text="${#temporals.format(r.createdAt, 'HH:mm:ss')}">14:02:11</span>
+ </div>
+ </div>
 
-                    <!-- Expandable Log Console -->
-                    <details th:open="${iterStat.first}">
-                        <summary class="mono text-cyan" style="font-size: 12px; margin-bottom: 6px;">Toggle Terminal Output</summary>
-                        <pre class="terminal" th:text="${r.consoleLog}">Console log output...</pre>
-                    </details>
-                </div>
-            </div>
-        </main>
-    </div>
+ <!-- Expandable Log Console -->
+ <details th:open="${iterStat.first}">
+ <summary class="mono text-purple" style="font-size: 12px; margin-bottom: 6px;">Toggle Terminal Output</summary>
+ <pre class="terminal" th:text="${r.consoleLog}">Console log output...</pre>
+ </details>
+ </div>
+ </div>
+ </main>
+ </div>
 </div>
 </body>
 </html>
+

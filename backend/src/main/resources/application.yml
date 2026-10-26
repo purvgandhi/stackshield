@@ -13,6 +13,14 @@ spring:
     enabled: true
   thymeleaf:
     cache: false
+  web:
+    resources:
+      cache:
+        period: 0
+        cachecontrol:
+          no-cache: true
+          no-store: true
+          must-revalidate: true
   servlet:
     multipart:
       max-file-size: 1MB

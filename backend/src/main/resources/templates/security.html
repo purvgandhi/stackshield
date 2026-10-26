@@ -1,103 +1,104 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments :: head(${repo.name} + ' · Security Analysis')}"></head>
 <body>
 <div class="app-layout">
-    <aside th:replace="~{fragments :: sidebar(${activeNav})}"></aside>
-    <div class="main-wrapper">
-        <header th:replace="~{fragments :: topbar}"></header>
+ <aside th:replace="~{fragments :: sidebar(${activeNav})}"></aside>
+ <div class="main-wrapper">
+ <header th:replace="~{fragments :: topbar}"></header>
 
-        <main class="content-container">
-            <div th:replace="~{fragments :: repoHeader(${repo}, 'security')}"></div>
+ <main class="content-container">
+ <div th:replace="~{fragments :: repoHeader(${repo}, 'security')}"></div>
 
-            <div th:if="${security != null}">
-                <!-- Security Grade Overview -->
-                <div class="card" style="margin-bottom: 20px;">
-                    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
-                        <div>
-                            <div class="text-muted" style="font-size: 11.5px; text-transform: uppercase; font-family: var(--mono); letter-spacing: 0.08em;">Automated Security Audit</div>
-                            <h2 style="margin: 4px 0 0; font-size: 18px; color: var(--text-main);" th:text="${security.summary}">Security scan results</h2>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 12px;">
-                            <span class="text-muted mono" style="font-size: 13px;">SECURITY SCORE:</span>
-                            <span class="badge" th:classappend="${security.securityGrade == 'A' ? 'badge-pass' : security.securityGrade == 'B' ? 'badge-info' : security.securityGrade == 'C' ? 'badge-warn' : 'badge-fail'}" style="font-size: 20px; padding: 6px 16px;" th:text="${security.securityGrade}">A</span>
-                        </div>
-                    </div>
-                </div>
+ <div th:if="${security != null}">
+ <!-- Security Grade Overview -->
+ <div class="card" style="margin-bottom: 20px;">
+ <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+ <div>
+ <div class="text-muted" style="font-size: 11.5px; text-transform: uppercase; font-family: var(--mono); letter-spacing: 0.08em;">Automated Security Audit</div>
+ <h2 style="margin: 4px 0 0; font-size: 18px; color: var(--text-main);" th:text="${security.summary}">Security scan results</h2>
+ </div>
+ <div style="display: flex; align-items: center; gap: 12px;">
+ <span class="text-muted mono" style="font-size: 13px;">SECURITY SCORE:</span>
+ <span class="badge" th:classappend="${security.securityGrade == 'A' ? 'badge-pass' : security.securityGrade == 'B' ? 'badge-info' : security.securityGrade == 'C' ? 'badge-warn' : 'badge-fail'}" style="font-size: 20px; padding: 6px 16px;" th:text="${security.securityGrade}">A</span>
+ </div>
+ </div>
+ </div>
 
-                <div class="grid-4">
-                    <div class="card">
-                        <div class="card-title">Critical Severity</div>
-                        <div class="stat-value text-rose" th:text="${security.criticalCount}">0</div>
-                        <div class="stat-sub">Must resolve immediately</div>
-                    </div>
-                    <div class="card">
-                        <div class="card-title">High Severity</div>
-                        <div class="stat-value text-rose" th:text="${security.highCount}">0</div>
-                        <div class="stat-sub">Vulnerable dependencies / secrets</div>
-                    </div>
-                    <div class="card">
-                        <div class="card-title">Medium Severity</div>
-                        <div class="stat-value text-amber" th:text="${security.mediumCount}">0</div>
-                        <div class="stat-sub">Hardening recommendations</div>
-                    </div>
-                    <div class="card">
-                        <div class="card-title">Total Issues</div>
-                        <div class="stat-value text-cyan" th:text="${security.totalIssues}">0</div>
-                        <div class="stat-sub">Identified findings</div>
-                    </div>
-                </div>
+ <div class="grid-4">
+ <div class="card">
+ <div class="card-title">Critical Severity</div>
+ <div class="stat-value text-rose" th:text="${security.criticalCount}">0</div>
+ <div class="stat-sub">Must resolve immediately</div>
+ </div>
+ <div class="card">
+ <div class="card-title">High Severity</div>
+ <div class="stat-value text-rose" th:text="${security.highCount}">0</div>
+ <div class="stat-sub">Vulnerable dependencies / secrets</div>
+ </div>
+ <div class="card">
+ <div class="card-title">Medium Severity</div>
+ <div class="stat-value text-amber" th:text="${security.mediumCount}">0</div>
+ <div class="stat-sub">Hardening recommendations</div>
+ </div>
+ <div class="card">
+ <div class="card-title">Total Issues</div>
+ <div class="stat-value text-purple" th:text="${security.totalIssues}">0</div>
+ <div class="stat-sub">Identified findings</div>
+ </div>
+ </div>
 
-                <!-- Findings Table -->
-                <div class="card" style="padding: 0;">
-                    <div style="padding: 16px 20px; border-bottom: 1px solid var(--border);">
-                        <h3 style="margin: 0; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted);">
-                            🛡️ Security & Vulnerability Findings
-                        </h3>
-                    </div>
+ <!-- Findings Table -->
+ <div class="card" style="padding: 0;">
+ <div style="padding: 16px 20px; border-bottom: 1px solid var(--border);">
+ <h3 style="margin: 0; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted);">
+ ️ Security & Vulnerability Findings
+ </h3>
+ </div>
 
-                    <div th:if="${#lists.isEmpty(security.findings)}" style="padding: 32px; text-align: center;" class="text-emerald">
-                        ✅ No vulnerabilities, exposed secrets, or insecure container rules detected!
-                    </div>
+ <div th:if="${#lists.isEmpty(security.findings)}" style="padding: 32px; text-align: center;" class="text-emerald">
+ No vulnerabilities, exposed secrets, or insecure container rules detected!
+ </div>
 
-                    <div class="table-wrap" th:if="${not #lists.isEmpty(security.findings)}" style="border: 0; border-radius: 0 0 var(--radius) var(--radius);">
-                        <table>
-                            <thead>
-                            <tr>
-                                <th>Severity</th>
-                                <th>Category</th>
-                                <th>Finding & Location</th>
-                                <th>Evidence Snippet</th>
-                                <th>Actionable Remediation</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr th:each="f : ${security.findings}">
-                                <td>
-                                    <span class="badge" th:classappend="'sev-' + ${f.severity}" th:text="${f.severity}">HIGH</span>
-                                </td>
-                                <td>
-                                    <span class="code-tag" th:text="${f.category}">SECRET_EXPOSURE</span>
-                                </td>
-                                <td>
-                                    <div style="font-weight: 700; color: var(--text-main);" th:text="${f.title}">Exposed Secret</div>
-                                    <div class="text-muted" style="font-size: 12px; margin-top: 2px;" th:text="${f.description}">Details</div>
-                                    <div class="mono text-cyan" style="font-size: 11.5px; margin-top: 4px;" th:text="${f.filePath} + (${f.lineNumber != null ? ':' + f.lineNumber : ''})">src/...</div>
-                                </td>
-                                <td>
-                                    <code class="code-tag" style="word-break: break-all;" th:text="${f.matchedSnippet}">snippet</code>
-                                </td>
-                                <td>
-                                    <div class="mono text-emerald" style="font-size: 12px;" th:text="${f.remediation}">Fix guide</div>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </main>
-    </div>
+ <div class="table-wrap" th:if="${not #lists.isEmpty(security.findings)}" style="border: 0; border-radius: 0 0 var(--radius) var(--radius);">
+ <table>
+ <thead>
+ <tr>
+ <th>Severity</th>
+ <th>Category</th>
+ <th>Finding & Location</th>
+ <th>Evidence Snippet</th>
+ <th>Actionable Remediation</th>
+ </tr>
+ </thead>
+ <tbody>
+ <tr th:each="f : ${security.findings}">
+ <td>
+ <span class="badge" th:classappend="'sev-' + ${f.severity}" th:text="${f.severity}">HIGH</span>
+ </td>
+ <td>
+ <span class="code-tag" th:text="${f.category}">SECRET_EXPOSURE</span>
+ </td>
+ <td>
+ <div style="font-weight: 700; color: var(--text-main);" th:text="${f.title}">Exposed Secret</div>
+ <div class="text-muted" style="font-size: 12px; margin-top: 2px;" th:text="${f.description}">Details</div>
+ <div class="mono text-purple" style="font-size: 11.5px; margin-top: 4px;" th:text="${f.filePath} + (${f.lineNumber != null ? ':' + f.lineNumber : ''})">src/...</div>
+ </td>
+ <td>
+ <code class="code-tag" style="word-break: break-all;" th:text="${f.matchedSnippet}">snippet</code>
+ </td>
+ <td>
+ <div class="mono text-emerald" style="font-size: 12px;" th:text="${f.remediation}">Fix guide</div>
+ </td>
+ </tr>
+ </tbody>
+ </table>
+ </div>
+ </div>
+ </div>
+ </main>
+ </div>
 </div>
 </body>
 </html>
+

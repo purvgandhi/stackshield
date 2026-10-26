@@ -1,0 +1,8 @@
+{
+  "name": "stackshield",
+  "version": "1.0.0",
+  "description": "StackShield - Codebase Analyzer for Java",
+  "scripts": {
+    "build": "echo 'StackShield static deployment ready for Vercel'"
+  }
+}
