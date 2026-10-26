@@ -1,12 +1,11 @@
 {
-  "version": 2,
-  "public": true,
+  "buildCommand": null,
+  "outputDirectory": "public",
   "cleanUrls": true,
   "rewrites": [
-    { "source": "/", "destination": "/public/index.html" },
-    { "source": "/history", "destination": "/public/history.html" },
-    { "source": "/upgrade-check", "destination": "/public/upgrade-check.html" },
-    { "source": "/analysis/(.*)", "destination": "/public/analysis.html" },
-    { "source": "/(.*)", "destination": "/public/$1" }
+    { "source": "/history", "destination": "/history.html" },
+    { "source": "/upgrade-check", "destination": "/upgrade-check.html" },
+    { "source": "/analysis/(.*)", "destination": "/analysis.html" },
+    { "source": "/(.*)", "destination": "/$1" }
   ]
 }

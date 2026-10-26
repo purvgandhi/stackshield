@@ -1,0 +1,9 @@
+Dockerfile
+target/
+backend/target/
+data/
+backend/data/
+.git/
+.idea/
+tmp/
+*.jar
